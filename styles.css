@@ -1,242 +1,260 @@
 body {
-    font-family: Arial, sans-serif;
-    color: #464646;
-    background-color: #d5d5d5;
-    justify-content: center;
-    height: max-content;  
-    }
-  .welcome{
-    text-align: center;
-    font-family: 'Times New Roman', Times, serif;
-    font-size: 40px;
-    margin: 0;
-    color: #222222;
-  }
-  .aboutme{
-    float: right;
-    text-align: left;
-    font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
-    margin: 0;
-    color: #222222;
-  }
-
-  header {
-    padding:1%;
-    background-color: #6565658f;
-    border-radius: 10px;
-  }
-  
-  header h1 {
-    font-family:Verdana, Geneva, Tahoma, sans-serif;
-    margin: 0;
-    color: #222222;
-  }
-
-  nav ul {
-    list-style-type: none;
-    padding: 0;
-  }
-  
-  nav ul li {
-    display: inline;
-    margin-right: 4px;
-  }
-  
-  nav ul li a {
-    color: #222222b2;
-    font-size: large;
-    font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
-    font-weight: bolder;
-    font-style:inherit;
-    margin: 50px;
-    padding: 10px;
-    transition: background-color 0.3s ease;
-    text-decoration: none;
-    border-radius: 10px;
-  }
-  nav ul li a:hover {
-    background-color: #22222263;
-    border-radius: 10px;
-}
-  
-  main {
-    margin-top: 10px;
-    padding: 30px;
-    
-    justify-content: center;
-  }
-
-  /* Add to the existing CSS */
-  section{
-  padding: 10px;
-  
+  font-family: Arial, sans-serif;
+  color: #464646;
+  background-color: #d5d5d5;
   justify-content: center;
-  }
+  height: max-content;  
+}
 
-/* Add to existing CSS */
-.aboutme {
+.welcome{
+  text-align: center;
+  font-family: 'Times New Roman', Times, serif;
+  font-size: 40px;
+  margin: 0;
+  color: #222222;
+}
+
+.aboutme{
   display: flex;
   justify-content:space-around;
   gap: 20px;
 }
+
 .aboutme-photo {
   width: 50%;
   text-align: right;
-  left: 0;
 }
+
 .aboutme-photo img {
   width:80%;
   border-radius: 10px;
 }
+
 .aboutme-text {
   width: 50%;
   text-align: left;
   justify-content:end;
-  right: 0;
   font-size:large;
   font-family: 'Courier New', Courier, monospace;
   font-weight:lighter;
 }
 
+header {
+  padding:1%;
+  background-color: #6565658f;
+  border-radius: 10px;
+}
 
-  .images{
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: space-around;
-  }
+header h1 {
+  font-family:Verdana, Geneva, Tahoma, sans-serif;
+  margin: 0;
+  color: #222222;
+}
 
-  .images-main{
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: space-around;
-    width: 100%;
-    
-  }
- 
-  
-  section img {
-    height: 200px;  /* Adjust as needed */
-    width: auto;  /* Adjust as needed */
-    object-fit: cover;
-    margin: 5px;
-    margin-top: 10px;
-    display:block;
-    border-radius: 10px;
-    transition: transform 0.3s ease;
-    cursor: pointer;
-  }
-  
-  @media (max-width: 600px) {
-    section img {
-      width: 100%;
-    }
-  }
-  
-  
-  section img:hover {
-    transform: scale(1.1);
-  }
-  
-  
-  button {
-    display: block;
-    margin: 10px auto;
-    padding: 10px 20px;
-    background-color: #6565658f;
-    color: #222222;
-    border: none;
-    border-radius: 10px;
-    cursor: pointer;
-  }
-  
-  button:hover {
-    border-radius: 10px;
-    background-color: #ccc;
-  }
-  
-  footer {
-    background-color: #333;
-    padding: 10px;
-    text-align: center;
-    font-size: large;
-    color: #fff;
-    /*this is to make it always at the end of the page but without covering any info of the page*/
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    width: 100%;
+nav ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+nav ul li {
+  display: inline;
+  margin-right: 4px;
+}
+
+nav ul li a {
+  color: #222222b2;
+  font-size: large;
+  font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+  font-weight: bolder;
+  font-style:inherit;
+  padding: 10px;
+  transition: background-color 0.3s ease;
+  text-decoration: none;
+  border-radius: 10px;
+}
+
+nav ul li a:hover {
+  background-color: #22222263;
+  border-radius: 10px;
+}
+
+main {
+  margin-top: 10px;
+  padding: 30px;
+  justify-content: center;
+}
+
+section{
+  padding: 10px;
+  justify-content: center;
+}
+
+.images{
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
+}
+
+.images-main{
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
+  width: 100%;
+}
+
+section img {
+  height: 200px;
+  width: auto;
+  object-fit: cover;
+  margin: 5px;
+  margin-top: 10px;
+  display:block;
+  border-radius: 10px;
+  transition: transform 0.3s ease;
+  cursor: pointer;
+}
+
+section img:hover {
+  transform: scale(1.1);
+}
+
+button {
+  display: block;
+  margin: 10px auto;
+  padding: 10px 20px;
+  background-color: #6565658f;
+  color: #222222;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+}
+
+button:hover {
+  border-radius: 10px;
+  background-color: #ccc;
+}
+
+footer {
+  background-color: #333;
+  padding: 10px;
+  text-align: center;
+  font-size: large;
+  color: #fff;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
 }
 
 .modal {
-  display: none;
-  position: fixed;
-  z-index: 1;
-  left: 0;
-  top: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(255, 255, 255, 0.658);
+display: none;
+position: fixed;
+z-index: 1;
+left: 0;
+top: 0;
+width: 100%;
+height: 100%;
+background-color: rgba(255, 255, 255, 0.658);
 }
 
 .modal img {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  max-width: 90%;
-  max-height: 90%;
-  border-radius: 10px;
+position: absolute;
+top: 50%;
+left: 50%;
+transform: translate(-50%, -50%);
+max-width: 90%;
+max-height: 90%;
+border-radius: 10px;
 }
 
-
-/* Add to existing CSS */
 @keyframes fadeIn {
-  0% {opacity: 0;}
-  100% {opacity: 1;}
+0% {opacity: 0;}
+100% {opacity: 1;}
 }
 
-/* Modify existing CSS */
 section img {
-  opacity: 0; /* Images start as hidden */
-  animation: fadeIn 1s ease-in 1 forwards;
+opacity: 0;
+animation: fadeIn 1s ease-in 1 forwards;
 }
 
-/* Add to existing CSS */
 .navbar {
-  display: flex;
-  justify-content: center;
-  list-style-type: none;
+display: flex;
+justify-content: center;
+list-style-type: none;
 }
 
 .navbar li {
-  margin: 0 10px;
+margin: 0 10px;
 }
 
-/* Add to existing CSS */
 .contact-info {
-  display: flex;
-  justify-content: center;
-  gap: 20px;
-  flex-wrap: wrap;
+display: flex;
+justify-content: center;
+gap: 20px;
+flex-wrap: wrap;
 }
 
 .contact-item {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  padding: 20px;
-  border: 1px solid #ddd;
-  border-radius: 10px;
-  top: 50%;
-  left: 50%;
-  transition: all 0.3s ease-in-out;
+display: flex;
+align-items: center;
+gap: 10px;
+padding: 20px;
+border: 1px solid #ddd;
+border-radius: 10px;
+transition: all 0.3s ease-in-out;
 }
 
 .contact-item i {
-  font-size: 24px;
+font-size: 24px;
 }
 
 .contact-item:hover {
-  transform: scale(1.1);
-  box-shadow: 0px 0px 10px rgba(0,0,0,0.2);
+transform: scale(1.1);
+box-shadow: 0px 0px 10px rgba(0,0,0,0.2);
+}
+
+@media only screen and (max-width: 600px) {
+body {
+  font-size: 18px;
+}
+nav ul li a {
+  font-size: small;
+  margin: 5px;
+  padding: 5px;
+}
+
+.welcome {
+  font-size: 24px;
+}
+
+.aboutme {
+  flex-direction: column;
+}
+
+.aboutme-photo,
+.aboutme-text {
+  width: 100%;
+}
+
+.aboutme-photo img {
+  width: 60%;
+}
+
+.images-main {
+  flex-direction: column;
+}
+
+section img {
+  height: auto;
+  width: 100%;
+}
+
+.contact-info {
+  flex-direction: column;
+}
+
+.contact-item {
+  width: 100%;
+  margin: 10px 0;
+}
 }
