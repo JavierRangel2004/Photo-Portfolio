@@ -1,146 +1,108 @@
 // Replace these with your own images
-
-var portraits =[];
-for (let i= 1; i <= 68; i++){
-  portraits.push('media/port/Portrait ('+i+').webp');
+const portraits = [];
+for (let i = 1; i <= 68; i++) {
+  portraits.push(`media/port/Portrait (${i}).webp`);
 }
 
-var landscapes =[];
-for (let i= 1; i <= 37; i++){
-  landscapes.push('media/land/landscape (' + i + ').webp');
+const landscapes = [];
+for (let i = 1; i <= 37; i++) {
+  landscapes.push(`media/land/landscape (${i}).webp`);
 }
-var objects =[];
-for (let i= 1; i <= 28; i++){
-  objects.push('media/obj/Object (' + i + ')_resultado.webp');
+
+const objects = [];
+for (let i = 1; i <= 28; i++) {
+  objects.push(`media/obj/Object (${i})_resultado.webp`);
 }
-var allImages = {
-  portraits: portraits,
-  landscapes: landscapes,
-  objects: objects
-};
 
-var loadedImages = {
-  portraits: 0,
-  landscapes: 0,
-  objects:0
-};
-  
-  window.onload = function() {
-    // Load initial images on home page
-    if (document.getElementById('featured-photos')) {
-      loadRandomImages('featured-photos', allImages.portraits, 1);
-      loadRandomImages('featured-photos', allImages.landscapes, 1);
-      loadRandomImages('featured-photos', allImages.objects, 1);
-    }
-  
-    // Load initial images in gallery
-    if (document.getElementById('portraits')) {
-      loadMoreImages('portraits');
-    }
-  
-    if (document.getElementById('landscapes')) {
-      loadMoreImages('landscapes');
-    }
+const allImages = { portraits, landscapes, objects };
 
-    if (document.getElementById('objects')) {
-        loadMoreImages('objects');
-      }
-  
-    // Add click events for "load more" buttons
-    if (document.getElementById('loadMorePortraits')) {
-      document.getElementById('loadMorePortraits').addEventListener('click', function() {
-        loadMoreImages('portraits');
-      });
-    }
-  
-    if (document.getElementById('loadMoreLandscapes')) {
-      document.getElementById('loadMoreLandscapes').addEventListener('click', function() {
-        loadMoreImages('landscapes');
-      });
-    }
+const loadedImages = { portraits: 0, landscapes: 0, objects: 0 };
 
-    if (document.getElementById('loadMoreObjects')) {
-        document.getElementById('loadMoreObjects').addEventListener('click', function() {
-          loadMoreImages('objects');
-        });
-      }
-  };
-  
-  function loadImages(sectionId, images) {
-    var section = document.getElementById(sectionId);
-  
-    images.forEach(function(image) {
-      var img = document.createElement('img');
-      img.src = image;
-      section.appendChild(img);
-    });
+window.addEventListener('load', () => {
+  // Load initial images on home page
+  loadInitialImages('featured-photos', allImages);
+
+  // Load initial images in gallery and set up "load more" buttons
+  ['portraits', 'landscapes', 'objects'].forEach((category) => {
+    if (document.getElementById(category)) {
+      loadMoreImages(category);
+    }
+    setupLoadMoreListener(category);
+  });
+});
+
+function loadInitialImages(sectionId, images) {
+  if (document.getElementById(sectionId)) {
+    loadRandomImages(sectionId, images.portraits, 1);
+    loadRandomImages(sectionId, images.landscapes, 1);
+    loadRandomImages(sectionId, images.objects, 1);
   }
-  
-  function loadMoreImages(category) {
-    var start = loadedImages[category];
-    var end = start + 4;
-    var images = allImages[category].slice(start, end);
-  
-    loadImages(category, images);
-  
-    loadedImages[category] = end;
-  }
+}
 
-// Modify the existing loadImages function
+function setupLoadMoreListener(category) {
+  const buttonId = `loadMore${category.charAt(0).toUpperCase() + category.slice(1)}`;
+  const button = document.getElementById(buttonId);
+  if (button) {
+    button.addEventListener('click', () => loadMoreImages(category));
+  }
+}
+
 function loadImages(sectionId, images) {
-  var section = document.getElementById(sectionId);
-
-  images.forEach(function(image, index) {
-    var img = document.createElement('img');
-    img.style.animationDelay = (index * 0.2) + 's'; // Adds a delay
-    img.addEventListener('click', function() {
-      openModal(image);
-    });
-    img.src = image; // Move this after adding the event listener
+  const section = document.getElementById(sectionId);
+  images.forEach((image, index) => {
+    const img = document.createElement('img');
+    img.style.animationDelay = `${index * 0.2}s`;
+    img.addEventListener('click', () => openModal(image));
+    img.src = image;
     section.appendChild(img);
   });
 }
 
-
+function loadMoreImages(category) {
+  const start = loadedImages[category];
+  const end = start + 4;
+  const images = allImages[category].slice(start, end);
+  loadImages(category, images);
+  loadedImages[category] = end;
+}
 
 function openModal(image) {
-  document.getElementById('modal').style.display = "block";
-  document.getElementById('modal-image').src = image;
-}
-
-window.onclick = function(event) {
-  if (event.target == document.getElementById('modal')) {
-    document.getElementById('modal').style.display = "none";
+  const modal = document.getElementById('modal');
+  if (modal) {
+    modal.style.display = "block";
+    document.getElementById('modal-image').src = image;
   }
 }
-function loadRandomImages(sectionId, images, count) {
-  var section = document.getElementById(sectionId);
-  var randomImages = getRandomImages(images, count);
 
-  randomImages.forEach(function(image) {
-    var img = document.createElement('img');
+window.addEventListener('click', (event) => {
+  const modal = document.getElementById('modal');
+  if (event.target === modal) {
+    modal.style.display = "none";
+  }
+});
+
+function loadRandomImages(sectionId, images, count) {
+  const section = document.getElementById(sectionId);
+  const randomImages = getRandomImages(images, count);
+  randomImages.forEach((image) => {
+    const img = document.createElement('img');
     img.src = image;
     img.style.animationDelay = '0s';
-    img.addEventListener('click', function() {
-      openModal(image);
-    });
+    img.addEventListener('click', () => openModal(image));
     section.appendChild(img);
   });
 }
 
 function getRandomImages(images, count) {
-  var randomImages = [];
-  var usedIndices = [];
+  const randomImages = [];
+  const usedIndices = new Set();
 
-  for (var i = 0; i < count; i++) {
-    var randomIndex;
-
-    do {
-      randomIndex = Math.floor(Math.random() * images.length);
-    } while (usedIndices.includes(randomIndex))
-
-    usedIndices.push(randomIndex);
-    randomImages.push(images[randomIndex]);
+  while (randomImages.length < count) {
+    const randomIndex = Math.floor(Math.random() * images.length);
+    if (!usedIndices.has(randomIndex)) {
+      usedIndices.add(randomIndex);
+      randomImages.push(images[randomIndex]);
+    }
   }
 
   return randomImages;

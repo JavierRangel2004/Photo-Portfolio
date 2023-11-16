@@ -99,7 +99,7 @@ body {
 
 .aboutme-text {
   width: 50%;
-  text-align: left;
+  text-align: justify;
   justify-content:end;
   font-size:larger;
   font-weight:lighter;
