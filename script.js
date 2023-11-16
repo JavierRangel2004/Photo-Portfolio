@@ -2,16 +2,16 @@
 
 var portraits =[];
 for (let i= 1; i <= 68; i++){
-  portraits.push('media/port/Portrait ('+i+').jpg');
+  portraits.push('media/port/Portrait ('+i+').webp');
 }
 
 var landscapes =[];
 for (let i= 1; i <= 37; i++){
-  landscapes.push('media/land/landscape (' + i + ').jpg');
+  landscapes.push('media/land/landscape (' + i + ').webp');
 }
 var objects =[];
 for (let i= 1; i <= 28; i++){
-  objects.push('media/obj/Object (' + i + ').jpg');
+  objects.push('media/obj/Object (' + i + ')_resultado.webp');
 }
 var allImages = {
   portraits: portraits,
