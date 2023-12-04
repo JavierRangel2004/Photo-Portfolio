@@ -6,12 +6,12 @@ for (let i = 1; i <= 68; i++) {
 
 const landscapes = [];
 for (let i = 1; i <= 37; i++) {
-  landscapes.push(`media/land/landscape (${i}).webp`);
+  landscapes.push(`media/land/Landscape (${i}).webp`);
 }
 
 const objects = [];
 for (let i = 1; i <= 28; i++) {
-  objects.push(`media/obj/Object (${i})_resultado.webp`);
+  objects.push(`media/obj/Object (${i}).webp`);
 }
 
 const allImages = { portraits, landscapes, objects };
