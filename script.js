@@ -40,9 +40,15 @@ let galleryLoading = false;
 let msnry; // Masonry instance
 
 function init() {
+  console.log("Script loaded!");
   if (document.getElementById("featured-photos")) {
     initFeaturedImages();
     handleHorizontalScroll("featured-photos");
+  }
+  if (document.getElementById("form")) {
+    contactFormSubmit();
+    //add error message in console "Loading contact form..."
+    console.log("Loading contact form...");
   } else {
     initGalleryPage();
   }
@@ -205,3 +211,54 @@ function initInfiniteScroll(currentCategory) {
     false
   );
 }
+
+function contactFormSubmit() {
+  document.getElementById('form').addEventListener('submit', function(e) {
+    e.preventDefault();
+  
+    // Data validation
+    const name = document.getElementById('name').value.trim();
+    const email = document.getElementById('email').value.trim();
+    const message = document.getElementById('message').value.trim();
+  
+    if (name === '') {
+      alert('Please enter your name.');
+      return;
+    }
+  
+    if (!/\S+@\S+\.\S+/.test(email)) {
+      alert('Please enter a valid email address.');
+      return;
+    }
+  
+    if (message === '') {
+      alert('Please enter a message.');
+      return;
+    }
+  
+    // Send data using Fetch API
+    fetch('https://script.google.com/macros/s/AKfycbxPUxuIUanbvIPtkfz53iYKlQJdzNksDRfWZpfN7_S_yeA9yaYYIltFd8IsBXYX4KUg/exec', {
+  method: "POST",
+  headers: {
+    'Content-Type': 'application/x-www-form-urlencoded',
+  },
+  body: new URLSearchParams({
+    "name": name,
+    "email": email,
+    "message": message
+  })
+})
+    
+
+    .then(response => response.text())
+    .then(text => {
+      if (text === 'Success!') {
+        alert('Thank you for contacting us, have an excellent day!!');
+      } else {
+        alert('An error occurred. Please try again later.');
+      }
+    })
+    .catch(error => console.error(error));
+  });
+}
+  
