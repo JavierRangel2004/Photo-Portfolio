@@ -2,26 +2,26 @@ document.addEventListener("DOMContentLoaded", init);
 
 const allImages = {
   portraits: [],
-  landscapes: [],
+  nature: [],
   city: [],
   creativity: [],
 };
 
 // Populate image arrays
-["portraits", "landscapes", "city", "creativity"].forEach((category) => {
+["portraits", "nature", "city", "creativity"].forEach((category) => {
   let limit;
   switch (category) {
     case "portraits":
-      limit = 70;
+      limit = 80;
       break;
-    case "landscapes":
-      limit = 50;
+    case "nature":
+      limit = 58;
       break;
     case "city":
-      limit = 30;
+      limit = 39;
       break;
     case "creativity":
-      limit = 22;
+      limit = 45;
       break;
   }
   for (let i = 1; i <= limit; i++) {
@@ -31,7 +31,7 @@ const allImages = {
 
 const loadedImages = {
   portraits: 0,
-  landscapes: 0,
+  nature: 0,
   city: 0,
   creativity: 0,
 };
@@ -60,12 +60,12 @@ function handleHorizontalScroll(elementId) {
 }
 
 function initFeaturedImages() {
-  const numPhotos = { portraits: 3, landscapes: 3, city: 3, creativity: 3 };
+  const numPhotos = { portraits: 3, nature: 3, city: 3, creativity: 3 };
   loadFeaturedImages("featured-photos", allImages, numPhotos);
 }
 
 function loadFeaturedImages(sectionId, images, numPhotosPerCategory) {
-  ["portraits", "landscapes", "city", "creativity"].forEach((category) => {
+  ["portraits", "nature", "city", "creativity"].forEach((category) => {
     const usedImages = [];
     for (let i = 0; i < numPhotosPerCategory[category]; i++) {
       let randomIndex;
@@ -80,7 +80,7 @@ function loadFeaturedImages(sectionId, images, numPhotosPerCategory) {
 }
 
 function determineCurrentCategory() {
-  const categories = ["portraits", "landscapes", "city", "creativity"];
+  const categories = ["portraits", "nature", "city", "creativity"];
   return (
     categories.find((category) => document.getElementById(category)) || null
   );

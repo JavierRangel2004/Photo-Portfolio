@@ -30,24 +30,24 @@
         height: 100%;
         font-family: "Poppins", sans-serif;
       }
-
+  
       body {
         display: flex;
         flex-direction: column;
         min-height: 100vh;
       }
-
+  
       nav {
         background: #174031be;
         backdrop-filter: saturate(180%) blur(10px);
       }
-
+  
       .navbar-brand {
         font-weight: 700;
         font-size: 1.5em;
         color: #f2f2f2;
       }
-
+  
       .site-footer {
         color: #f2f2f2;
         background: #174031;
@@ -56,46 +56,44 @@
         justify-content: space-between;
         align-items: center;
       }
-
+  
       .site-footer .footer-brand {
         display: flex;
         align-items: center;
         height: 80px;
       }
-
+  
       .site-footer .footer-brand img {
         max-height: 80px;
         padding: 0.5rem;
         border-radius: 20px;
       }
-
+  
       .site-footer .footer-contact-info {
         text-align: right;
       }
-
+  
       .site-footer .footer-contact-info p {
         margin: 0;
-        /* Remove default margins */
       }
-
+  
       .footer-contact-info a {
         color: #f2f2f2;
         text-decoration: none;
         margin-right: 15px;
         display: inline-block;
       }
-
+  
       .footer-contact-info a:hover {
         text-decoration: underline;
       }
-
+  
       .footer-contact-info i {
         font-size: 1.5rem;
-        /* Icon size */
         vertical-align: middle;
         margin-right: 8px;
       }
-
+  
       .instagram-icon {
         background-image: url("/media/igLogo.png");
         display: inline-block;
@@ -105,31 +103,31 @@
         vertical-align: middle;
         margin-right: 8px;
       }
-
+  
       /*modal styles*/
       .modal-content {
         background-color: transparent;
         border: none;
       }
-
+  
       .modal-dialog {
         max-width: 95%;
       }
-
+  
       #modal-image {
         max-height: 80vh;
         max-width: 100%;
         object-fit: contain;
       }
-
+  
       .modal-backdrop.show {
         opacity: 0.7;
       }
-
+  
       .btn-close-white {
         filter: invert(1);
       }
-
+  
       .close-btn {
         position: absolute;
         top: 10px;
@@ -138,109 +136,101 @@
         font-size: 30px;
         color: #fff;
       }
-
+  
       /*Responsive styles*/
       @media (max-width: 768px) {
         .site-footer {
           flex-direction: column;
           text-align: center;
         }
-
+  
         .footer-contact-info {
           margin-top: 1rem;
         }
       }
-
-      /* Additional styles */
-      /* Ensure the body has no margin to prevent any unnecessary spacing */
+  
       body {
         margin: 0;
       }
-
-      /* This will be your masonry container */
       .gallery {
         margin: 1rem;
         column-gap: 1rem;
       }
-
+  
       .img-container {
-        /* Break-inside prevents a column break within an image container */
         break-inside: avoid;
         margin-bottom: 1rem;
         transition: opacity 0.5s ease-in-out;
-        opacity: 0; /* Start images as transparent */
+        opacity: 0;
       }
-
+  
       .fade-in {
-        opacity: 1; /* When .fade-in is added, the image will fade in */
+        opacity: 1;
       }
-
-      /* You can adjust the number of columns based on the screen width using media queries */
+  
       @media (min-width: 576px) {
         .gallery {
           column-count: 2;
         }
       }
-
+  
       @media (min-width: 768px) {
         .gallery {
           column-count: 3;
         }
       }
-
+  
       @media (min-width: 992px) {
         .gallery {
           column-count: 4;
         }
       }
-
+  
       @media (min-width: 1200px) {
         .gallery {
           column-count: 5;
         }
       }
-
-      /* Image styles for scaling and presentation */
+  
       .gallery-image {
-        width: 100%; /* Forces image to fill its container's width */
-        height: auto; /* Keeps image's aspect ratio intact */
-        display: block; /* Removes extra space below the image */
-        object-fit: cover; /* Ensures the image covers the container */
+        width: 100%;
+        height: auto;
+        display: block;
+        object-fit: cover;
       }
-
-      /* Optional: Add transitions for hovering over images */
+  
       .img-container:hover .gallery-image {
         transform: scale(1.05);
         transition: transform 0.3s ease;
       }
-
+  
       .nav-links {
         display: flex;
         justify-content: space-between;
         align-items: center;
         padding: 1rem;
-        margin-bottom: 1rem; /* Adds a little space below the navbar */
+        margin-bottom: 1rem;
       }
-
+  
       .nav-links a {
         text-decoration: none;
-        color: #2c7359; /* Bootstrap primary color, you can change this color */
+        color: #2c7359;
         font-weight: bold;
         font-size: 1.2rem;
         transition: color 0.3s ease;
       }
-
+  
       .nav-links a:hover {
-        color: #174031; /* Darker shade for hover effect, change as needed */
+        color: #174031;
         text-decoration: underline;
       }
-
+  
       .left-link {
-        margin-right: auto; /* Pushes the link to the left */
+        margin-right: auto;
       }
-
+  
       .right-link {
-        margin-left: auto; /* Pushes the link to the right */
+        margin-left: auto;
       }
     </style>
   </head>
@@ -250,7 +240,7 @@
     <header>
       <nav class="navbar navbar-expand-lg navbar-dark fixed-top">
         <div class="container-fluid">
-          <a class="navbar-brand" href="#">JRMGraphy</a>
+          <a class="navbar-brand" href="index.html">JRMGraphy</a>
           <button
             class="navbar-toggler"
             type="button"
