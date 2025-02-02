@@ -65,4 +65,3 @@ JRMGraphy is a personal photography portfolio built with Jekyll. It showcases va
 
 ## License
 
-[Specify your license here]
