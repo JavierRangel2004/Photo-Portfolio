@@ -134,10 +134,10 @@ function addCarouselArrows(wrapper, container) {
   wrapper.appendChild(rightArrow);
 
   leftArrow.addEventListener('click', () => {
-    container.scrollBy({ left: -200, behavior: 'smooth' });
+    container.scrollBy({ left: -300, behavior: 'smooth' });
   });
   rightArrow.addEventListener('click', () => {
-    container.scrollBy({ left: 200, behavior: 'smooth' });
+    container.scrollBy({ left: 300, behavior: 'smooth' });
   });
 }
 
