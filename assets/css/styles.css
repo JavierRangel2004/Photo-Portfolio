@@ -307,3 +307,61 @@ a, button {
   font-size: 0.8rem;
   font-weight: bold;
 }
+
+/* ----- Existing CSS above remains unchanged ----- */
+
+/* Footer adjustments for mobile view */
+@media (max-width: 576px) {
+  .site-footer {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    padding: 1.5rem;
+  }
+  .site-footer .footer-brand,
+  .site-footer .footer-contact-info,
+  .site-footer .footer-links {
+    margin-bottom: 1rem;
+  }
+}
+
+/* About section adjustments */
+.about-container {
+  align-items: stretch;
+}
+.about-image-container {
+  flex: 1;
+  max-width: 300px;
+}
+.about-photo {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 10px;
+}
+@media (max-width: 576px) {
+  .about-container {
+    flex-direction: column;
+    align-items: center;
+  }
+  .about-image-container {
+    max-width: 100%;
+    margin-bottom: 1rem;
+  }
+  .about-text {
+    text-align: justify;
+  }
+}
+
+/* Mobile carousel adjustments */
+@media (max-width: 576px) {
+  /* Allow images to span full viewport width */
+  #featured-photos .img-container img {
+    width: 100vw;
+    height: auto;
+  }
+  .horizontal-scroll {
+    margin: 0;
+    padding: 0;
+  }
+}
