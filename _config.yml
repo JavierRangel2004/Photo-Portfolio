@@ -1,0 +1,17 @@
+title: "JRMGraphy"
+email: inspecjrm@gmail.com
+description: "Capturing moments, telling stories."
+baseurl: ""
+url: ""
+twitter_username: jekyllrb
+github_username: jekyll
+
+plugins:
+  - jekyll-feed
+
+exclude:
+  - .DS_Store
+  - .gitignore
+  - netlify.toml
+  - node_modules/
+  - vendor/

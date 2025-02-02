@@ -1,0 +1,33 @@
+---
+layout: default
+---
+
+<h1>{{ page.title }}</h1>
+
+<!-- Filter UI (non-functional placeholder) -->
+<div class="mb-4">
+  <p>Filter by:</p>
+  <div class="btn-group" role="group">
+    <button type="button" class="btn btn-outline-dark">Recent</button>
+    <button type="button" class="btn btn-outline-dark">Most Popular</button>
+  </div>
+</div>
+
+<div class="row row-cols-1 row-cols-md-2 g-4">
+    {% for category in site.data.categories %}
+    <div class="col">
+        <div class="card h-100">
+            <a href="/gallery/{{ category.name }}" class="gallery-card-link">
+                <div class="img-square-wrapper" style="position:relative;width:100%;padding-top:100%;">
+                    <img src="/assets/images/{{ category.name }}/{{ category.images[0] }}"
+                        class="card-img-top img-square category-img" alt="{{ category.title }}" loading="lazy"
+                        style="position:absolute;top:0;left:0;width:100%;height:100%;object-fit:cover;">
+                </div>
+                <div class="card-body">
+                    <h5 class="card-title">{{ category.title }}</h5>
+                </div>
+            </a>
+        </div>
+    </div>
+    {% endfor %}
+</div>

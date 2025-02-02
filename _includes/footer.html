@@ -1,0 +1,19 @@
+<footer class="site-footer">
+    <div class="footer-brand">
+        <img src="{{ '/assets/images/logo.jpg' | relative_url }}" alt="JRMGraphy Logo">
+    </div>
+    <div class="footer-contact-info">
+        <a href="mailto:inspecjrm@gmail.com"><i class="fa fa-envelope fa-lg" aria-hidden="true"></i>Email</a>
+        <a href="https://www.instagram.com/JRM_Graphy" target="_blank"><i class="fab fa-instagram fa-lg"
+                aria-hidden="true"></i>Instagram</a>
+    </div>
+    <div class="footer-links">
+        <a href="{{ '/' | relative_url }}">Home</a> |
+        <a href="{{ '/gallery' | relative_url }}">Gallery</a> |
+        <a href="{{ '/about' | relative_url }}">About</a> |
+        <a href="{{ '/contact' | relative_url }}">Contact</a>
+    </div>
+    <div class="footer-copyright">
+        <p>&copy; {{ "now" | date: "%Y" }} JRMGraphy. All rights reserved.</p>
+    </div>
+</footer>

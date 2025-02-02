@@ -1,0 +1,35 @@
+- name: "portraits"
+  title: "Portraits"
+  description: "Capturing personal expressions."
+  prefix: "portraits"
+  start: 1
+  count: 70
+  images:
+    - "portraits (1).webp"
+
+- name: "nature"
+  title: "Nature"
+  description: "Landscapes and natural beauty."
+  prefix: "nature"
+  start: 1
+  count: 58
+  images:
+    - "nature (1).webp"
+
+- name: "product"
+  title: "Product"
+  description: "Commercial photography."
+  prefix: "product"
+  start: 1
+  count: 39
+  images:
+    - "product (1).webp"
+
+- name: "concert"
+  title: "Concert"
+  description: "Live music photography."
+  prefix: "concert"
+  start: 1
+  count: 45
+  images:
+    - "concert (1).webp"
