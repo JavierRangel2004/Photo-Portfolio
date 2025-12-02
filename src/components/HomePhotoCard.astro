@@ -1,0 +1,79 @@
+---
+import type { PhotoOrientation } from '../lib/photos';
+
+interface Props {
+  photo: {
+    id: string;
+    category: string;
+    src: string;
+    date: string;
+    sessionDate: string;
+    originalName: string;
+    width?: number;
+    height?: number;
+  };
+  orientation: PhotoOrientation;
+}
+
+const { photo, orientation } = Astro.props;
+---
+
+<div class="home-photo-card" data-photo-id={photo.id}>
+  <img 
+    src={photo.src} 
+    alt={`${photo.category} photo - ${photo.originalName}`}
+    loading="lazy"
+    class={`home-carousel-image home-carousel-image--${orientation}`}
+    data-modal-src={photo.src}
+  />
+</div>
+
+<style>
+  .home-photo-card {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    background: var(--color-background-light);
+    border-radius: var(--radius-sm);
+    margin: 0;
+    padding: 0;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    transition: box-shadow var(--transition-base);
+  }
+  
+  .home-photo-card:hover {
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
+  }
+  
+  .home-carousel-image {
+    display: block;
+    transition: transform var(--transition-slow);
+    cursor: pointer;
+  }
+  
+  /* Horizontales y cuadradas: llenar ancho */
+  .home-carousel-image--landscape,
+  .home-carousel-image--square {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+  }
+  
+  /* Verticales: llenar alto */
+  .home-carousel-image--portrait {
+    height: 100%;
+    width: auto;
+    object-fit: cover;
+    object-position: center;
+  }
+  
+  .home-photo-card:hover .home-carousel-image {
+    transform: scale(1.03);
+  }
+</style>
+

@@ -1,0 +1,32 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Header from '../../components/Header.astro';
+import Footer from '../../components/Footer.astro';
+import GalleryGrid from '../../components/GalleryGrid.astro';
+import CategoryFilter from '../../components/CategoryFilter.astro';
+import Modal from '../../components/Modal.astro';
+import { getAllPhotos, getCategories } from '../../lib/photos';
+
+const category = Astro.url.searchParams.get('category') || 'all';
+const categories = getCategories();
+// Cargar TODAS las fotos para el filtrado client-side
+const allPhotos = getAllPhotos();
+---
+
+<BaseLayout title="Gallery" description="Explore my photography portfolio">
+  <Header />
+  <main class="content container p-5">
+    <h1 class="text-center my-5">Gallery</h1>
+    
+    <CategoryFilter categories={categories} currentCategory={category} />
+    
+    {allPhotos.length > 0 ? (
+      <GalleryGrid photos={allPhotos} initialCategory={category} />
+    ) : (
+      <p class="text-center">No photos found in this category.</p>
+    )}
+  </main>
+  <Footer />
+  <Modal />
+</BaseLayout>
+

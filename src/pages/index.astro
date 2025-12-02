@@ -1,0 +1,76 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import HomeCarousel from '../components/HomeCarousel.astro';
+import CategoryDropdown from '../components/CategoryDropdown.astro';
+import Modal from '../components/Modal.astro';
+import { getCategories, getRandomPhotosFromAllCategories, getRandomPhotosByCategory } from '../lib/photos';
+
+const siteInfo = {
+  tagline: "Your Moment, Our Lens",
+  author: "Javier Rangel"
+};
+
+// Obtener categoría del query param (si existe)
+const category = Astro.url.searchParams.get('category') || 'all';
+const categories = getCategories();
+
+// Cargar TODAS las fotos necesarias para el filtrado client-side
+// Para cada categoría, cargar 15 fotos aleatorias (suficiente para cuando se seleccione)
+// Para "all", usaremos 5 de cada categoría mezcladas
+const allCategoryPhotos = {};
+categories.forEach(cat => {
+  allCategoryPhotos[cat] = getRandomPhotosByCategory(cat, 15);
+});
+
+// Para "all", tomar 5 de cada categoría
+const allFeaturedPhotos = getRandomPhotosFromAllCategories(5);
+
+// Combinar todas las fotos posibles (sin duplicados por ID)
+const allPossiblePhotos = Object.values(allCategoryPhotos).flat();
+const uniquePhotosMap = new Map();
+allPossiblePhotos.forEach(photo => {
+  if (!uniquePhotosMap.has(photo.id)) {
+    uniquePhotosMap.set(photo.id, photo);
+  }
+});
+const uniquePhotos = Array.from(uniquePhotosMap.values());
+---
+
+<BaseLayout title="Home" description="JRMGraphy - Capturing moments, telling stories">
+  <Header />
+  <main class="content container p-5">
+    <section class="text-center my-5 fade-in-up">
+      <h1 class="display-4">JRMGraphy</h1>
+      <p class="lead">{siteInfo.tagline}</p>
+    </section>
+
+    <section class="mb-5 text-center fade-in-up">
+      <h2>Focusing dreams, capturing life</h2>
+      <p>
+        Hello! I'm {siteInfo.author}, a passionate photographer based in Mexico City. 
+        With a keen eye for capturing special moments, I specialize in nature and portrait photography. 
+        Join me as I share my journey and the stories behind each photo.
+      </p>
+      <a href="/about" class="btn btn-outline-light rounded-pill">Learn More</a>
+    </section>
+
+    <h2 class="text-center my-5 fade-in-up">Check out my gallery:</h2>
+
+    <CategoryDropdown categories={categories} currentCategory={category} />
+
+    {uniquePhotos.length > 0 ? (
+      <HomeCarousel photos={uniquePhotos} initialCategory={category} />
+    ) : (
+      <p class="text-center">No photos found.</p>
+    )}
+
+    <div class="text-center my-5 p-10">
+      <a href="/gallery" class="btn btn-outline-light rounded-pill">View Gallery</a>
+    </div>
+  </main>
+  <Footer />
+  <Modal />
+</BaseLayout>
+

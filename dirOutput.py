@@ -50,8 +50,8 @@ def scan_directory(root_dir, dir_blacklist=None, file_blacklist=None, output_fil
 if __name__ == "__main__":
     # Specify the root directory, directory blacklist, and file blacklist
     root_directory = "./"  # Change to the desired root directory
-    directories_to_ignore = [".jekyll-cache","_site",".git","Cache","cache","Jekyll","images"]  # Add directory names to ignore
-    files_to_ignore = ["README.md", "LICENSE","output.txt","test.py","prompt.txt"]  # Add file names to ignore
+    directories_to_ignore = [".jekyll-cache","_site",".git","node_modules","cache","Jekyll","images","public","data"]  # Add directory names to ignore
+    files_to_ignore = ["README.md", "LICENSE","output.txt","test.py","prompt.txt","package-lock.json"]  # Add file names to ignore
 
     # Specify the output file
     output_file_path = "output.txt"

@@ -1,0 +1,143 @@
+---
+interface Props {
+  categories: string[];
+  currentCategory?: string;
+  baseUrl?: string; // URL base para los filtros (por defecto: página actual)
+}
+
+const { categories, currentCategory = 'all', baseUrl } = Astro.props;
+---
+
+<div class="category-filter">
+  <button 
+    class={`filter-chip ${currentCategory === 'all' ? 'active' : ''}`}
+    data-category="all"
+    type="button"
+  >
+    All
+  </button>
+  {categories.map((category) => (
+    <button 
+      class={`filter-chip ${currentCategory === category ? 'active' : ''}`}
+      data-category={category}
+      type="button"
+    >
+      {category.charAt(0).toUpperCase() + category.slice(1)}
+    </button>
+  ))}
+</div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const filterButtons = document.querySelectorAll('.category-filter .filter-chip');
+    // Seleccionar solo las fotos (slides del carrusel o items de la gallery), no los botones
+    const allPhotoItems = document.querySelectorAll('.home-carousel-slide[data-category], .masonry-item[data-category]');
+    
+    // Función para filtrar fotos
+    const filterPhotos = (selectedCategory) => {
+      // Actualizar botones activos
+      filterButtons.forEach(btn => {
+        const btnCategory = btn.getAttribute('data-category');
+        if (btnCategory === selectedCategory) {
+          btn.classList.add('active');
+        } else {
+          btn.classList.remove('active');
+        }
+      });
+      
+      // Filtrar fotos
+      allPhotoItems.forEach(item => {
+        const itemCategory = item.getAttribute('data-category');
+        const shouldShow = selectedCategory === 'all' || 
+                          itemCategory === selectedCategory;
+        
+        item.style.display = shouldShow ? '' : 'none';
+      });
+      
+      // Actualizar URL sin recargar usando History API
+      const url = new URL(window.location);
+      if (selectedCategory === 'all') {
+        url.searchParams.delete('category');
+      } else {
+        url.searchParams.set('category', selectedCategory);
+      }
+      window.history.pushState({ category: selectedCategory }, '', url);
+    };
+    
+    // Event listeners para botones
+    filterButtons.forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        e.preventDefault();
+        const category = btn.getAttribute('data-category') || 'all';
+        filterPhotos(category);
+      });
+    });
+    
+    // Aplicar filtro inicial basado en la URL
+    const urlParams = new URLSearchParams(window.location.search);
+    const initialCategory = urlParams.get('category') || 'all';
+    filterPhotos(initialCategory);
+    
+    // Manejar navegación del navegador (back/forward)
+    window.addEventListener('popstate', (e) => {
+      const urlParams = new URLSearchParams(window.location.search);
+      const category = urlParams.get('category') || 'all';
+      filterPhotos(category);
+    });
+  });
+</script>
+
+<style>
+  .category-filter {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-sm);
+    justify-content: center;
+    margin: var(--space-xl) 0;
+    padding: 0 var(--space-md);
+  }
+  
+  .filter-chip {
+    padding: var(--space-sm) var(--space-lg);
+    border-radius: var(--radius-lg);
+    background-color: var(--color-background-alt);
+    color: var(--color-text);
+    font-weight: var(--font-weight-medium);
+    transition: all var(--transition-base);
+    text-decoration: none;
+    border: 2px solid transparent;
+    cursor: pointer;
+    font-family: var(--font-family);
+    font-size: 0.95rem;
+  }
+  
+  .filter-chip:hover {
+    background-color: var(--color-secondary-dark);
+    transform: translateY(-2px);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  }
+  
+  .filter-chip.active {
+    background-color: var(--color-primary);
+    color: var(--color-text-light);
+    border-color: var(--color-primary-dark);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  }
+  
+  .filter-chip:active {
+    transform: translateY(0);
+  }
+  
+  @media (max-width: 576px) {
+    .category-filter {
+      gap: var(--space-xs);
+      padding: 0;
+    }
+    
+    .filter-chip {
+      padding: var(--space-xs) var(--space-md);
+      font-size: 0.9rem;
+    }
+  }
+</style>
+

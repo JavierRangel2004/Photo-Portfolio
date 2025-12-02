@@ -1,0 +1,89 @@
+---
+import PhotoCard from './PhotoCard.astro';
+
+interface Props {
+  photos: Array<{
+    id: string;
+    category: string;
+    src: string;
+    date: string;
+    sessionDate: string;
+    originalName: string;
+  }>;
+  initialCategory?: string;
+}
+
+const { photos, initialCategory = 'all' } = Astro.props;
+---
+
+<div class="masonry-gallery">
+  {photos.map((photo) => {
+    const shouldShowInitially = initialCategory === 'all' || photo.category === initialCategory;
+    return (
+      <div 
+        class="masonry-item fade-in-up" 
+        data-category={photo.category}
+        style={shouldShowInitially ? '' : 'display: none;'}
+      >
+        <PhotoCard photo={photo} />
+      </div>
+    );
+  })}
+</div>
+
+<style>
+  .masonry-gallery {
+    column-count: 3;
+    column-gap: var(--space-lg);
+    margin: var(--space-xl) 0;
+  }
+  
+  .masonry-item {
+    break-inside: avoid;
+    margin-bottom: var(--space-lg);
+    page-break-inside: avoid;
+  }
+  
+  .masonry-item .photo-card {
+    width: 100%;
+  }
+  
+  .masonry-item .photo-card img {
+    width: 100%;
+    height: auto;
+    display: block;
+    border-radius: var(--radius-sm);
+  }
+  
+  /* Desktop grande: 4 columnas */
+  @media (min-width: 1400px) {
+    .masonry-gallery {
+      column-count: 4;
+    }
+  }
+  
+  /* Tablet: 2 columnas */
+  @media (max-width: 1024px) {
+    .masonry-gallery {
+      column-count: 2;
+      column-gap: var(--space-md);
+    }
+    
+    .masonry-item {
+      margin-bottom: var(--space-md);
+    }
+  }
+  
+  /* Móvil: 1 columna */
+  @media (max-width: 640px) {
+    .masonry-gallery {
+      column-count: 1;
+      column-gap: var(--space-md);
+    }
+    
+    .masonry-item {
+      margin-bottom: var(--space-md);
+    }
+  }
+</style>
+

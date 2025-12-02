@@ -1,0 +1,53 @@
+---
+interface Props {
+  photo: {
+    id: string;
+    category: string;
+    src: string;
+    date: string;
+    sessionDate: string;
+    originalName: string;
+  };
+}
+
+const { photo } = Astro.props;
+---
+
+<div class="photo-card" data-photo-id={photo.id}>
+  <img 
+    src={photo.src} 
+    alt={`${photo.category} photo - ${photo.originalName}`}
+    loading="lazy"
+    class="gallery-image"
+    data-modal-src={photo.src}
+  />
+</div>
+
+<style>
+  .photo-card {
+    position: relative;
+    overflow: hidden;
+    border-radius: var(--radius-sm);
+    background: var(--color-background-alt);
+    display: block;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    transition: box-shadow var(--transition-base);
+  }
+  
+  .photo-card:hover {
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
+  }
+  
+  .photo-card img {
+    width: 100%;
+    height: auto;
+    display: block;
+    transition: transform var(--transition-slow);
+    cursor: pointer;
+  }
+  
+  .photo-card:hover img {
+    transform: scale(1.03);
+  }
+</style>
+

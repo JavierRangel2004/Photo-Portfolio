@@ -1,0 +1,289 @@
+---
+import HomePhotoCard from './HomePhotoCard.astro';
+import { getPhotoOrientation, type Photo } from '../lib/photos';
+
+interface Props {
+  photos: Photo[];
+  initialCategory?: string;
+}
+
+const { photos, initialCategory = 'all' } = Astro.props;
+---
+
+<div class="home-carousel-wrapper">
+  <div class="home-carousel-track" id="featured-photos">
+    {photos.map((photo) => {
+      const orientation = getPhotoOrientation(photo);
+      const shouldShowInitially = initialCategory === 'all' || photo.category === initialCategory;
+      return (
+        <div 
+          class="home-carousel-slide fade-in-up" 
+          data-category={photo.category}
+          style={shouldShowInitially ? '' : 'display: none;'}
+        >
+          <HomePhotoCard photo={photo} orientation={orientation} />
+          <div class="category-badge">{photo.category.charAt(0).toUpperCase() + photo.category.slice(1)}</div>
+        </div>
+      );
+    })}
+  </div>
+  <div class="carousel-arrow left" id="carousel-left">
+    <i class="fas fa-chevron-left"></i>
+  </div>
+  <div class="carousel-arrow right" id="carousel-right">
+    <i class="fas fa-chevron-right"></i>
+  </div>
+</div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const container = document.getElementById('featured-photos');
+    const leftArrow = document.getElementById('carousel-left');
+    const rightArrow = document.getElementById('carousel-right');
+    
+    if (!container) return;
+    
+    // Función para calcular y aplicar altura uniforme
+    const updateCarouselHeight = () => {
+      // Solo considerar slides visibles (no ocultos por el filtro)
+      const allSlides = container.querySelectorAll('.home-carousel-slide');
+      const visibleSlides = Array.from(allSlides).filter(slide => {
+        const style = window.getComputedStyle(slide);
+        return style.display !== 'none';
+      });
+      
+      if (!visibleSlides.length) return;
+      
+      const images = Array.from(container.querySelectorAll('.home-carousel-image'))
+        .filter(img => {
+          const slide = img.closest('.home-carousel-slide');
+          return slide && window.getComputedStyle(slide).display !== 'none';
+        });
+      
+      if (!images.length) return;
+      
+      let maxHeight = 0;
+      const firstVisibleSlide = visibleSlides[0];
+      if (!firstVisibleSlide) return;
+      
+      const slideWidth = firstVisibleSlide.getBoundingClientRect().width;
+      
+      // Calcular la altura máxima basada en las imágenes visibles y cargadas
+      images.forEach((img) => {
+        if (img.complete && img.naturalHeight > 0 && img.naturalWidth > 0) {
+          // Calcular altura que tendría la imagen si se ajusta al ancho del slide
+          // manteniendo su aspect ratio
+          const aspectRatio = img.naturalWidth / img.naturalHeight;
+          const calculatedHeight = slideWidth / aspectRatio;
+          
+          if (calculatedHeight > maxHeight) {
+            maxHeight = calculatedHeight;
+          }
+        }
+      });
+      
+      // Si no hay imágenes cargadas o el cálculo falla, usar un valor por defecto
+      if (maxHeight === 0 || maxHeight < 200) {
+        maxHeight = 420; // altura fallback razonable
+      }
+      
+      // Aplicar la altura uniforme usando CSS custom property
+      container.style.setProperty('--carousel-height', `${Math.ceil(maxHeight)}px`);
+    };
+    
+    // Ejecutar cuando las imágenes se carguen
+    const allImages = container.querySelectorAll('.home-carousel-image');
+    let loadedCount = 0;
+    const totalImages = allImages.length;
+    
+    if (totalImages === 0) {
+      updateCarouselHeight();
+    } else {
+      allImages.forEach((img) => {
+        if (img.complete) {
+          loadedCount++;
+          if (loadedCount === totalImages) {
+            setTimeout(updateCarouselHeight, 100);
+          }
+        } else {
+          img.addEventListener('load', () => {
+            loadedCount++;
+            if (loadedCount === totalImages) {
+              setTimeout(updateCarouselHeight, 100);
+            }
+          }, { once: true });
+        }
+      });
+    }
+    
+    // Recalcular en resize
+    let resizeTimeout;
+    window.addEventListener('resize', () => {
+      clearTimeout(resizeTimeout);
+      resizeTimeout = setTimeout(updateCarouselHeight, 250);
+    });
+    
+    // Recalcular cuando cambie el filtro (observar cambios en display de slides)
+    const observer = new MutationObserver(() => {
+      setTimeout(updateCarouselHeight, 100);
+    });
+    
+    observer.observe(container, {
+      attributes: true,
+      attributeFilter: ['style'],
+      subtree: true
+    });
+    
+    // Scroll horizontal con rueda del mouse
+    container.addEventListener('wheel', (e) => {
+      if (e.deltaY !== 0) {
+        e.preventDefault();
+        container.scrollLeft += e.deltaY;
+      }
+    });
+    
+    // Flechas de navegación
+    if (leftArrow) {
+      leftArrow.addEventListener('click', () => {
+        container.scrollBy({ left: -300, behavior: 'smooth' });
+      });
+    }
+    
+    if (rightArrow) {
+      rightArrow.addEventListener('click', () => {
+        container.scrollBy({ left: 300, behavior: 'smooth' });
+      });
+    }
+  });
+</script>
+
+<style>
+  .home-carousel-wrapper {
+    position: relative;
+    margin: var(--space-xl) auto;
+    overflow: hidden;
+    padding: 0 var(--space-lg);
+  }
+  
+  .home-carousel-track {
+    display: flex;
+    flex-wrap: nowrap;
+    gap: var(--space-lg);
+    align-items: flex-start;
+    overflow-x: auto;
+    scroll-behavior: smooth;
+    padding: var(--space-md) 0;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+  
+  .home-carousel-track::-webkit-scrollbar {
+    display: none;
+  }
+  
+  .home-carousel-slide {
+    position: relative;
+    flex-shrink: 0;
+    width: 300px;
+    height: var(--carousel-height, 420px);
+    margin: 0;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  /* Badge de categoría como overlay absoluto */
+  .category-badge {
+    position: absolute;
+    bottom: var(--space-md);
+    left: var(--space-md);
+    background: rgba(0, 0, 0, 0.8);
+    color: #ffffff;
+    padding: var(--space-xs) var(--space-md);
+    border-radius: var(--radius-lg);
+    font-size: 0.85rem;
+    font-weight: 600;
+    pointer-events: none;
+    z-index: 2;
+    backdrop-filter: blur(6px);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+  }
+  
+  .carousel-arrow {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 44px;
+    height: 44px;
+    background: rgba(0, 0, 0, 0.65);
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #fff;
+    cursor: pointer;
+    z-index: 10;
+    transition: all var(--transition-base);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+  }
+  
+  .carousel-arrow:hover {
+    background: rgba(0, 0, 0, 0.85);
+    transform: translateY(-50%) scale(1.1);
+  }
+  
+  .carousel-arrow:active {
+    transform: translateY(-50%) scale(0.95);
+  }
+  
+  .carousel-arrow.left {
+    left: var(--space-md);
+  }
+  
+  .carousel-arrow.right {
+    right: var(--space-md);
+  }
+  
+  @media (max-width: 768px) {
+    .home-carousel-wrapper {
+      padding: 0 var(--space-md);
+    }
+    
+    .home-carousel-slide {
+      width: 260px;
+      height: var(--carousel-height, 360px);
+    }
+    
+    .carousel-arrow {
+      width: 38px;
+      height: 38px;
+    }
+    
+    .carousel-arrow.left {
+      left: var(--space-sm);
+    }
+    
+    .carousel-arrow.right {
+      right: var(--space-sm);
+    }
+  }
+  
+  @media (max-width: 480px) {
+    .home-carousel-wrapper {
+      padding: 0 var(--space-sm);
+    }
+    
+    .home-carousel-slide {
+      width: 240px;
+      height: var(--carousel-height, 320px);
+    }
+    
+    .carousel-arrow {
+      width: 36px;
+      height: 36px;
+      font-size: 0.9rem;
+    }
+  }
+</style>
+
