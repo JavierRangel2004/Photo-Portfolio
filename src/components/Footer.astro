@@ -1,4 +1,5 @@
 ---
+import { Image } from 'astro:assets';
 const currentYear = new Date().getFullYear();
 const siteTitle = "JRMGraphy";
 const email = "inspecjrm@gmail.com";
@@ -7,7 +8,7 @@ const instagram = "https://www.instagram.com/JRM_Graphy";
 
 <footer class="site-footer">
   <div class="footer-brand">
-    <img src="/assets/images/logo.jpg" alt="JRMGraphy Logo">
+    <Image src="/assets/images/logo.jpg" alt="JRMGraphy Logo" width={200} height={200} loading="lazy" />
   </div>
   <div class="footer-contact-info">
     <a href={`mailto:${email}`}>

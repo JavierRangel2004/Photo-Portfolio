@@ -2,7 +2,7 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
-import HomeCarousel from '../components/HomeCarousel.astro';
+import GalleryGrid from '../components/GalleryGrid.astro';
 import CategoryDropdown from '../components/CategoryDropdown.astro';
 import Modal from '../components/Modal.astro';
 import { getCategories, getRandomPhotosFromAllCategories, getRandomPhotosByCategory } from '../lib/photos';
@@ -61,7 +61,7 @@ const uniquePhotos = Array.from(uniquePhotosMap.values());
     <CategoryDropdown categories={categories} currentCategory={category} />
 
     {uniquePhotos.length > 0 ? (
-      <HomeCarousel photos={uniquePhotos} initialCategory={category} />
+      <GalleryGrid photos={uniquePhotos} initialCategory={category} />
     ) : (
       <p class="text-center">No photos found.</p>
     )}

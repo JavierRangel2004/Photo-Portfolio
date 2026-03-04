@@ -14,14 +14,17 @@ interface Props {
   };
   orientation: PhotoOrientation;
 }
+import { Image } from 'astro:assets';
 
 const { photo, orientation } = Astro.props;
 ---
 
 <div class="home-photo-card" data-photo-id={photo.id}>
-  <img 
+  <Image 
     src={photo.src} 
-    alt={`${photo.category} photo - ${photo.originalName}`}
+    alt={`${photo.category} - ${photo.originalName}`}
+    width={photo.width || 800}
+    height={photo.height || 600}
     loading="lazy"
     class={`home-carousel-image home-carousel-image--${orientation}`}
     data-modal-src={photo.src}

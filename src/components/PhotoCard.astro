@@ -9,14 +9,17 @@ interface Props {
     originalName: string;
   };
 }
+import { Image } from 'astro:assets';
 
 const { photo } = Astro.props;
 ---
 
 <div class="photo-card" data-photo-id={photo.id}>
-  <img 
+  <Image 
     src={photo.src} 
-    alt={`${photo.category} photo - ${photo.originalName}`}
+    alt={`${photo.category} - ${photo.originalName}`}
+    width={photo.width || 800}
+    height={photo.height || 600}
     loading="lazy"
     class="gallery-image"
     data-modal-src={photo.src}
@@ -30,12 +33,13 @@ const { photo } = Astro.props;
     border-radius: var(--radius-sm);
     background: var(--color-background-alt);
     display: block;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
     transition: box-shadow var(--transition-base);
+    border: 1px solid rgba(255, 255, 255, 0.05);
   }
   
   .photo-card:hover {
-    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.6);
   }
   
   .photo-card img {

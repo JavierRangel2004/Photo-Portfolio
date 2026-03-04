@@ -82,6 +82,7 @@ out/
 # Vim
 *.swp
 *.swo
+*.sw*
 *~
 
 # Emacs

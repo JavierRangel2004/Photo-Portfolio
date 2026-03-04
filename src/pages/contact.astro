@@ -2,101 +2,145 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
+import { Image } from 'astro:assets';
 ---
 
 <BaseLayout title="Contact" description="Get in touch with JRMGraphy">
   <Header />
-  <main class="content container p-5">
-    <div class="d-flex flex-column flex-md-row align-items-start mb-4">
-      <img src="/assets/images/yo.jpg" alt="Javier Rangel Headshot" class="about-photo me-md-4 mb-3 fade-in-up" loading="lazy">
-      <div class="fade-in-up">
-        <h2>Get in Touch</h2>
-        <p>Whether you're looking to book a photoshoot, discuss a collaboration, or simply want to say hello, I'm here to help. I specialize in capturing unique moments and telling stories through photography. Let's talk about how we can work together to bring your vision to life.</p>
-      </div>
+  
+  <div class="contact-hero position-relative d-flex align-items-center justify-content-center overflow-hidden">
+    <div class="contact-hero-bg position-absolute w-100 h-100">
+       <Image src="/assets/images/yo.jpg" alt="Get in touch background" class="w-100 h-100 object-fit-cover opacity-25" width={1920} height={1280} loading="eager" fetchpriority="high" />
     </div>
-
-    <form id="form" class="mb-5" action="https://script.google.com/macros/s/AKfycbyKdn5xogggfHK1ap6fv3LfxN1L6ok2n95Bjfhm3Mw_N-833sJBe5ULpLKU9VtrWiQj/exec" method="POST" target="hidden_iframe">
-      <div class="mb-3">
-        <label for="name" class="form-label">Name *</label>
-        <input type="text" class="form-control" id="name" name="name" placeholder="Your Name" required />
-      </div>
-      <div class="mb-3">
-        <label for="email" class="form-label">Email *</label>
-        <input type="email" class="form-control" id="email" name="email" placeholder="name@example.com" required />
-      </div>
-      <div class="mb-3">
-        <label for="inquiry-type" class="form-label">Type of Inquiry *</label>
-        <select id="inquiry-type" name="type" class="form-select" required>
-          <option value="booking">Booking</option>
-          <option value="collaboration">Collaboration</option>
-          <option value="general">General Inquiry</option>
-        </select>
-      </div>
-      <div class="mb-3">
-        <label for="message" class="form-label">Message *</label>
-        <textarea class="form-control" id="message" name="message" rows="3" placeholder="How can I help you?" required></textarea>
-      </div>
-      <button type="submit" class="btn btn-outline-light rounded-pill" id="submit-btn">Send</button>
-    </form>
-    
-    <!-- Iframe oculto para recibir la respuesta del formulario -->
-    <iframe name="hidden_iframe" id="hidden_iframe" style="display: none;"></iframe>
-
-    <div id="contact-confirmation" class="alert alert-success" style="display:none;">
-      Thank you for contacting us! Your message has been received. We will get back to you shortly.
+    <div class="contact-hero-overlay position-absolute top-0 start-0 w-100 h-100"></div>
+    <div class="position-relative z-index-2 text-center text-white fade-in-up">
+       <h1 class="display-3 fw-bold mb-3 tracking-wide text-white drop-shadow-lg">Let's Connect</h1>
+       <p class="lead fs-4 fw-light text-light opacity-75">Bring your vision to life through my lens</p>
     </div>
+  </div>
 
-    <h2 class="mt-5 mb-3">Contact Information</h2>
-    <p><strong>Email:</strong> <a href="mailto:inspecjrm@gmail.com">inspecjrm@gmail.com</a></p>
+  <main class="content container p-5 mb-5 premium-dark-section glass-panel">
+    <div class="row g-5">
+      <div class="col-lg-6 fade-in-up">
+        <h2 class="h2 fw-bold mb-4 gradient-text">Get in Touch</h2>
+        <p class="fs-5 fw-light lh-lg text-secondary mb-5">Whether you're looking to book a photoshoot, discuss a collaboration, or simply want to say hello, I'm here to help. I specialize in capturing unique moments and telling stories through photography. Let's talk about how we can work together.</p>
+        
+        <div class="contact-info-blocks mt-5">
+           <div class="d-flex align-items-center mb-4 p-3 rounded-4 glass-panel-sm">
+             <div class="icon-circle bg-premium-gradient me-4 d-flex justify-content-center align-items-center text-dark fs-4 rounded-circle">
+               <i class="fas fa-envelope"></i>
+             </div>
+             <div>
+               <h4 class="h5 text-white mb-1">Email Me</h4>
+               <a href="mailto:inspecjrm@gmail.com" class="text-secondary text-decoration-none hover-white transition">inspecjrm@gmail.com</a>
+             </div>
+           </div>
+           
+           <div class="d-flex align-items-center mb-4 p-3 rounded-4 glass-panel-sm">
+             <div class="icon-circle bg-premium-gradient me-4 d-flex justify-content-center align-items-center text-dark fs-4 rounded-circle">
+               <i class="fas fa-map-marker-alt"></i>
+             </div>
+             <div>
+               <h4 class="h5 text-white mb-1">Location</h4>
+               <span class="text-secondary">Mexico City, Mexico</span>
+             </div>
+           </div>
+        </div>
+      </div>
+      
+      <div class="col-lg-6 fade-in-up" style="animation-delay: 0.2s;">
+        <div class="premium-form-wrapper p-4 p-md-5 rounded-4 glass-panel-sm position-relative">
+          <div class="form-glow"></div>
+          <form id="contact-form" class="position-relative z-1" name="contact" method="POST" data-netlify="true" netlify-honeypot="bot-field">
+            <input type="hidden" name="form-name" value="contact" />
+            <p class="d-none">
+              <label>Don't fill this out if you're human: <input name="bot-field" /></label>
+            </p>
+            
+            <div class="mb-4">
+              <label for="name" class="form-label text-white-50 ms-1 fw-light">Name *</label>
+              <input type="text" class="form-control premium-input" id="name" name="name" placeholder="Your Name" required />
+            </div>
+            <div class="mb-4">
+              <label for="email" class="form-label text-white-50 ms-1 fw-light">Email *</label>
+              <input type="email" class="form-control premium-input" id="email" name="email" placeholder="name@example.com" required />
+            </div>
+            <div class="mb-4">
+              <label for="inquiry-type" class="form-label text-white-50 ms-1 fw-light">Type of Inquiry *</label>
+              <select id="inquiry-type" name="type" class="form-select premium-input" required>
+                <option value="booking" class="bg-dark text-white">Booking</option>
+                <option value="collaboration" class="bg-dark text-white">Collaboration</option>
+                <option value="general" class="bg-dark text-white">General Inquiry</option>
+              </select>
+            </div>
+            <div class="mb-4">
+              <label for="message" class="form-label text-white-50 ms-1 fw-light">Message *</label>
+              <textarea class="form-control premium-input" id="message" name="message" rows="4" placeholder="How can I help you?" required></textarea>
+            </div>
+            <button type="submit" class="btn btn-premium rounded-pill w-100 py-3 fw-bold mt-2" id="submit-btn">Send Message</button>
+          </form>
 
-    <h2 class="mt-5 mb-3">Our Location</h2>
-    <div class="ratio ratio-16x9">
-      <iframe 
-        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3763.008135890624!2d-99.13320858459223!3d19.43260738688643!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x85d1f92aa8c0f8fb%3A0x2a6ea4ecf9d3bf!2sMexico%20City!5e0!3m2!1sen!2smx!4v1699999999999!5m2!1sen!2smx"
-        style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
-    </div>
-
-    <h2 class="mt-5 mb-3">Why us?</h2>
-    <div class="accordion my-4" id="faqAccordion">
-      <div class="accordion-item">
-        <h2 class="accordion-header" id="headingWhyChooseMe">
-          <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseWhyChooseMe"
-            aria-expanded="false" aria-controls="collapseWhyChooseMe">
-            Why Choose JRMGraphy?
-          </button>
-        </h2>
-        <div id="collapseWhyChooseMe" class="accordion-collapse collapse show" aria-labelledby="headingWhyChooseMe"
-          data-bs-parent="#faqAccordion">
-          <div class="accordion-body">
-            With a keen eye for capturing the essence of the moment, my photography is about creating art, not just snapshots. My dedication to quality and creativity sets me apart.
+          <div id="contact-confirmation" class="alert premium-alert mt-4" style="display:none;">
+            <div class="d-flex align-items-center">
+              <i class="fas fa-check-circle fs-4 me-3 text-success"></i>
+              <span>Thank you! Your message has been received. We will get back to you shortly.</span>
+            </div>
           </div>
         </div>
       </div>
-      <div class="accordion-item">
-        <h2 class="accordion-header" id="headingServicesOffered">
-          <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
-            data-bs-target="#collapseServicesOffered" aria-expanded="false" aria-controls="collapseServicesOffered">
-            What Services Do I Offer?
-          </button>
-        </h2>
-        <div id="collapseServicesOffered" class="accordion-collapse collapse" aria-labelledby="headingServicesOffered"
-          data-bs-parent="#faqAccordion">
-          <div class="accordion-body">
-            I offer a range of photography services including portraits, landscapes, event coverage, and bespoke projects tailored to your specific needs.
-          </div>
+    </div>
+
+    <div class="row mt-5 pt-5 border-top border-secondary border-opacity-25 fade-in-up">
+      <div class="col-12">
+        <h2 class="h2 fw-bold mb-4 text-center gradient-text">Our Location</h2>
+        <div class="ratio ratio-21x9 rounded-4 overflow-hidden shadow-lg border border-secondary border-opacity-25">
+          <iframe 
+            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3763.008135890624!2d-99.13320858459223!3d19.43260738688643!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x85d1f92aa8c0f8fb%3A0x2a6ea4ecf9d3bf!2sMexico%20City!5e0!3m2!1sen!2smx!4v1699999999999!5m2!1sen!2smx"
+            title="Google Maps Location"
+            style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
         </div>
       </div>
-      <div class="accordion-item">
-        <h2 class="accordion-header" id="headingBookingProcess">
-          <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
-            data-bs-target="#collapseBookingProcess" aria-expanded="false" aria-controls="collapseBookingProcess">
-            How Does the Booking Process Work?
-          </button>
-        </h2>
-        <div id="collapseBookingProcess" class="accordion-collapse collapse" aria-labelledby="headingBookingProcess"
-          data-bs-parent="#faqAccordion">
-          <div class="accordion-body">
-            Booking is simple. Contact me through any listed method, discuss your project or event, and we'll set a date and time. A deposit may be required for larger projects.
+    </div>
+
+    <div class="row mt-5 pt-5 fade-in-up">
+      <div class="col-lg-8 mx-auto">
+        <h2 class="h2 fw-bold mb-4 text-center gradient-text">Why Us?</h2>
+        <div class="accordion premium-accordion" id="faqAccordion">
+          <div class="accordion-item bg-transparent border-0 mb-3">
+            <h2 class="accordion-header" id="headingWhyChooseMe">
+              <button class="accordion-button bg-black bg-opacity-50 text-white rounded-3 fs-5 fw-medium" type="button" data-bs-toggle="collapse" data-bs-target="#collapseWhyChooseMe" aria-expanded="true" aria-controls="collapseWhyChooseMe">
+                Why Choose JRMGraphy?
+              </button>
+            </h2>
+            <div id="collapseWhyChooseMe" class="accordion-collapse collapse show" aria-labelledby="headingWhyChooseMe" data-bs-parent="#faqAccordion">
+              <div class="accordion-body text-secondary fs-5 fw-light">
+                With a keen eye for capturing the essence of the moment, my photography is about creating art, not just snapshots. My dedication to quality and creativity sets me apart.
+              </div>
+            </div>
+          </div>
+          <div class="accordion-item bg-transparent border-0 mb-3">
+            <h2 class="accordion-header" id="headingServicesOffered">
+              <button class="accordion-button collapsed bg-black bg-opacity-50 text-white rounded-3 fs-5 fw-medium" type="button" data-bs-toggle="collapse" data-bs-target="#collapseServicesOffered" aria-expanded="false" aria-controls="collapseServicesOffered">
+                What Services Do I Offer?
+              </button>
+            </h2>
+            <div id="collapseServicesOffered" class="accordion-collapse collapse" aria-labelledby="headingServicesOffered" data-bs-parent="#faqAccordion">
+              <div class="accordion-body text-secondary fs-5 fw-light">
+                I offer a range of photography services including portraits, landscapes, event coverage, and bespoke projects tailored to your specific needs.
+              </div>
+            </div>
+          </div>
+          <div class="accordion-item bg-transparent border-0 mb-3">
+            <h2 class="accordion-header" id="headingBookingProcess">
+              <button class="accordion-button collapsed bg-black bg-opacity-50 text-white rounded-3 fs-5 fw-medium" type="button" data-bs-toggle="collapse" data-bs-target="#collapseBookingProcess" aria-expanded="false" aria-controls="collapseBookingProcess">
+                How Does the Booking Process Work?
+              </button>
+            </h2>
+            <div id="collapseBookingProcess" class="accordion-collapse collapse" aria-labelledby="headingBookingProcess" data-bs-parent="#faqAccordion">
+              <div class="accordion-body text-secondary fs-5 fw-light">
+                Booking is simple. Contact me through any listed method, discuss your project or event, and we'll set a date and time. A deposit may be required for larger projects.
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -105,74 +149,228 @@ import Footer from '../components/Footer.astro';
   <Footer />
   
   <script>
-    // Contact form submission usando iframe para evitar problemas de CORS
     document.addEventListener('DOMContentLoaded', function() {
-      const form = document.getElementById('form');
-      const submitButton = document.getElementById('submit-btn');
+      const form = document.getElementById('contact-form') as HTMLFormElement;
+      const submitButton = document.getElementById('submit-btn') as HTMLButtonElement;
       const confirmationDiv = document.getElementById('contact-confirmation');
-      const hiddenIframe = document.getElementById('hidden_iframe');
 
       if (!form) return;
 
-      // Validación antes de enviar
       form.addEventListener('submit', function(e) {
-        const name = document.getElementById('name').value.trim();
-        const email = document.getElementById('email').value.trim();
-        const message = document.getElementById('message').value.trim();
+        e.preventDefault();
 
-        // Validación del lado del cliente
-        if (!name) {
-          e.preventDefault();
-          alert('Please enter your name.');
-          return false;
-        }
-        if (!/\S+@\S+\.\S+/.test(email)) {
-          e.preventDefault();
-          alert('Please enter a valid email.');
-          return false;
-        }
-        if (!message) {
-          e.preventDefault();
-          alert('Please enter a message.');
-          return false;
+        const name = (document.getElementById('name') as HTMLInputElement).value.trim();
+        const email = (document.getElementById('email') as HTMLInputElement).value.trim();
+        const message = (document.getElementById('message') as HTMLTextAreaElement).value.trim();
+
+        if (!name || !/\S+@\S+\.\S+/.test(email) || !message) {
+          alert('Please fill out all required fields correctly.');
+          return;
         }
 
-        // Deshabilitar botón y mostrar estado de carga
         if (submitButton) {
           submitButton.disabled = true;
-          submitButton.textContent = 'Sending...';
+          submitButton.innerHTML = '<span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>Sending...';
         }
 
-        // Ocultar mensaje de confirmación previo
         if (confirmationDiv) {
           confirmationDiv.style.display = 'none';
         }
 
-        // El formulario se enviará automáticamente al iframe
-        // Esperamos a que el iframe cargue para mostrar el mensaje de éxito
-        setTimeout(function() {
-          // Asumimos éxito después de un breve delay
-          // (el iframe no puede comunicarse de vuelta debido a CORS, pero el envío funciona)
-          form.reset();
-          if (confirmationDiv) {
-            confirmationDiv.style.display = 'block';
-            confirmationDiv.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        const formData = new FormData(form);
+        const searchParams = new URLSearchParams();
+        
+        for (const pair of formData.entries()) {
+          searchParams.append(pair[0], pair[1] as string);
+        }
+
+        fetch('/', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+          body: searchParams.toString()
+        })
+        .then(response => {
+          if (response.ok) {
+            form.reset();
+            if (confirmationDiv) {
+              confirmationDiv.style.display = 'block';
+              confirmationDiv.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+            }
+          } else {
+            throw new Error('Form submission failed');
           }
+        })
+        .catch(error => {
+          console.error('Error submitting form:', error);
+          alert('There was a problem submitting your form. Please try again later.');
+        })
+        .finally(() => {
           if (submitButton) {
             submitButton.disabled = false;
-            submitButton.textContent = 'Send';
+            submitButton.textContent = 'Send Message';
           }
-        }, 1000);
-      });
-
-      // Escuchar cuando el iframe carga (opcional, para mejor UX)
-      if (hiddenIframe) {
-        hiddenIframe.addEventListener('load', function() {
-          // El formulario se envió exitosamente
-          // Nota: No podemos leer el contenido del iframe por CORS, pero sabemos que cargó
         });
-      }
+      });
     });
   </script>
 </BaseLayout>
+
+<style>
+  /* Base Reset for Dark Mode Page */
+  body {
+    background-color: #0d0d0d !important;
+    background-image: radial-gradient(circle at 50% 0%, #1a1a1a 0%, #0d0d0d 60%);
+    color: #f2f2f2 !important;
+  }
+
+  .contact-hero {
+    height: 60vh;
+    min-height: 400px;
+    margin-top: -80px;
+  }
+
+  .contact-hero-overlay {
+    background: linear-gradient(to bottom, rgba(13,13,13,0.4) 0%, rgba(13,13,13,1) 100%);
+  }
+
+  .drop-shadow-lg {
+    text-shadow: 0 4px 20px rgba(0,0,0,0.6);
+  }
+
+  .tracking-wide {
+    letter-spacing: 2px;
+  }
+
+  .premium-dark-section {
+    margin-top: -100px;
+    position: relative;
+    z-index: 10;
+    border-radius: 24px;
+    padding: 4rem !important;
+  }
+
+  .glass-panel {
+    background: rgba(30, 30, 30, 0.45);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    box-shadow: 0 30px 60px -15px rgba(0, 0, 0, 0.6);
+  }
+
+  .glass-panel-sm {
+    background: rgba(45, 45, 45, 0.4);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    transition: transform 0.3s ease, background 0.3s ease;
+  }
+
+  .glass-panel-sm:hover {
+    background: rgba(55, 55, 55, 0.5);
+    transform: translateY(-2px);
+  }
+
+  .gradient-text {
+    background: linear-gradient(90deg, #ffffff 0%, #888888 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    display: inline-block;
+  }
+
+  .bg-premium-gradient {
+    background: linear-gradient(135deg, #f0f0f0 0%, #a0a0a0 100%);
+  }
+
+  .icon-circle {
+    width: 60px;
+    height: 60px;
+    flex-shrink: 0;
+  }
+
+  .hover-white:hover {
+    color: #ffffff !important;
+  }
+
+  .transition {
+    transition: all 0.3s ease;
+  }
+
+  /* Form Styles */
+  .premium-input {
+    background-color: rgba(0, 0, 0, 0.3) !important;
+    border: 1px solid rgba(255, 255, 255, 0.1) !important;
+    color: #ffffff !important;
+    padding: 1rem 1.25rem !important;
+    border-radius: 12px !important;
+    transition: all 0.3s ease !important;
+  }
+
+  .premium-input:focus {
+    background-color: rgba(0, 0, 0, 0.5) !important;
+    border-color: rgba(255, 255, 255, 0.3) !important;
+    box-shadow: 0 0 0 4px rgba(255, 255, 255, 0.05) !important;
+  }
+
+  .premium-input::placeholder {
+    color: rgba(255, 255, 255, 0.3) !important;
+  }
+
+  .form-glow {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    box-shadow: inset 0 0 50px rgba(0,0,0,0.5);
+    pointer-events: none;
+    border-radius: inherit;
+    z-index: 0;
+  }
+
+  .btn-premium {
+    background: linear-gradient(135deg, #f0f0f0 0%, #ffffff 100%);
+    color: #0d0d0d !important;
+    border: none;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 20px rgba(255, 255, 255, 0.15);
+  }
+
+  .btn-premium:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 30px rgba(255, 255, 255, 0.25);
+    background: #ffffff;
+  }
+
+  .premium-alert {
+    background: rgba(25, 135, 84, 0.2);
+    border: 1px solid rgba(25, 135, 84, 0.4);
+    color: #d1e7dd;
+    border-radius: 12px;
+  }
+
+  /* Accordion Variables */
+  .premium-accordion .accordion-button::after {
+    filter: invert(1);
+    opacity: 0.7;
+  }
+
+  .premium-accordion .accordion-button:not(.collapsed)::after {
+    filter: invert(1);
+    opacity: 1;
+  }
+
+  .text-secondary {
+    color: #a1a1aa !important;
+  }
+  
+  @media (max-width: 768px) {
+    .premium-dark-section {
+      padding: 2rem !important;
+    }
+    
+    .contact-hero {
+      height: 50vh;
+    }
+  }
+</style>
 

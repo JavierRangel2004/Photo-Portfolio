@@ -4,10 +4,10 @@ Portfolio de fotografía profesional construido con **Astro**, optimizado para r
 
 ## 🚀 Características
 
-- **Pipeline automático de fotos**: Procesa y optimiza imágenes automáticamente desde Lightroom
-- **Ordenamiento por fecha**: Las fotos se ordenan automáticamente por fecha de captura (EXIF)
-- **Galería moderna**: Grid responsivo con CSS Grid
-- **Optimización de imágenes**: Generación automática de versiones WebP optimizadas
+- **Pipeline automático de fotos**: Procesa y optimiza imágenes automáticamente desde Lightroom y utiliza pre-computación WebP.
+- **Ordenamiento por fecha**: Las fotos se ordenan automáticamente por fecha de captura (EXIF).
+- **Galería moderna**: Grid responsivo con CSS Grid y diseño Dark/Premium.
+- **Optimización de imágenes nativa**: Generación y entrega con el componente nativo `<Image />` de Astro (optimizaciones de performance de clase mundial).
 - **Filtros por categoría**: Navegación fácil entre categorías
 - **Preparado para features futuras**: Estructura lista para likes/popularidad (Firebase)
 
@@ -145,8 +145,8 @@ El archivo `netlify.toml` contiene la configuración.
 
 ## 📚 Tecnologías
 
-- **Astro** - Framework estático
-- **Sharp** - Procesamiento de imágenes
+- **Astro 5.18.0+** - Framework estático con `<Image />` super rápido
+- **Sharp** - Procesamiento paralelo de imágenes
 - **Exifr** - Lectura de metadatos EXIF
 - **Bootstrap 5** - UI framework
 - **TypeScript** - Tipado (opcional)
