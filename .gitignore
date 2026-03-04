@@ -28,11 +28,14 @@ dist/
 # ============================================
 # Generated files (no subir al repo)
 # ============================================
-src/data/photos.json
-public/photos/
 .photos-cache.json
 output.txt
 *.log
+
+# ============================================
+# Original Images (Not uploaded to save space)
+# ============================================
+assets/images/
 
 # ============================================
 # Archivos de sistema operativo
