@@ -1,34 +1,73 @@
 ---
 const siteTitle = "JRMGraphy";
+const navLinks = [
+  { href: "/", label: "Home" },
+  { href: "/gallery", label: "Archive" },
+  { href: "/about", label: "About" },
+  { href: "/contact", label: "Contact" },
+];
 ---
 
-<header>
-  <div class="bg-image"></div>
-</header>
+<nav class="site-nav site-nav--transparent" aria-label="Main navigation">
+  <div class="container nav-inner">
+    <a href="/" class="nav-brand">{siteTitle}</a>
 
-<nav class="navbar navbar-expand-lg navbar-dark fixed-top">
-  <div class="container-fluid">
-    <a class="navbar-brand" href="/">{siteTitle}</a>
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
-      aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-      <span class="navbar-toggler-icon"></span>
-    </button>
-    <div class="collapse navbar-collapse" id="navbarNav">
-      <ul class="navbar-nav ms-auto">
-        <li class="nav-item">
-          <a class="nav-link" href="/">Home</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="/gallery">Gallery</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="/about">About</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="/contact">Contact</a>
-        </li>
-      </ul>
+    <!-- Desktop links -->
+    <div class="nav-links" role="list">
+      {navLinks.map(link => (
+        <a href={link.href} class="nav-link" role="listitem">{link.label}</a>
+      ))}
     </div>
+
+    <!-- Mobile hamburger -->
+    <button
+      class="nav-toggle"
+      id="nav-toggle"
+      aria-label="Toggle navigation"
+      aria-expanded="false"
+      aria-controls="nav-drawer"
+    >
+      <span></span>
+      <span></span>
+      <span></span>
+    </button>
   </div>
 </nav>
 
+<!-- Mobile drawer overlay -->
+<div class="nav-drawer-overlay" id="nav-overlay" aria-hidden="true"></div>
+
+<!-- Mobile drawer -->
+<nav class="nav-drawer" id="nav-drawer" aria-label="Mobile navigation">
+  <div class="nav-drawer-links">
+    {navLinks.map(link => (
+      <a href={link.href} class="nav-drawer-link">{link.label}</a>
+    ))}
+  </div>
+  <div class="nav-drawer-social">
+    <a href="https://www.instagram.com/JRM_Graphy" target="_blank" rel="noopener noreferrer" aria-label="Instagram">
+      <i class="fab fa-instagram"></i> @JRM_Graphy
+    </a>
+  </div>
+</nav>
+
+<style>
+  .nav-drawer-social {
+    margin-top: 2rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--color-border);
+  }
+
+  .nav-drawer-social a {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: var(--text-sm);
+    color: var(--color-text-dim);
+    transition: color var(--dur-base);
+  }
+
+  .nav-drawer-social a:hover {
+    color: var(--color-accent);
+  }
+</style>

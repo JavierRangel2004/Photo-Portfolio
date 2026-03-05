@@ -1,0 +1,55 @@
+---
+import { getRandomPhotosByCategory, getCategories } from '../lib/photos';
+
+const categories = getCategories();
+
+const categoryMeta: Record<string, { label: string; description: string }> = {
+  portraits: { label: 'Portraits', description: 'Presence & emotion' },
+  city:       { label: 'City',      description: 'Urban fragments' },
+  concert:    { label: 'Concert',   description: 'Live energy' },
+  product:    { label: 'Product',   description: 'Objects & form' },
+  nature:     { label: 'Nature',    description: 'Light & landscape' },
+  creativity: { label: 'Creative',  description: 'Concept & vision' },
+};
+
+const categoryData = categories.map(cat => {
+  const photos = getRandomPhotosByCategory(cat, 1);
+  const cover = photos[0];
+  const meta = categoryMeta[cat] || { label: cat, description: '' };
+  return { ...meta, slug: cat, cover };
+});
+---
+
+<section class="categories-section" aria-label="Photography categories">
+  <div class="categories-header reveal">
+    <div class="section-heading">
+      <p class="section-eyebrow">Visual Worlds</p>
+      <h2 class="section-title">Explore by theme</h2>
+    </div>
+  </div>
+
+  <div class="categories-grid">
+    {categoryData.map((cat, i) => (
+      <a
+        href={`/gallery?category=${cat.slug}`}
+        class="category-card reveal"
+        style={`transition-delay: ${i * 0.06}s`}
+        aria-label={`Browse ${cat.label} photos`}
+      >
+        {cat.cover && (
+          <img
+            src={cat.cover.src}
+            alt={`${cat.label} photography`}
+            width={cat.cover.width || 800}
+            height={cat.cover.height || 600}
+            loading="lazy"
+          />
+        )}
+        <div class="category-card-body">
+          <span class="category-card-name">{cat.label}</span>
+          <span class="category-card-count">{cat.description}</span>
+        </div>
+      </a>
+    ))}
+  </div>
+</section>

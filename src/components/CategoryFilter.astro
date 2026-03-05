@@ -2,142 +2,72 @@
 interface Props {
   categories: string[];
   currentCategory?: string;
-  baseUrl?: string; // URL base para los filtros (por defecto: página actual)
 }
 
-const { categories, currentCategory = 'all', baseUrl } = Astro.props;
+const { categories, currentCategory = 'all' } = Astro.props;
 ---
 
-<div class="category-filter">
-  <button 
+<div class="category-filter" role="group" aria-label="Filter by category">
+  <button
     class={`filter-chip ${currentCategory === 'all' ? 'active' : ''}`}
     data-category="all"
     type="button"
+    aria-pressed={currentCategory === 'all' ? 'true' : 'false'}
   >
     All
   </button>
-  {categories.map((category) => (
-    <button 
-      class={`filter-chip ${currentCategory === category ? 'active' : ''}`}
-      data-category={category}
+  {categories.map((cat) => (
+    <button
+      class={`filter-chip ${currentCategory === cat ? 'active' : ''}`}
+      data-category={cat}
       type="button"
+      aria-pressed={currentCategory === cat ? 'true' : 'false'}
     >
-      {category.charAt(0).toUpperCase() + category.slice(1)}
+      {cat.charAt(0).toUpperCase() + cat.slice(1)}
     </button>
   ))}
 </div>
 
 <script>
   document.addEventListener('DOMContentLoaded', () => {
-    const filterButtons = document.querySelectorAll('.category-filter .filter-chip');
-    // Seleccionar solo las fotos (slides del carrusel o items de la gallery), no los botones
-    const allPhotoItems = document.querySelectorAll('.home-carousel-slide[data-category], .masonry-item[data-category]');
-    
-    // Función para filtrar fotos
-    const filterPhotos = (selectedCategory) => {
-      // Actualizar botones activos
+    const filterButtons = document.querySelectorAll<HTMLButtonElement>('.category-filter .filter-chip');
+    const galleryItems = document.querySelectorAll<HTMLElement>('[data-category]');
+
+    const filterPhotos = (selected: string) => {
       filterButtons.forEach(btn => {
-        const btnCategory = btn.getAttribute('data-category');
-        if (btnCategory === selectedCategory) {
-          btn.classList.add('active');
-        } else {
-          btn.classList.remove('active');
-        }
+        const isActive = btn.dataset.category === selected;
+        btn.classList.toggle('active', isActive);
+        btn.setAttribute('aria-pressed', isActive ? 'true' : 'false');
       });
-      
-      // Filtrar fotos
-      allPhotoItems.forEach(item => {
-        const itemCategory = item.getAttribute('data-category');
-        const shouldShow = selectedCategory === 'all' || 
-                          itemCategory === selectedCategory;
-        
-        item.style.display = shouldShow ? '' : 'none';
+
+      galleryItems.forEach(item => {
+        if (item.classList.contains('filter-chip')) return; // skip the buttons themselves
+        const cat = item.dataset.category;
+        const show = selected === 'all' || cat === selected;
+        item.style.display = show ? '' : 'none';
       });
-      
-      // Actualizar URL sin recargar usando History API
-      const url = new URL(window.location);
-      if (selectedCategory === 'all') {
+
+      const url = new URL(window.location.href);
+      if (selected === 'all') {
         url.searchParams.delete('category');
       } else {
-        url.searchParams.set('category', selectedCategory);
+        url.searchParams.set('category', selected);
       }
-      window.history.pushState({ category: selectedCategory }, '', url);
+      window.history.pushState({ category: selected }, '', url);
     };
-    
-    // Event listeners para botones
+
     filterButtons.forEach(btn => {
-      btn.addEventListener('click', (e) => {
-        e.preventDefault();
-        const category = btn.getAttribute('data-category') || 'all';
-        filterPhotos(category);
+      btn.addEventListener('click', () => {
+        filterPhotos(btn.dataset.category || 'all');
       });
     });
-    
-    // Aplicar filtro inicial basado en la URL
-    const urlParams = new URLSearchParams(window.location.search);
-    const initialCategory = urlParams.get('category') || 'all';
-    filterPhotos(initialCategory);
-    
-    // Manejar navegación del navegador (back/forward)
-    window.addEventListener('popstate', (e) => {
-      const urlParams = new URLSearchParams(window.location.search);
-      const category = urlParams.get('category') || 'all';
-      filterPhotos(category);
+
+    const urlCategory = new URLSearchParams(window.location.search).get('category') || 'all';
+    filterPhotos(urlCategory);
+
+    window.addEventListener('popstate', () => {
+      const cat = new URLSearchParams(window.location.search).get('category') || 'all';
+      filterPhotos(cat);
     });
   });
 </script>
-
-<style>
-  .category-filter {
-    display: flex;
-    flex-wrap: wrap;
-    gap: var(--space-sm);
-    justify-content: center;
-    margin: var(--space-xl) 0;
-    padding: 0 var(--space-md);
-  }
-  
-  .filter-chip {
-    padding: var(--space-sm) var(--space-lg);
-    border-radius: var(--radius-lg);
-    background-color: var(--color-background-alt);
-    color: var(--color-text);
-    font-weight: var(--font-weight-medium);
-    transition: all var(--transition-base);
-    text-decoration: none;
-    border: 2px solid transparent;
-    cursor: pointer;
-    font-family: var(--font-family);
-    font-size: 0.95rem;
-  }
-  
-  .filter-chip:hover {
-    background-color: var(--color-secondary-dark);
-    transform: translateY(-2px);
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-  }
-  
-  .filter-chip.active {
-    background-color: var(--color-primary);
-    color: var(--color-background);
-    border-color: var(--color-primary-dark);
-    box-shadow: 0 4px 15px rgba(255, 255, 255, 0.15);
-  }
-  
-  .filter-chip:active {
-    transform: translateY(0);
-  }
-  
-  @media (max-width: 576px) {
-    .category-filter {
-      gap: var(--space-xs);
-      padding: 0;
-    }
-    
-    .filter-chip {
-      padding: var(--space-xs) var(--space-md);
-      font-size: 0.9rem;
-    }
-  }
-</style>
-

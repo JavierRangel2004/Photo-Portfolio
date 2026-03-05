@@ -9,7 +9,7 @@
   "type": "module",
   "scripts": {
     "prepare:photos": "node scripts/generate-photos.mjs",
-    "dev": "npm run prepare:photos && astro dev",
+    "dev": "npm run prepare:photos || true && astro dev",
     "build": "astro build",
     "preview": "astro preview"
   },

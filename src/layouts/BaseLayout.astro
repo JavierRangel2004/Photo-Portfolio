@@ -4,9 +4,9 @@ interface Props {
   description?: string;
 }
 
-const { title, description = "Capturing moments, telling stories." } = Astro.props;
+const { title, description = "Photography portfolio by Javier Rangel — Mexico City." } = Astro.props;
 const siteTitle = "JRMGraphy";
-const fullTitle = `${title} - ${siteTitle}`;
+const fullTitle = title === "Home" ? siteTitle : `${title} — ${siteTitle}`;
 ---
 
 <!DOCTYPE html>
@@ -16,72 +16,181 @@ const fullTitle = `${title} - ${siteTitle}`;
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>{fullTitle}</title>
   <meta name="description" content={description} />
-  
-  <!-- Bootstrap 5 -->
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-  
-  <!-- Google Fonts -->
+  <meta name="theme-color" content="#0A0A0A" />
+
+  <!-- Open Graph -->
+  <meta property="og:title" content={fullTitle} />
+  <meta property="og:description" content={description} />
+  <meta property="og:type" content="website" />
+
+  <!-- Google Fonts — Playfair Display (serif editorial) + Inter (sans UI) -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-  
-  <!-- Font Awesome -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" crossorigin="anonymous">
-  
-  <!-- Custom Styles -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,400;0,600;0,700;0,900;1,400;1,700&display=swap" rel="stylesheet">
+
+  <!-- Font Awesome (icons only) -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer">
+
+  <!-- Design System & Global Styles -->
   <link rel="stylesheet" href="/styles/styles.css" />
 </head>
 <body>
   <slot />
-  
-  <!-- Bootstrap JS -->
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-  
-  <!-- Modal handler - Simple, sin manipulación de DOM -->
+
+  <!-- Scroll-based nav behaviour -->
   <script>
-    document.addEventListener('DOMContentLoaded', () => {
-      // Delegación de eventos para evitar problemas con navegación
-      document.body.addEventListener('click', (e) => {
-        const img = e.target.closest('.gallery-image[data-modal-src]');
-        if (img) {
-          e.preventDefault();
-          const modalImage = document.getElementById('modal-image');
-          const modalSrc = img.getAttribute('data-modal-src');
-          if (modalImage && modalSrc) {
-            modalImage.src = modalSrc;
-            const modal = new bootstrap.Modal(document.getElementById('imageModal'));
-            modal.show();
+    const nav = document.querySelector('.site-nav');
+    if (nav) {
+      const onScroll = () => {
+        nav.classList.toggle('scrolled', window.scrollY > 20);
+      };
+      window.addEventListener('scroll', onScroll, { passive: true });
+      onScroll();
+    }
+  </script>
+
+  <!-- Mobile nav drawer -->
+  <script>
+    const toggle = document.getElementById('nav-toggle');
+    const drawer = document.getElementById('nav-drawer');
+    const overlay = document.getElementById('nav-overlay');
+
+    const openDrawer = () => {
+      toggle?.classList.add('open');
+      drawer?.classList.add('open');
+      overlay?.classList.add('open');
+      document.body.style.overflow = 'hidden';
+    };
+
+    const closeDrawer = () => {
+      toggle?.classList.remove('open');
+      drawer?.classList.remove('open');
+      overlay?.classList.remove('open');
+      document.body.style.overflow = '';
+    };
+
+    toggle?.addEventListener('click', () => {
+      const isOpen = drawer?.classList.contains('open');
+      isOpen ? closeDrawer() : openDrawer();
+    });
+
+    overlay?.addEventListener('click', closeDrawer);
+
+    document.querySelectorAll('.nav-drawer-link').forEach(link => {
+      link.addEventListener('click', closeDrawer);
+    });
+  </script>
+
+  <!-- Scroll-triggered reveal animations -->
+  <script>
+    const revealEls = document.querySelectorAll('.reveal');
+    if (revealEls.length > 0) {
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('visible');
+            observer.unobserve(entry.target);
           }
-        }
-      });
-      
-      // IntersectionObserver para animaciones fade-in-up
-      const fadeElements = document.querySelectorAll('.fade-in-up');
-      
-      if (fadeElements.length > 0) {
-        const observerOptions = {
-          root: null,
-          rootMargin: '0px 0px -50px 0px',
-          threshold: 0.1
-        };
-        
-        const observer = new IntersectionObserver((entries) => {
-          entries.forEach(entry => {
-            if (entry.isIntersecting) {
-              entry.target.classList.add('is-visible');
-              // Opcional: dejar de observar después de que se anima
-              observer.unobserve(entry.target);
-            }
-          });
-        }, observerOptions);
-        
-        fadeElements.forEach(element => {
-          observer.observe(element);
         });
+      }, { rootMargin: '0px 0px -60px 0px', threshold: 0.08 });
+
+      revealEls.forEach(el => observer.observe(el));
+    }
+  </script>
+
+  <!-- Premium Lightbox -->
+  <script>
+    (() => {
+      let photos: { src: string; category: string; id: string }[] = [];
+      let currentIndex = 0;
+      let touchStartX = 0;
+
+      const lightbox = document.getElementById('lightbox');
+      const lbImg    = document.getElementById('lb-img') as HTMLImageElement | null;
+      const lbCat    = document.getElementById('lb-cat');
+      const lbCount  = document.getElementById('lb-count');
+
+      if (!lightbox || !lbImg) return;
+
+      function open(index: number) {
+        currentIndex = index;
+        const p = photos[index];
+        if (!p || !lbImg) return;
+        lbImg.src = p.src;
+        lbImg.alt = p.category;
+        if (lbCat) lbCat.textContent = p.category.charAt(0).toUpperCase() + p.category.slice(1);
+        if (lbCount) lbCount.textContent = `${index + 1} / ${photos.length}`;
+        lightbox.classList.add('open');
+        document.body.style.overflow = 'hidden';
+      }
+
+      function close() {
+        lightbox.classList.remove('open');
+        document.body.style.overflow = '';
+      }
+
+      function prev() { open((currentIndex - 1 + photos.length) % photos.length); }
+      function next() { open((currentIndex + 1) % photos.length); }
+
+      // Build photo list and attach click handlers
+      function init() {
+        const cards = document.querySelectorAll<HTMLElement>('[data-lightbox-src]');
+        photos = Array.from(cards).map(card => ({
+          src: card.dataset.lightboxSrc || '',
+          category: card.dataset.lightboxCat || '',
+          id: card.dataset.lightboxId || '',
+        }));
+        cards.forEach((card, i) => {
+          card.addEventListener('click', () => open(i));
+        });
+      }
+
+      // Controls
+      document.getElementById('lb-close')?.addEventListener('click', close);
+      document.getElementById('lb-prev')?.addEventListener('click', prev);
+      document.getElementById('lb-next')?.addEventListener('click', next);
+
+      lightbox.addEventListener('click', (e) => {
+        if (e.target === lightbox) close();
+      });
+
+      document.addEventListener('keydown', (e) => {
+        if (!lightbox.classList.contains('open')) return;
+        if (e.key === 'Escape') close();
+        if (e.key === 'ArrowLeft') prev();
+        if (e.key === 'ArrowRight') next();
+      });
+
+      // Touch / swipe
+      lightbox.addEventListener('touchstart', (e) => {
+        touchStartX = e.touches[0].clientX;
+      }, { passive: true });
+
+      lightbox.addEventListener('touchend', (e) => {
+        const delta = touchStartX - e.changedTouches[0].clientX;
+        if (Math.abs(delta) > 50) delta > 0 ? next() : prev();
+      });
+
+      // Initialize after DOM ready
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', init);
+      } else {
+        init();
+      }
+    })();
+  </script>
+
+  <!-- Active nav link highlight -->
+  <script>
+    const currentPath = window.location.pathname;
+    document.querySelectorAll('.nav-link, .nav-drawer-link').forEach(link => {
+      const href = (link as HTMLAnchorElement).getAttribute('href');
+      if (href && (href === currentPath || (href !== '/' && currentPath.startsWith(href)))) {
+        link.classList.add('active');
       }
     });
   </script>
-  
+
   <!-- Google Analytics -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-5NLFSHDCBJ"></script>
   <script>
@@ -92,4 +201,3 @@ const fullTitle = `${title} - ${siteTitle}`;
   </script>
 </body>
 </html>
-

@@ -7,51 +7,30 @@ interface Props {
     date: string;
     sessionDate: string;
     originalName: string;
+    width?: number;
+    height?: number;
   };
 }
-import { Image } from 'astro:assets';
 
 const { photo } = Astro.props;
 ---
 
-<div class="photo-card" data-photo-id={photo.id}>
-  <Image 
-    src={photo.src} 
-    alt={`${photo.category} - ${photo.originalName}`}
+<div
+  class="photo-card"
+  data-lightbox-src={photo.src}
+  data-lightbox-cat={photo.category}
+  data-lightbox-id={photo.id}
+  role="button"
+  tabindex="0"
+  aria-label={`View ${photo.category} photo`}
+>
+  <img
+    src={photo.src}
+    alt={`${photo.category} photography by JRMGraphy`}
     width={photo.width || 800}
     height={photo.height || 600}
     loading="lazy"
-    class="gallery-image"
-    data-modal-src={photo.src}
   />
+  <div class="photo-card-overlay"></div>
+  <span class="photo-card-cat">{photo.category}</span>
 </div>
-
-<style>
-  .photo-card {
-    position: relative;
-    overflow: hidden;
-    border-radius: var(--radius-sm);
-    background: var(--color-background-alt);
-    display: block;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
-    transition: box-shadow var(--transition-base);
-    border: 1px solid rgba(255, 255, 255, 0.05);
-  }
-  
-  .photo-card:hover {
-    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.6);
-  }
-  
-  .photo-card img {
-    width: 100%;
-    height: auto;
-    display: block;
-    transition: transform var(--transition-slow);
-    cursor: pointer;
-  }
-  
-  .photo-card:hover img {
-    transform: scale(1.03);
-  }
-</style>
-

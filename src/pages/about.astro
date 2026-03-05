@@ -2,160 +2,112 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
+import ContactCTA from '../components/ContactCTA.astro';
 import { Image } from 'astro:assets';
 ---
 
-<BaseLayout title="About" description="Learn more about JRMGraphy and Javier Rangel">
+<BaseLayout title="About" description="Javier Rangel — Photographer based in Mexico City. Portraits, city, concert, and editorial photography.">
   <Header />
 
-  <div class="about-hero position-relative d-flex align-items-center justify-content-center overflow-hidden">
-    <div class="about-hero-bg position-absolute w-100 h-100">
-       <Image src="/assets/images/yo.jpg" alt="Javier Rangel background" class="w-100 h-100 object-fit-cover opacity-25" width={1920} height={1280} loading="eager" fetchpriority="high" />
+  <!-- Hero -->
+  <div class="about-hero">
+    <div class="about-hero-bg">
+      <Image
+        src="/assets/images/yo.jpg"
+        alt="Javier Rangel"
+        width={1920}
+        height={1280}
+        loading="eager"
+        fetchpriority="high"
+      />
     </div>
-    <div class="about-hero-overlay position-absolute top-0 start-0 w-100 h-100"></div>
-    <div class="position-relative z-index-2 text-center text-white fade-in-up">
-       <h1 class="display-3 fw-bold mb-3 tracking-wide text-white drop-shadow-lg">Behind the Lens</h1>
-       <p class="lead fs-4 fw-light text-light opacity-75">Capturing the beauty of landscapes and the essence of people</p>
+    <div class="about-hero-overlay"></div>
+    <div class="about-hero-content">
+      <p class="about-hero-eyebrow">Photographer</p>
+      <h1 class="about-hero-title">Behind the Lens</h1>
+      <p class="about-hero-sub">Mexico City · Est. 2021</p>
     </div>
   </div>
 
-  <main class="content container p-5 mb-5 premium-dark-section glass-panel">
-    <div class="row align-items-center g-5">
-      <div class="col-lg-5 col-md-12 fade-in-up">
-        <div class="about-image-wrapper position-relative rounded-4 overflow-hidden shadow-lg">
-          <Image src="/assets/images/yo.jpg" alt="Javier Rangel" class="about-img-main w-100 h-auto" width={1920} height={1280} loading="lazy" />
-          <div class="image-glow"></div>
-        </div>
+  <!-- Main content -->
+  <main class="about-main">
+    <div class="about-grid">
+      <!-- Photo -->
+      <div class="about-photo-wrap reveal">
+        <Image
+          src="/assets/images/yo.jpg"
+          alt="Javier Rangel — photographer"
+          class="about-photo"
+          width={900}
+          height={1200}
+          loading="lazy"
+        />
       </div>
 
-      <div class="col-lg-7 col-md-12 text-light fade-in-up" style="animation-delay: 0.2s;">
-        <h2 class="h1 fw-bold mb-3 gradient-text">Javier Rangel</h2>
-        <h3 class="h5 fw-light text-muted mb-4 letter-spacing-1">Photographer • Mexico City</h3>
+      <!-- Text -->
+      <div class="about-text reveal stagger-2">
+        <h2 class="about-name">Javier Rangel</h2>
+        <p class="about-location">Mexico City · Photography</p>
 
-        <div class="about-content fs-5 fw-light lh-lg text-secondary">
-          <p>Hello! I'm an amateur photographer based in the vibrant city of Mexico City. With over 3 years of experience, I'm dedicated to capturing the beauty of landscapes and the unique expression of people through photography.</p>
-          <p>My journey began a few years ago. I've explored different techniques and styles, always seeking to convey emotions and tell stories through each image. For me, photography is more than just taking a picture—it's about capturing the perfect moment that conveys a particular emotion.</p>
-          <p>I'm passionate about portrait photography. Every face has a unique story, and my goal is to capture the essence of each individual. Whether it's a quiet photo session or an exciting event, I aim to capture genuine expressions and convey personality in every photograph.</p>
-          <p>If you're passionate about photography and looking to capture unique moments and emotions, I invite you to join my visual world.</p>
+        <div class="about-manifesto">
+          <p>
+            I'm an amateur photographer based in Mexico City. For me, photography isn't 
+            about equipment — it's about seeing. About deciding what to look at, and 
+            how long to look.
+          </p>
+          <p>
+            Over the past few years I've explored portraits, urban environments, live 
+            concerts, nature, and product work — always searching for the frame where 
+            light and moment align.
+          </p>
+          <p>
+            My approach is observational. I'm drawn to quiet details and strong presences: 
+            a face in natural light, a street at the edge of night, the energy of a crowd 
+            mid-song.
+          </p>
+          <p>
+            Every image I publish is curated. If it's here, I believe in it.
+          </p>
         </div>
 
-        <div class="mt-5 d-flex flex-wrap gap-3">
-           <a href="/contact" class="btn btn-premium rounded-pill px-4 py-3 fw-medium">Work With Me</a>
-           <a href="/gallery" class="btn btn-outline-premium rounded-pill px-4 py-3 fw-medium">View Gallery</a>
+        <div class="about-services">
+          <p class="about-services-title">Available for</p>
+          <div class="services-grid">
+            <div class="service-item">
+              <span class="service-dot"></span>
+              <span>Portrait sessions</span>
+            </div>
+            <div class="service-item">
+              <span class="service-dot"></span>
+              <span>Concert coverage</span>
+            </div>
+            <div class="service-item">
+              <span class="service-dot"></span>
+              <span>Editorial projects</span>
+            </div>
+            <div class="service-item">
+              <span class="service-dot"></span>
+              <span>Product photography</span>
+            </div>
+            <div class="service-item">
+              <span class="service-dot"></span>
+              <span>Visual collaborations</span>
+            </div>
+            <div class="service-item">
+              <span class="service-dot"></span>
+              <span>Select events</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="about-cta">
+          <a href="/contact" class="btn btn-primary">Get in Touch</a>
+          <a href="/gallery" class="btn btn-ghost">View Archive</a>
         </div>
       </div>
     </div>
   </main>
+
+  <ContactCTA />
   <Footer />
 </BaseLayout>
-
-<style>
-  /* Base Reset for Dark Mode Page */
-  body {
-    background-color: #0d0d0d !important;
-    background-image: radial-gradient(circle at 50% 0%, #1a1a1a 0%, #0d0d0d 60%);
-    color: #f2f2f2 !important;
-  }
-
-  .about-hero {
-    height: 60vh;
-    min-height: 400px;
-    margin-top: -80px; /* Offset the navbar spacing if needed */
-  }
-
-  .about-hero-overlay {
-    background: linear-gradient(to bottom, rgba(13,13,13,0.4) 0%, rgba(13,13,13,1) 100%);
-  }
-
-  .drop-shadow-lg {
-    text-shadow: 0 4px 20px rgba(0,0,0,0.6);
-  }
-
-  .tracking-wide {
-    letter-spacing: 2px;
-  }
-  
-  .letter-spacing-1 {
-    letter-spacing: 1px;
-  }
-
-  .premium-dark-section {
-    margin-top: -100px;
-    position: relative;
-    z-index: 10;
-    border-radius: 24px;
-    padding: 4rem !important;
-  }
-
-  .glass-panel {
-    background: rgba(30, 30, 30, 0.45);
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
-    border: 1px solid rgba(255, 255, 255, 0.08);
-    box-shadow: 0 30px 60px -15px rgba(0, 0, 0, 0.6);
-  }
-
-  .about-img-main {
-    transition: transform 0.8s cubic-bezier(0.2, 0.8, 0.2, 1);
-  }
-
-  .about-image-wrapper:hover .about-img-main {
-    transform: scale(1.03);
-  }
-
-  .image-glow {
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    box-shadow: inset 0 0 0 1px rgba(255,255,255,0.1), inset 0 0 20px rgba(0,0,0,0.5);
-    pointer-events: none;
-    border-radius: inherit;
-  }
-
-  .gradient-text {
-    background: linear-gradient(90deg, #ffffff 0%, #888888 100%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    display: inline-block;
-  }
-
-  .btn-premium {
-    background: linear-gradient(135deg, #f0f0f0 0%, #ffffff 100%);
-    color: #0d0d0d !important;
-    border: none;
-    transition: all 0.3s ease;
-    box-shadow: 0 4px 20px rgba(255, 255, 255, 0.15);
-  }
-
-  .btn-premium:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 8px 30px rgba(255, 255, 255, 0.25);
-    background: #ffffff;
-  }
-
-  .btn-outline-premium {
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    color: #ffffff !important;
-    background: transparent;
-    transition: all 0.3s ease;
-  }
-
-  .btn-outline-premium:hover {
-    background: rgba(255, 255, 255, 0.1);
-    border-color: rgba(255, 255, 255, 0.5);
-    transform: translateY(-3px);
-  }
-
-  .text-secondary {
-    color: #a1a1aa !important;
-  }
-  
-  @media (max-width: 768px) {
-    .premium-dark-section {
-      padding: 2rem !important;
-    }
-  }
-</style>
-

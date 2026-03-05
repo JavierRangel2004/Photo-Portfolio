@@ -9,24 +9,35 @@ import { getAllPhotos, getCategories } from '../../lib/photos';
 
 const category = Astro.url.searchParams.get('category') || 'all';
 const categories = getCategories();
-// Cargar TODAS las fotos para el filtrado client-side
 const allPhotos = getAllPhotos();
+const photoCount = allPhotos.length;
 ---
 
-<BaseLayout title="Gallery" description="Explore my photography portfolio">
+<BaseLayout
+  title="Archive"
+  description="Complete photography archive by Javier Rangel — portraits, city, concert, nature, product, and creative photography."
+>
   <Header />
-  <main class="content container p-5">
-    <h1 class="text-center my-5">Gallery</h1>
-    
-    <CategoryFilter categories={categories} currentCategory={category} />
-    
-    {allPhotos.length > 0 ? (
-      <GalleryGrid photos={allPhotos} initialCategory={category} />
-    ) : (
-      <p class="text-center">No photos found in this category.</p>
-    )}
+
+  <main class="site-main">
+    <div class="gallery-page-header">
+      <div class="container">
+        <h1 class="gallery-page-title reveal">Archive</h1>
+        <p class="gallery-page-meta reveal stagger-1">{photoCount} photographs</p>
+      </div>
+    </div>
+
+    <div class="container">
+      <CategoryFilter categories={categories} currentCategory={category} />
+
+      {allPhotos.length > 0 ? (
+        <GalleryGrid photos={allPhotos} initialCategory={category} />
+      ) : (
+        <p style="text-align:center; color: var(--color-text-muted); padding: 4rem 0;">No photographs found.</p>
+      )}
+    </div>
   </main>
+
   <Footer />
   <Modal />
 </BaseLayout>
-
