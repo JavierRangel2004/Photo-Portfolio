@@ -1,0 +1,43 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Header from '../../components/Header.astro';
+import Footer from '../../components/Footer.astro';
+import GalleryGrid from '../../components/GalleryGrid.astro';
+import CategoryFilter from '../../components/CategoryFilter.astro';
+import Modal from '../../components/Modal.astro';
+import { getAllPhotos, getCategories } from '../../lib/photos';
+
+const category = Astro.url.searchParams.get('category') || 'all';
+const categories = getCategories();
+const allPhotos = getAllPhotos();
+const photoCount = allPhotos.length;
+---
+
+<BaseLayout
+  title="Archive"
+  description="Complete photography archive by Javier Rangel — portraits, city, concert, nature, product, and creative photography."
+>
+  <Header />
+
+  <main class="site-main">
+    <div class="gallery-page-header">
+      <div class="container">
+        <h1 class="gallery-page-title reveal">Archive</h1>
+        <p class="gallery-page-meta reveal stagger-1">{photoCount} photographs</p>
+      </div>
+    </div>
+
+    <div class="container">
+      <CategoryFilter categories={categories} currentCategory={category} />
+
+      {allPhotos.length > 0 ? (
+        <GalleryGrid photos={allPhotos} initialCategory={category} />
+      ) : (
+        <p style="text-align:center; color: var(--color-text-muted); padding: 4rem 0;">No photographs found.</p>
+      )}
+    </div>
+  </main>
+
+  <Footer />
+  <Modal />
+</BaseLayout>

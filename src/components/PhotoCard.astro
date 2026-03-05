@@ -1,0 +1,36 @@
+---
+interface Props {
+  photo: {
+    id: string;
+    category: string;
+    src: string;
+    date: string;
+    sessionDate: string;
+    originalName: string;
+    width?: number;
+    height?: number;
+  };
+}
+
+const { photo } = Astro.props;
+---
+
+<div
+  class="photo-card"
+  data-lightbox-src={photo.src}
+  data-lightbox-cat={photo.category}
+  data-lightbox-id={photo.id}
+  role="button"
+  tabindex="0"
+  aria-label={`View ${photo.category} photo`}
+>
+  <img
+    src={photo.src}
+    alt={`${photo.category} photography by JRMGraphy`}
+    width={photo.width || 800}
+    height={photo.height || 600}
+    loading="lazy"
+  />
+  <div class="photo-card-overlay"></div>
+  <span class="photo-card-cat">{photo.category}</span>
+</div>

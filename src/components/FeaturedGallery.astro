@@ -1,0 +1,42 @@
+---
+import { getRandomPhotosFromAllCategories } from '../lib/photos';
+import type { Photo } from '../lib/photos';
+
+// 9 photos for the editorial asymmetric grid
+const photos: Photo[] = getRandomPhotosFromAllCategories(2).slice(0, 9);
+---
+
+<section class="featured-section" aria-label="Selected works">
+  <div class="featured-header reveal">
+    <div class="section-heading">
+      <p class="section-eyebrow">Selected Works</p>
+      <h2 class="section-title">A curated view</h2>
+    </div>
+    <a href="/gallery" class="view-all">View all &rarr;</a>
+  </div>
+
+  <div class="featured-grid">
+    {photos.map((photo, i) => (
+      <div
+        class="featured-item reveal"
+        style={`transition-delay: ${(i % 4) * 0.08}s`}
+        data-lightbox-src={photo.src}
+        data-lightbox-cat={photo.category}
+        data-lightbox-id={photo.id}
+        role="button"
+        tabindex="0"
+        aria-label={`View ${photo.category} photo`}
+      >
+        <img
+          src={photo.src}
+          alt={`${photo.category} photography by JRMGraphy`}
+          width={photo.width || 800}
+          height={photo.height || 600}
+          loading={i < 3 ? 'eager' : 'lazy'}
+        />
+        <div class="featured-item-overlay"></div>
+        <span class="featured-item-label">{photo.category}</span>
+      </div>
+    ))}
+  </div>
+</section>

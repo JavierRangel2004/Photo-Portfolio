@@ -1,0 +1,76 @@
+---
+import { getRandomPhotosByCategory } from '../lib/photos';
+
+// Pick a strong hero image from portraits or city
+const heroPhoto = getRandomPhotosByCategory('portraits', 1)[0] 
+               || getRandomPhotosByCategory('city', 1)[0];
+---
+
+<section class="hero" aria-label="Hero">
+  <div class="hero-bg" id="hero-bg">
+    {heroPhoto && (
+      <img 
+        src={heroPhoto.src}
+        alt="JRMGraphy hero"
+        width="1920"
+        height="1280"
+        loading="eager"
+        fetchpriority="high"
+        id="hero-img"
+      />
+    )}
+  </div>
+  <div class="hero-overlay"></div>
+
+  <div class="hero-content">
+    <p class="hero-eyebrow">Mexico City · Photography</p>
+    <h1 class="hero-title">JRMGraphy</h1>
+    <p class="hero-subtitle">A curated view of presence, city, and light.</p>
+
+    <div class="hero-actions">
+      <a href="/gallery" class="btn btn-primary">View Archive</a>
+      <a href="/contact" class="btn btn-ghost">Get in Touch</a>
+    </div>
+  </div>
+
+  <div class="hero-scroll" aria-hidden="true">
+    <span>Scroll</span>
+    <div class="hero-scroll-line"></div>
+  </div>
+</section>
+
+<script>
+  // Subtle parallax on hero bg
+  const heroBg = document.getElementById('hero-bg');
+  if (heroBg && window.matchMedia('(prefers-reduced-motion: no-preference)').matches) {
+    window.addEventListener('scroll', () => {
+      const scrolled = window.scrollY;
+      heroBg.style.transform = `translateY(${scrolled * 0.35}px)`;
+    }, { passive: true });
+  }
+
+  // Small zoom-out on load for cinematic feel
+  const heroImg = document.getElementById('hero-img');
+  if (heroImg) {
+    heroImg.addEventListener('load', () => heroImg.classList.add('loaded'));
+    if (heroImg.complete) heroImg.classList.add('loaded');
+  }
+</script>
+
+<style>
+  .hero-actions {
+    display: flex;
+    gap: 1rem;
+    margin-top: 2rem;
+    opacity: 0;
+    transform: translateY(16px);
+    animation: reveal 0.7s cubic-bezier(0.16, 1, 0.3, 1) 0.8s forwards;
+  }
+
+  @media (max-width: 480px) {
+    .hero-actions {
+      flex-direction: column;
+      width: fit-content;
+    }
+  }
+</style>

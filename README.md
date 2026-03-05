@@ -1,67 +1,156 @@
-# JRMGraphy
+# JRMGraphy - Photography Portfolio
 
-JRMGraphy is a personal photography portfolio built with Jekyll. It showcases various photography categories (e.g., Portraits, Nature, City, Creativity) and offers dynamic galleries, an infinite scroll feature, and a contact form. The site is optimized for both desktop and mobile viewing and is hosted on platforms like Netlify.
+Portfolio de fotografía profesional construido con **Astro**, optimizado para rendimiento y experiencia de usuario.
 
-## Features
+## 🚀 Características
 
-- **Responsive Design:** Built with [Bootstrap 5](https://getbootstrap.com) to ensure a mobile-first, responsive layout.
-- **Dynamic Galleries:** Utilizes JavaScript for random image selection, infinite scrolling, and modal-based image enlargements.
-- **Easy Category Management:** Categories and image settings are defined in `_data/categories.yml` with individual category pages in the `/gallery` folder.
-- **Contact Form:** Integrated contact form that submits data via a Google Apps Script endpoint.
-- **SEO & Performance:** Uses best practices such as lazy loading of images and a minimalistic design for fast page loads.
+- **Pipeline automático de fotos**: Procesa y optimiza imágenes automáticamente desde Lightroom y utiliza pre-computación WebP.
+- **Ordenamiento por fecha**: Las fotos se ordenan automáticamente por fecha de captura (EXIF).
+- **Galería moderna**: Grid responsivo con CSS Grid y diseño Dark/Premium.
+- **Optimización de imágenes nativa**: Generación y entrega con el componente nativo `<Image />` de Astro (optimizaciones de performance de clase mundial).
+- **Filtros por categoría**: Navegación fácil entre categorías
+- **Preparado para features futuras**: Estructura lista para likes/popularidad (Firebase)
 
-## Technologies Used
+## 📁 Estructura del Proyecto
 
-- **Jekyll:** Static site generator for building the site.
-- **Ruby Gems:** Defined in `Gemfile` (e.g., jekyll, minima, jekyll-feed).
-- **Bootstrap 5:** For responsive UI components.
-- **Font Awesome:** For icons in the navigation and footer.
-- **Google Fonts:** Using the "Poppins" font family.
-- **JavaScript:** Custom scripts for galleries, modals, infinite scroll, and form submission.
-- **Netlify:** Configuration via `netlify.toml` for continuous deployment.
-- **Google Apps Script:** Used for handling contact form submissions.
+```
+Photo-Portfolio/
+├── assets/images/          # Imágenes RAW (input)
+│   ├── portraits/
+│   ├── nature/
+│   ├── product/
+│   ├── concert/
+│   ├── city/
+│   └── creativity/
+├── src/
+│   ├── components/        # Componentes Astro
+│   ├── layouts/           # Layouts base
+│   ├── pages/             # Páginas del sitio
+│   ├── lib/               # Helpers y utilidades
+│   ├── data/              # photos.json (generado automáticamente)
+│   └── styles/            # Estilos CSS
+├── public/
+│   ├── photos/            # Imágenes optimizadas (generadas)
+│   └── assets/            # Assets estáticos (logo, etc.)
+├── scripts/
+│   └── generate-photos.mjs  # Script de procesamiento
+└── docs/                  # Documentación
+```
 
-## Directory Structure
+## 🛠️ Instalación
 
-- **Root Files:**  
-  - `404.html`, `about.md`, `contact.md`, `index.md` – Core pages.
-  - `.gitignore`, `Gemfile`, `Gemfile.lock`, `netlify.toml` – Build and deployment files.
-- **/_config.yml:** Site configuration (title, description, plugins, etc.).
-- **/_layouts:** Layout templates (`default.html`, `home.html`, `gallery.html`, `page.html`, `category.html`).
-- **/_includes:** Reusable HTML fragments (header, navigation, footer, modal).
-- **/_data:** YAML files for categories (`categories.yml`) and site info (`site_info.yml`).
-- **/assets:**  
-  - `css/styles.css` – Custom styling.
-  - `js/script.js` – Custom JavaScript for dynamic functionality.
-- **/gallery:** Markdown files for each category page.
-- **dirOutput.py:** A utility script to scan directories and output file contents (useful for debugging and content management).
-
-## Setup and Installation
-
-1. **Clone the Repository:**
+1. **Clonar el repositorio**:
    ```bash
-   git clone https://your-repository-url.git
+   git clone <repo-url>
+   cd Photo-Portfolio
    ```
-2. **Install Dependencies:**
+
+2. **Instalar dependencias**:
    ```bash
-   bundle install
+   npm install
    ```
-3. **Run Locally:**
+
+## 📸 Cómo Agregar Nuevas Fotos
+
+### Flujo de trabajo:
+
+1. **Exportar desde Lightroom**:
+   - Exporta tus fotos con los nombres que prefieras
+   - No necesitas renombrarlas manualmente
+
+2. **Copiar a la carpeta correspondiente**:
+   - Copia las fotos a `assets/images/<categoria>/`
+   - Ejemplo: `assets/images/portraits/DSC_1234.jpg`
+
+3. **Commit y push**:
    ```bash
-   bundle exec jekyll serve
+   git add assets/images/
+   git commit -m "Add new photos"
+   git push
    ```
-   Open your browser and navigate to `http://localhost:4000`.
 
-## Managing Categories
+4. **Build automático**:
+   - En Netlify, el build ejecutará automáticamente:
+     - `npm run prepare:photos` → Procesa y optimiza imágenes
+     - `npm run build` → Genera el sitio estático
 
-- **Adding a New Category:**
-  1. **Update `_data/categories.yml`:** Add a new entry with keys such as `name`, `title`, `description`, `prefix`, `start`, `count`, and an initial image.
-  2. **Create a Markdown Page:** In the `/gallery` folder, create a new file (e.g., `newcategory.md`) using the `category` layout.
-  3. **Image Assets:** Place your images in the corresponding folder (e.g., `/assets/images/newcategory`).
+### El script automáticamente:
 
-- **Editing an Existing Category:**
-  - Update the corresponding details in `_data/categories.yml`.
-  - Add or remove images in the respective folder.
+- ✅ Lee la fecha de captura desde EXIF (o usa mtime como fallback)
+- ✅ Optimiza las imágenes a WebP (1600px máximo, calidad 85%)
+- ✅ Genera `src/data/photos.json` ordenado por fecha
+- ✅ Agrupa fotos por sesión (mismo día)
 
-## License
+## 🏃 Desarrollo Local
 
+1. **Procesar fotos** (primera vez o cuando agregues nuevas):
+   ```bash
+   npm run prepare:photos
+   ```
+
+2. **Iniciar servidor de desarrollo**:
+   ```bash
+   npm run dev
+   ```
+   El sitio estará disponible en `http://localhost:4321`
+
+3. **Build de producción**:
+   ```bash
+   npm run build
+   ```
+   Genera el sitio estático en `dist/`
+
+4. **Preview del build**:
+   ```bash
+   npm run preview
+   ```
+
+## 📝 Scripts Disponibles
+
+- `npm run prepare:photos` - Procesa y optimiza todas las imágenes
+- `npm run dev` - Inicia servidor de desarrollo (procesa fotos automáticamente)
+- `npm run build` - Build de producción (procesa fotos automáticamente)
+- `npm run preview` - Preview del build de producción
+
+## 🎨 Categorías
+
+Las categorías se detectan automáticamente desde las carpetas en `assets/images/`. Actualmente:
+
+- `portraits` - Retratos
+- `nature` - Naturaleza
+- `product` - Producto
+- `concert` - Conciertos
+- `city` - Ciudad
+- `creative` - Creatividad
+
+## 🔮 Features Futuras (Preparado)
+
+El proyecto está estructurado para facilitar la implementación de:
+
+- **Likes/Popularidad**: Cada foto tiene un `id` único que puede usarse con Firebase
+- **Filtro "Most Popular"**: Función `getPhotosByPopularity()` lista para integrar
+- **Agrupación por sesión**: Función `groupPhotosBySession()` disponible para UI
+
+Ver `docs/astro-migration.md` para más detalles.
+
+## 🌐 Deploy en Netlify
+
+El proyecto está configurado para deploy automático en Netlify:
+
+- **Build command**: `npm run build`
+- **Publish directory**: `dist`
+- **Node version**: 18
+
+El archivo `netlify.toml` contiene la configuración.
+
+## 📚 Tecnologías
+
+- **Astro 5.18.0+** - Framework estático con `<Image />` super rápido
+- **Sharp** - Procesamiento paralelo de imágenes
+- **Exifr** - Lectura de metadatos EXIF
+- **Bootstrap 5** - UI framework
+- **TypeScript** - Tipado (opcional)
+
+## 📄 Licencia
+
+Todos los derechos reservados - JRMGraphy

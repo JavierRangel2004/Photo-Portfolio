@@ -1,0 +1,123 @@
+---
+interface Props {
+  categories: string[];
+  currentCategory?: string;
+  baseUrl?: string;
+}
+
+const { categories, currentCategory = 'all', baseUrl } = Astro.props;
+---
+
+<div class="category-dropdown-wrapper">
+  <label for="categoryFilter" class="form-label">Filter by Category:</label>
+  <select id="categoryFilter" class="form-select d-inline-block w-auto">
+    <option value="all" selected={currentCategory === 'all'}>All</option>
+    {categories.map((category) => (
+      <option 
+        value={category}
+        selected={currentCategory === category}
+      >
+        {category.charAt(0).toUpperCase() + category.slice(1)}
+      </option>
+    ))}
+  </select>
+</div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const categoryFilter = document.getElementById('categoryFilter');
+    if (!categoryFilter) return;
+    
+    // Obtener todas las fotos usando data-category (carrusel o gallery)
+    // Seleccionar solo las fotos (slides del carrusel o items de la gallery), no otros elementos
+    const allPhotoSlides = document.querySelectorAll('.home-carousel-slide[data-category], .masonry-item[data-category]');
+    
+    // Función para filtrar fotos
+    const filterPhotos = (selectedCategory) => {
+      allPhotoSlides.forEach(slide => {
+        const slideCategory = slide.getAttribute('data-category');
+        const shouldShow = selectedCategory === 'all' || 
+                          slideCategory === selectedCategory;
+        
+        slide.style.display = shouldShow ? '' : 'none';
+      });
+      
+      // Actualizar URL sin recargar usando History API
+      const url = new URL(window.location);
+      if (selectedCategory === 'all') {
+        url.searchParams.delete('category');
+      } else {
+        url.searchParams.set('category', selectedCategory);
+      }
+      window.history.pushState({ category: selectedCategory }, '', url);
+    };
+    
+    // Event listener para el dropdown
+    categoryFilter.addEventListener('change', (e) => {
+      const selected = e.target.value;
+      filterPhotos(selected);
+    });
+    
+    // Aplicar filtro inicial basado en la URL
+    const urlParams = new URLSearchParams(window.location.search);
+    const initialCategory = urlParams.get('category') || 'all';
+    if (categoryFilter.value !== initialCategory) {
+      categoryFilter.value = initialCategory;
+    }
+    filterPhotos(initialCategory);
+    
+    // Manejar navegación del navegador (back/forward)
+    window.addEventListener('popstate', (e) => {
+      const urlParams = new URLSearchParams(window.location.search);
+      const category = urlParams.get('category') || 'all';
+      categoryFilter.value = category;
+      filterPhotos(category);
+    });
+  });
+</script>
+
+<style>
+  .category-dropdown-wrapper {
+    display: flex;
+    align-items: center;
+    gap: var(--space-md);
+    justify-content: center;
+    margin: var(--space-xl) 0;
+    flex-wrap: wrap;
+  }
+  
+  .category-dropdown-wrapper .form-label {
+    margin: 0;
+    font-weight: var(--font-weight-medium);
+    color: var(--color-primary);
+    font-size: 1.1rem;
+  }
+  
+  .category-dropdown-wrapper .form-select {
+    min-width: 200px;
+    border-radius: var(--radius-sm);
+    border: 2px solid var(--color-background-alt);
+    padding: var(--space-sm) var(--space-md);
+    transition: border-color var(--transition-base), box-shadow var(--transition-base);
+    font-family: var(--font-family);
+    font-weight: var(--font-weight-medium);
+  }
+  
+  .category-dropdown-wrapper .form-select:focus {
+    border-color: var(--color-primary-light);
+    box-shadow: 0 0 0 3px rgba(51, 51, 51, 0.1);
+    outline: none;
+  }
+  
+  @media (max-width: 576px) {
+    .category-dropdown-wrapper {
+      flex-direction: column;
+      align-items: stretch;
+    }
+    
+    .category-dropdown-wrapper .form-select {
+      width: 100%;
+    }
+  }
+</style>
+

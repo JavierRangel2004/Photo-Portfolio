@@ -1,0 +1,73 @@
+---
+interface Props {
+  categories: string[];
+  currentCategory?: string;
+}
+
+const { categories, currentCategory = 'all' } = Astro.props;
+---
+
+<div class="category-filter" role="group" aria-label="Filter by category">
+  <button
+    class={`filter-chip ${currentCategory === 'all' ? 'active' : ''}`}
+    data-category="all"
+    type="button"
+    aria-pressed={currentCategory === 'all' ? 'true' : 'false'}
+  >
+    All
+  </button>
+  {categories.map((cat) => (
+    <button
+      class={`filter-chip ${currentCategory === cat ? 'active' : ''}`}
+      data-category={cat}
+      type="button"
+      aria-pressed={currentCategory === cat ? 'true' : 'false'}
+    >
+      {cat.charAt(0).toUpperCase() + cat.slice(1)}
+    </button>
+  ))}
+</div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const filterButtons = document.querySelectorAll<HTMLButtonElement>('.category-filter .filter-chip');
+    const galleryItems = document.querySelectorAll<HTMLElement>('[data-category]');
+
+    const filterPhotos = (selected: string) => {
+      filterButtons.forEach(btn => {
+        const isActive = btn.dataset.category === selected;
+        btn.classList.toggle('active', isActive);
+        btn.setAttribute('aria-pressed', isActive ? 'true' : 'false');
+      });
+
+      galleryItems.forEach(item => {
+        if (item.classList.contains('filter-chip')) return; // skip the buttons themselves
+        const cat = item.dataset.category;
+        const show = selected === 'all' || cat === selected;
+        item.style.display = show ? '' : 'none';
+      });
+
+      const url = new URL(window.location.href);
+      if (selected === 'all') {
+        url.searchParams.delete('category');
+      } else {
+        url.searchParams.set('category', selected);
+      }
+      window.history.pushState({ category: selected }, '', url);
+    };
+
+    filterButtons.forEach(btn => {
+      btn.addEventListener('click', () => {
+        filterPhotos(btn.dataset.category || 'all');
+      });
+    });
+
+    const urlCategory = new URLSearchParams(window.location.search).get('category') || 'all';
+    filterPhotos(urlCategory);
+
+    window.addEventListener('popstate', () => {
+      const cat = new URLSearchParams(window.location.search).get('category') || 'all';
+      filterPhotos(cat);
+    });
+  });
+</script>

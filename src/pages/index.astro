@@ -1,0 +1,29 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import Hero from '../components/Hero.astro';
+import FeaturedGallery from '../components/FeaturedGallery.astro';
+import CategoryNav from '../components/CategoryNav.astro';
+import StatementBlock from '../components/StatementBlock.astro';
+import ContactCTA from '../components/ContactCTA.astro';
+import Modal from '../components/Modal.astro';
+---
+
+<BaseLayout
+  title="Home"
+  description="JRMGraphy — Photography portfolio by Javier Rangel. Based in Mexico City."
+>
+  <Header />
+
+  <main>
+    <Hero />
+    <FeaturedGallery />
+    <CategoryNav />
+    <StatementBlock />
+    <ContactCTA />
+  </main>
+
+  <Footer />
+  <Modal />
+</BaseLayout>
