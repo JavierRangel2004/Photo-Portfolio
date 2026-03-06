@@ -1,9 +1,14 @@
 ---
 import { getRandomPhotosByCategory } from '../lib/photos';
+import { getLangFromUrl, useTranslations, useTranslatedPath } from '../i18n/utils';
 
 // Pick a strong hero image from portraits or city
 const heroPhoto = getRandomPhotosByCategory('portraits', 1)[0] 
                || getRandomPhotosByCategory('city', 1)[0];
+
+const lang = getLangFromUrl(Astro.url);
+const t = useTranslations(lang);
+const translatePath = useTranslatedPath(lang);
 ---
 
 <section class="hero" aria-label="Hero">
@@ -23,18 +28,18 @@ const heroPhoto = getRandomPhotosByCategory('portraits', 1)[0]
   <div class="hero-overlay"></div>
 
   <div class="hero-content">
-    <p class="hero-eyebrow">Mexico City · Photography</p>
-    <h1 class="hero-title">JRMGraphy</h1>
-    <p class="hero-subtitle">A curated view of presence, city, and light.</p>
+    <p class="hero-eyebrow">{t('hero.eyebrow')}</p>
+    <h1 class="hero-title">{t('hero.title')}</h1>
+    <p class="hero-subtitle">{t('hero.subtitle')}</p>
 
     <div class="hero-actions">
-      <a href="/gallery" class="btn btn-primary">View Archive</a>
-      <a href="/contact" class="btn btn-ghost">Get in Touch</a>
+      <a href={translatePath('/gallery')} class="btn btn-primary">{t('hero.cta.primary')}</a>
+      <a href={translatePath('/contact')} class="btn btn-ghost">{t('hero.cta.secondary')}</a>
     </div>
   </div>
 
-  <a class="hero-scroll" id="hero-scroll" href="#home-themes" aria-label="Explore themes">
-    <span class="hero-scroll-text">Explore themes</span>
+  <a class="hero-scroll" id="hero-scroll" href="#home-themes" aria-label={t('hero.scroll')}>
+    <span class="hero-scroll-text">{t('hero.scroll')}</span>
     <span class="hero-scroll-icon" aria-hidden="true"></span>
   </a>
 </section>

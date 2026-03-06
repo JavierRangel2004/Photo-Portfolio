@@ -1,4 +1,6 @@
 ---
+import { getLangFromUrl, useTranslations } from '../i18n/utils';
+
 interface Props {
   photo: {
     id: string;
@@ -28,26 +30,41 @@ const orientation =
       : photo.width > photo.height
         ? 'landscape'
         : 'portrait';
+
+const lang = getLangFromUrl(Astro.url);
+const t = useTranslations(lang);
+// Translating the category label using the dictionary
+// using a type assertion to keyof typeof ui['es'] to access safely
+const localizedCategory = t(`categories.desc.${photo.category}` as any) ? t(`categories.desc.${photo.category}` as any).split(' ')[0].replace('.', '') : photo.category;
+const categoryMap: Record<string, any> = {
+  portraits: { es: 'Retratos', en: 'Portraits' },
+  city: { es: 'Ciudad', en: 'City' },
+  concert: { es: 'Conciertos', en: 'Concert' },
+  nature: { es: 'Naturaleza', en: 'Nature' },
+  product: { es: 'Producto', en: 'Product' },
+  creativity: { es: 'Creatividad', en: 'Creativity' },
+};
+const displayCategory = categoryMap[photo.category]?.[lang] || photo.category;
 ---
 
 <div
   class={`photo-card photo-card--${orientation}`}
   data-lightbox-src={photo.src}
-  data-lightbox-cat={photo.category}
+  data-lightbox-cat={displayCategory}
   data-lightbox-id={photo.id}
   data-lightbox-group={lightboxGroup}
   data-orientation={orientation}
   role="button"
   tabindex="0"
-  aria-label={`View ${photo.category} photo`}
+  aria-label={`View ${displayCategory} photo`}
 >
   <img
     src={photo.src}
-    alt={`${photo.category} photography by JRMGraphy`}
+    alt={`${displayCategory} photography by JRMGraphy`}
     width={photo.width}
     height={photo.height}
     loading={loading}
   />
   <div class="photo-card-overlay"></div>
-  <span class="photo-card-cat">{photo.category}</span>
+  <span class="photo-card-cat">{displayCategory}</span>
 </div>

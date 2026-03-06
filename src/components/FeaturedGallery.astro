@@ -2,18 +2,23 @@
 import { getRandomPhotosFromAllCategories } from '../lib/photos';
 import type { Photo } from '../lib/photos';
 import PhotoCard from './PhotoCard.astro';
+import { getLangFromUrl, useTranslations, useTranslatedPath } from '../i18n/utils';
 
 const photos: Photo[] = getRandomPhotosFromAllCategories(5);
+
+const lang = getLangFromUrl(Astro.url);
+const t = useTranslations(lang);
+const translatePath = useTranslatedPath(lang);
 ---
 
 <section class="featured-section" id="home-glance" aria-label="Selected works">
   <div class="featured-header reveal">
     <div class="section-heading">
-      <p class="section-eyebrow">Quick glance</p>
-      <h2 class="section-title">A quick glance</h2>
-      <p class="section-subtitle">A rotating mix of photographs from every category, arranged in an orientation-safe masonry layout.</p>
+      <p class="section-eyebrow">{t('featured.eyebrow')}</p>
+      <h2 class="section-title">{t('featured.title')}</h2>
+      <p class="section-subtitle">{t('featured.subtitle')}</p>
     </div>
-    <a href="/gallery" class="view-all">View all &rarr;</a>
+    <a href={translatePath('/gallery')} class="view-all">{t('featured.viewAll')}</a>
   </div>
 
   <div class="masonry-gallery masonry-gallery--featured">

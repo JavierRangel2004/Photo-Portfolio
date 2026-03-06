@@ -1,0 +1,64 @@
+---
+import { languages } from '../i18n/ui';
+import { getLangFromUrl, useTranslatedPath } from '../i18n/utils';
+
+const currentLang = getLangFromUrl(Astro.url);
+const translatePath = useTranslatedPath(currentLang);
+
+// Get the current path without the language prefix
+const pathName = Astro.url.pathname;
+const pathWithoutLang = pathName.replace(/^\/(es|en)/, '') || '/';
+---
+
+<div class="language-picker">
+  {Object.entries(languages).map(([lang, label]) => (
+    <a
+      href={translatePath(pathWithoutLang, lang)}
+      class={`lang-link ${currentLang === lang ? 'active' : ''}`}
+      data-lang={lang}
+      aria-label={`Change language to ${label}`}
+    >
+      {label}
+    </a>
+  ))}
+</div>
+
+<style>
+  .language-picker {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-left: 1rem;
+    border-left: 1px solid var(--color-border);
+    padding-left: 1rem;
+  }
+  
+  .lang-link {
+    font-size: var(--text-xs);
+    font-weight: 500;
+    color: var(--color-text-dim);
+    text-decoration: none;
+    transition: color var(--dur-base);
+  }
+  
+  .lang-link:hover {
+    color: var(--color-accent);
+  }
+  
+  .lang-link.active {
+    color: var(--color-text);
+    pointer-events: none;
+  }
+</style>
+
+<script>
+  // Persist language choice in localStorage when a language link is clicked
+  document.querySelectorAll('.lang-link').forEach(link => {
+    link.addEventListener('click', (e) => {
+      const targetLang = (e.currentTarget as HTMLElement).getAttribute('data-lang');
+      if (targetLang) {
+        localStorage.setItem('preferredLang', targetLang);
+      }
+    });
+  });
+</script>

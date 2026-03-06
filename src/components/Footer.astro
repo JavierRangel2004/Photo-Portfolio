@@ -1,15 +1,20 @@
 ---
+import { getLangFromUrl, useTranslations } from '../i18n/utils';
+
 const currentYear = new Date().getFullYear();
 const siteTitle = "JRMGraphy";
 const email = "inspecjrm@gmail.com";
 const instagram = "https://www.instagram.com/JRM_Graphy";
+
+const lang = getLangFromUrl(Astro.url);
+const t = useTranslations(lang);
 ---
 
 <footer class="site-footer">
   <div class="footer-inner">
     <div class="footer-left">
       <div class="footer-brand">{siteTitle}</div>
-      <div class="footer-copy">&copy; {currentYear} {siteTitle}. All rights reserved.</div>
+      <div class="footer-copy">&copy; {currentYear} {siteTitle}. {t('footer.rights')}</div>
     </div>
 
     <div class="footer-social">

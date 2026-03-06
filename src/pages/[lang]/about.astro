@@ -1,0 +1,111 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Header from '../../components/Header.astro';
+import Footer from '../../components/Footer.astro';
+import ContactCTA from '../../components/ContactCTA.astro';
+import { Image } from 'astro:assets';
+import yoImage from '../../assets/images/yo.jpg';
+import { getLangFromUrl, useTranslations } from '../../i18n/utils';
+
+export function getStaticPaths() {
+  return [
+    { params: { lang: 'en' } },
+    { params: { lang: 'es' } },
+  ];
+}
+
+const lang = getLangFromUrl(Astro.url);
+const t = useTranslations(lang);
+---
+
+<BaseLayout title={t('about.title')} description={t('about.desc')}>
+  <Header />
+
+  <!-- Hero -->
+  <div class="about-hero">
+    <div class="about-hero-bg">
+      <Image
+        src={yoImage}
+        alt="Javier Rangel"
+        width={1920}
+        height={1280}
+        loading="eager"
+        fetchpriority="high"
+      />
+    </div>
+    <div class="about-hero-overlay"></div>
+    <div class="about-hero-content">
+      <p class="about-hero-eyebrow">{t('about.hero.eyebrow')}</p>
+      <h1 class="about-hero-title">{t('about.hero.title')}</h1>
+      <p class="about-hero-sub">{t('about.hero.sub')}</p>
+    </div>
+  </div>
+
+  <!-- Main content -->
+  <main class="about-main">
+    <div class="about-grid">
+      <!-- Photo -->
+      <div class="about-photo-wrap reveal">
+        <Image
+          src={yoImage}
+          alt="Javier Rangel — photographer"
+          class="about-photo"
+          width={900}
+          height={1200}
+          loading="eager"
+        />
+      </div>
+
+      <!-- Text -->
+      <div class="about-text reveal stagger-2">
+        <h2 class="about-name">{t('about.name')}</h2>
+        <p class="about-location">{t('about.location')}</p>
+
+        <div class="about-manifesto">
+          <p>{t('about.manifesto.p1')}</p>
+          <p>{t('about.manifesto.p2')}</p>
+          <p>{t('about.manifesto.p3')}</p>
+          <p>{t('about.manifesto.p4')}</p>
+        </div>
+
+        <div class="about-services">
+          <p class="about-services-title">{t('about.services.title')}</p>
+          <div class="services-grid">
+            <div class="service-item">
+              <span class="service-dot"></span>
+              <span>{t('about.services.portrait')}</span>
+            </div>
+            <div class="service-item">
+              <span class="service-dot"></span>
+              <span>{t('about.services.concert')}</span>
+            </div>
+            <div class="service-item">
+              <span class="service-dot"></span>
+              <span>{t('about.services.editorial')}</span>
+            </div>
+            <div class="service-item">
+              <span class="service-dot"></span>
+              <span>{t('about.services.product')}</span>
+            </div>
+            <div class="service-item">
+              <span class="service-dot"></span>
+              <span>{t('about.services.visual')}</span>
+            </div>
+            <div class="service-item">
+              <span class="service-dot"></span>
+              <span>{t('about.services.events')}</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="about-cta">
+          <a href={`/${lang}/contact`} class="btn btn-primary">{t('hero.cta.secondary')}</a>
+          <a href={`/${lang}/gallery`} class="btn btn-ghost">{t('hero.cta.primary')}</a>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <ContactCTA />
+  <Footer />
+</BaseLayout>

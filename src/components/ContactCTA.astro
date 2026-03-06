@@ -1,15 +1,20 @@
 ---
+import { getLangFromUrl, useTranslations, useTranslatedPath } from '../i18n/utils';
+
+const lang = getLangFromUrl(Astro.url);
+const t = useTranslations(lang);
+const translatePath = useTranslatedPath(lang);
 ---
 
 <section class="cta-section" aria-label="Call to action">
   <div class="cta-inner">
     <div class="cta-text reveal">
-      <h2 class="cta-title">Let's work together.</h2>
-      <p class="cta-sub">Available for portrait, editorial, events, and visual collaborations.</p>
+      <h2 class="cta-title">{t('contactCta.title')}</h2>
+      <p class="cta-sub">{t('contactCta.subtitle')}</p>
     </div>
     <div class="cta-actions reveal stagger-2">
-      <a href="/gallery" class="btn btn-ghost">View Archive</a>
-      <a href="/contact" class="btn btn-primary">Get in Touch</a>
+      <a href={translatePath('/gallery')} class="btn btn-ghost">{t('hero.cta.primary')}</a>
+      <a href={translatePath('/contact')} class="btn btn-primary">{t('hero.cta.secondary')}</a>
     </div>
   </div>
 </section>
