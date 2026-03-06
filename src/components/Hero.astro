@@ -1,4 +1,5 @@
 ---
+import { Image } from 'astro:assets';
 import { getRandomPhotosByCategory } from '../lib/photos';
 import { getLangFromUrl, useTranslations, useTranslatedPath } from '../i18n/utils';
 
@@ -14,7 +15,7 @@ const translatePath = useTranslatedPath(lang);
 <section class="hero" aria-label="Hero">
   <div class="hero-bg" id="hero-bg">
     {heroPhoto && (
-      <img
+      <Image
         src={heroPhoto.src}
         alt="JRMGraphy hero"
         width={heroPhoto.width || 1920}
