@@ -10,15 +10,6 @@ const { categories, currentCategory = 'all' } = Astro.props;
 
 const lang = getLangFromUrl(Astro.url);
 const t = useTranslations(lang);
-
-const categoryMap: Record<string, any> = {
-  portraits: { es: 'Retratos', en: 'Portraits' },
-  city: { es: 'Ciudad', en: 'City' },
-  concert: { es: 'Conciertos', en: 'Concert' },
-  nature: { es: 'Naturaleza', en: 'Nature' },
-  product: { es: 'Producto', en: 'Product' },
-  creativity: { es: 'Creatividad', en: 'Creativity' },
-};
 ---
 
 <div class="category-dropdown-wrapper">
@@ -26,7 +17,7 @@ const categoryMap: Record<string, any> = {
   <select id="categoryFilter" class="form-select d-inline-block w-auto">
     <option value="all" selected={currentCategory === 'all'}>{t('gallery.all')}</option>
     {categories.map((category) => {
-      const displayCategory = categoryMap[category]?.[lang] || category;
+      const displayCategory = t(`category.${category}` as any) || category;
       return (
         <option 
           value={category}

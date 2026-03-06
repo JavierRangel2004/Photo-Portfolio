@@ -10,15 +10,6 @@ const { categories, currentCategory = 'all' } = Astro.props;
 
 const lang = getLangFromUrl(Astro.url);
 const t = useTranslations(lang);
-
-const categoryMap: Record<string, any> = {
-  portraits: { es: 'Retratos', en: 'Portraits' },
-  city: { es: 'Ciudad', en: 'City' },
-  concert: { es: 'Conciertos', en: 'Concert' },
-  nature: { es: 'Naturaleza', en: 'Nature' },
-  product: { es: 'Producto', en: 'Product' },
-  creativity: { es: 'Creatividad', en: 'Creativity' },
-};
 ---
 
 <div class="category-filter" role="group" aria-label={t('gallery.filter')}>
@@ -31,7 +22,7 @@ const categoryMap: Record<string, any> = {
     {t('gallery.all')}
   </button>
   {categories.map((cat) => {
-    const displayCategory = categoryMap[cat]?.[lang] || cat;
+    const displayCategory = t(`category.${cat}` as any) || cat;
     return (
       <button
         class={`filter-chip ${currentCategory === cat ? 'active' : ''}`}

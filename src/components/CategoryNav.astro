@@ -9,12 +9,12 @@ const t = useTranslations(lang);
 const translatePath = useTranslatedPath(lang);
 
 const categoryMeta: Record<string, { label: string; description: string }> = {
-  portraits: { label: 'Portraits', description: t('categories.desc.portraits') },
-  city:       { label: 'City',      description: t('categories.desc.city') },
-  concert:    { label: 'Concert',   description: t('categories.desc.concert') },
-  product:    { label: 'Product',   description: t('categories.desc.product') },
-  nature:     { label: 'Nature',    description: t('categories.desc.nature') },
-  creativity: { label: 'Creative',  description: t('categories.desc.creativity') },
+  portraits: { label: t('category.portraits'), description: t('categories.desc.portraits') },
+  city:       { label: t('category.city'),      description: t('categories.desc.city') },
+  concert:    { label: t('category.concert'),   description: t('categories.desc.concert') },
+  product:    { label: t('category.product'),   description: t('categories.desc.product') },
+  nature:     { label: t('category.nature'),    description: t('categories.desc.nature') },
+  creativity: { label: t('category.creativity'),  description: t('categories.desc.creativity') },
 };
 
 const categoryData = categories.map(cat => {
@@ -40,12 +40,12 @@ const categoryData = categories.map(cat => {
         href={`${translatePath('/gallery')}?category=${cat.slug}`}
         class="category-card reveal"
         style={`transition-delay: ${i * 0.06}s`}
-        aria-label={`Browse ${cat.label} photos`}
+        aria-label={lang === 'es' ? `Explorar colección de ${cat.label.toLowerCase()}` : `Browse ${cat.label} photos`}
       >
         {cat.cover && (
           <img
             src={cat.cover.src}
-            alt={`${cat.label} photography`}
+            alt={lang === 'es' ? `Fotografía de ${cat.label.toLowerCase()}` : `${cat.label} photography`}
             width={cat.cover.width}
             height={cat.cover.height}
             loading="lazy"

@@ -33,18 +33,12 @@ const orientation =
 
 const lang = getLangFromUrl(Astro.url);
 const t = useTranslations(lang);
-// Translating the category label using the dictionary
-// using a type assertion to keyof typeof ui['es'] to access safely
-const localizedCategory = t(`categories.desc.${photo.category}` as any) ? t(`categories.desc.${photo.category}` as any).split(' ')[0].replace('.', '') : photo.category;
-const categoryMap: Record<string, any> = {
-  portraits: { es: 'Retratos', en: 'Portraits' },
-  city: { es: 'Ciudad', en: 'City' },
-  concert: { es: 'Conciertos', en: 'Concert' },
-  nature: { es: 'Naturaleza', en: 'Nature' },
-  product: { es: 'Producto', en: 'Product' },
-  creativity: { es: 'Creatividad', en: 'Creativity' },
-};
-const displayCategory = categoryMap[photo.category]?.[lang] || photo.category;
+
+const displayCategory = t(`category.${photo.category}` as any) || photo.category;
+
+const altText = lang === 'es' 
+  ? `Fotografía ${displayCategory.toLowerCase()} por JRMGraphy` 
+  : `${displayCategory} photography by JRMGraphy`;
 ---
 
 <div
@@ -56,11 +50,11 @@ const displayCategory = categoryMap[photo.category]?.[lang] || photo.category;
   data-orientation={orientation}
   role="button"
   tabindex="0"
-  aria-label={`View ${displayCategory} photo`}
+  aria-label={lang === 'es' ? `Ver fotografía de ${displayCategory.toLowerCase()}` : `View ${displayCategory} photo`}
 >
   <img
     src={photo.src}
-    alt={`${displayCategory} photography by JRMGraphy`}
+    alt={altText}
     width={photo.width}
     height={photo.height}
     loading={loading}
