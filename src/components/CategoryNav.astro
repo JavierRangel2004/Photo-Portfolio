@@ -1,4 +1,5 @@
 ---
+import { Image } from 'astro:assets';
 import { getRandomPhotosByCategory, getCategories } from '../lib/photos';
 import { getLangFromUrl, useTranslations, useTranslatedPath } from '../i18n/utils';
 
@@ -40,10 +41,11 @@ const categoryData = categories.map(cat => {
         href={`${translatePath('/gallery')}?category=${cat.slug}`}
         class="category-card reveal"
         style={`transition-delay: ${i * 0.06}s`}
-        aria-label={lang === 'es' ? `Explorar colección de ${cat.label.toLowerCase()}` : `Browse ${cat.label} photos`}
+        aria-labelledby={`category-card-name-${cat.slug}`}
+        aria-describedby={`category-card-desc-${cat.slug}`}
       >
         {cat.cover && (
-          <img
+          <Image
             src={cat.cover.src}
             alt={lang === 'es' ? `Fotografía de ${cat.label.toLowerCase()}` : `${cat.label} photography`}
             width={cat.cover.width}
@@ -52,8 +54,8 @@ const categoryData = categories.map(cat => {
           />
         )}
         <div class="category-card-body">
-          <span class="category-card-name">{cat.label}</span>
-          <span class="category-card-count">{cat.description}</span>
+          <span id={`category-card-name-${cat.slug}`} class="category-card-name">{cat.label}</span>
+          <span id={`category-card-desc-${cat.slug}`} class="category-card-count">{cat.description}</span>
         </div>
       </a>
     ))}

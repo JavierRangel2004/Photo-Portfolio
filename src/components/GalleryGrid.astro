@@ -11,15 +11,20 @@ const { photos, initialCategory = 'all' } = Astro.props;
 ---
 
 <div class="masonry-gallery" id="masonry-gallery">
-  {photos.map((photo) => {
+  {photos.map((photo, i) => {
     const isVisible = initialCategory === 'all' || photo.category === initialCategory;
+    const style = `transition-delay: ${(i % 4) * 0.08}s;${isVisible ? '' : 'display: none;'}`;
     return (
       <div
-        class="masonry-item"
+        class="masonry-item reveal"
         data-category={photo.category}
-        style={isVisible ? '' : 'display: none;'}
+        style={style}
       >
-        <PhotoCard photo={photo} lightboxGroup="archive" />
+        <PhotoCard
+          photo={photo}
+          lightboxGroup="archive"
+          loading={i < 6 ? 'eager' : 'lazy'}
+        />
       </div>
     );
   })}
