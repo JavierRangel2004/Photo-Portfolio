@@ -38,6 +38,11 @@ output.txt
 assets/images/
 
 # ============================================
+# Duplicate generated photos (legacy folder)
+# ============================================
+src/assets/photos/
+
+# ============================================
 # Archivos de sistema operativo
 # ============================================
 # macOS
