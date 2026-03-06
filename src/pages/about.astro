@@ -4,6 +4,7 @@ import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import ContactCTA from '../components/ContactCTA.astro';
 import { Image } from 'astro:assets';
+import yoImage from '../assets/images/yo.jpg';
 ---
 
 <BaseLayout title="About" description="Javier Rangel — Photographer based in Mexico City. Portraits, city, concert, and editorial photography.">
@@ -13,7 +14,7 @@ import { Image } from 'astro:assets';
   <div class="about-hero">
     <div class="about-hero-bg">
       <Image
-        src="/assets/images/yo.jpg"
+        src={yoImage}
         alt="Javier Rangel"
         width={1920}
         height={1280}
@@ -35,12 +36,12 @@ import { Image } from 'astro:assets';
       <!-- Photo -->
       <div class="about-photo-wrap reveal">
         <Image
-          src="/assets/images/yo.jpg"
+          src={yoImage}
           alt="Javier Rangel — photographer"
           class="about-photo"
           width={900}
           height={1200}
-          loading="lazy"
+          loading="eager"
         />
       </div>
 
