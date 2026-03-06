@@ -1,5 +1,16 @@
 import photosData from '../data/photos.json';
 
+interface PhotoRecord {
+  id: string;
+  category: string;
+  src: string;
+  date: string;
+  sessionDate: string;
+  originalName: string;
+  width?: number;
+  height?: number;
+}
+
 export interface Photo {
   id: string;
   category: string;
@@ -13,6 +24,17 @@ export interface Photo {
 
 export type PhotoOrientation = 'landscape' | 'portrait' | 'square';
 
+const allPhotos: Photo[] = (photosData as PhotoRecord[]).map((photo) => {
+  const width = photo.width && photo.width > 0 ? photo.width : undefined;
+  const height = photo.height && photo.height > 0 ? photo.height : undefined;
+
+  return {
+    ...photo,
+    width,
+    height,
+  };
+});
+
 // Obtener orientación de una foto
 export function getPhotoOrientation(photo: Photo): PhotoOrientation {
   const { width, height } = photo;
@@ -24,7 +46,7 @@ export function getPhotoOrientation(photo: Photo): PhotoOrientation {
 
 // Cargar todas las fotos
 export function getAllPhotos(): Photo[] {
-  return photosData as Photo[];
+  return allPhotos;
 }
 
 // Obtener fotos por categoría
@@ -104,4 +126,3 @@ export function getRandomPhotosFromAllCategories(perCategory: number = 5): Photo
   // Mezclar todas las fotos para que no estén agrupadas por categoría
   return result.sort(() => Math.random() - 0.5);
 }
-

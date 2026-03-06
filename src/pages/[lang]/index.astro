@@ -1,0 +1,40 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Header from '../../components/Header.astro';
+import Footer from '../../components/Footer.astro';
+import Hero from '../../components/Hero.astro';
+import FeaturedGallery from '../../components/FeaturedGallery.astro';
+import CategoryNav from '../../components/CategoryNav.astro';
+import StatementBlock from '../../components/StatementBlock.astro';
+import ContactCTA from '../../components/ContactCTA.astro';
+import Modal from '../../components/Modal.astro';
+import { getLangFromUrl, useTranslations } from '../../i18n/utils';
+
+export function getStaticPaths() {
+  return [
+    { params: { lang: 'en' } },
+    { params: { lang: 'es' } },
+  ];
+}
+
+const lang = getLangFromUrl(Astro.url);
+const t = useTranslations(lang);
+---
+
+<BaseLayout
+  title={t('nav.home')}
+  description="JRMGraphy — Photography portfolio by Javier Rangel. Based in Mexico City."
+>
+  <Header />
+
+  <main>
+    <Hero />
+    <CategoryNav />
+    <FeaturedGallery />
+    <StatementBlock />
+    <ContactCTA />
+  </main>
+
+  <Footer />
+  <Modal />
+</BaseLayout>

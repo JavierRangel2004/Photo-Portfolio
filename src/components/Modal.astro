@@ -1,4 +1,8 @@
 ---
+import { getLangFromUrl, useTranslations } from '../i18n/utils';
+
+const lang = getLangFromUrl(Astro.url);
+const t = useTranslations(lang);
 ---
 
 <!-- Premium Lightbox — controlled by BaseLayout.astro script -->
@@ -7,12 +11,12 @@
     <img class="lightbox-img" id="lb-img" src="" alt="" />
   </div>
 
-  <button class="lightbox-close" id="lb-close" aria-label="Close viewer">&times;</button>
+  <button class="lightbox-close" id="lb-close" aria-label={t('modal.close')}>&times;</button>
 
-  <button class="lightbox-arrow prev" id="lb-prev" aria-label="Previous photo">
+  <button class="lightbox-arrow prev" id="lb-prev" aria-label={t('modal.prev')}>
     <i class="fas fa-chevron-left"></i>
   </button>
-  <button class="lightbox-arrow next" id="lb-next" aria-label="Next photo">
+  <button class="lightbox-arrow next" id="lb-next" aria-label={t('modal.next')}>
     <i class="fas fa-chevron-right"></i>
   </button>
 

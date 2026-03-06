@@ -1,15 +1,20 @@
 ---
 import { getRandomPhotosByCategory, getCategories } from '../lib/photos';
+import { getLangFromUrl, useTranslations, useTranslatedPath } from '../i18n/utils';
 
 const categories = getCategories();
 
+const lang = getLangFromUrl(Astro.url);
+const t = useTranslations(lang);
+const translatePath = useTranslatedPath(lang);
+
 const categoryMeta: Record<string, { label: string; description: string }> = {
-  portraits: { label: 'Portraits', description: 'Presence & emotion' },
-  city:       { label: 'City',      description: 'Urban fragments' },
-  concert:    { label: 'Concert',   description: 'Live energy' },
-  product:    { label: 'Product',   description: 'Objects & form' },
-  nature:     { label: 'Nature',    description: 'Light & landscape' },
-  creativity: { label: 'Creative',  description: 'Concept & vision' },
+  portraits: { label: t('category.portraits'), description: t('categories.desc.portraits') },
+  city:       { label: t('category.city'),      description: t('categories.desc.city') },
+  concert:    { label: t('category.concert'),   description: t('categories.desc.concert') },
+  product:    { label: t('category.product'),   description: t('categories.desc.product') },
+  nature:     { label: t('category.nature'),    description: t('categories.desc.nature') },
+  creativity: { label: t('category.creativity'),  description: t('categories.desc.creativity') },
 };
 
 const categoryData = categories.map(cat => {
@@ -20,28 +25,29 @@ const categoryData = categories.map(cat => {
 });
 ---
 
-<section class="categories-section" aria-label="Photography categories">
+<section class="categories-section" id="home-themes" aria-label="Photography categories">
   <div class="categories-header reveal">
     <div class="section-heading">
-      <p class="section-eyebrow">Visual Worlds</p>
-      <h2 class="section-title">Explore by theme</h2>
+      <p class="section-eyebrow">{t('categories.eyebrow')}</p>
+      <h2 class="section-title">{t('categories.title')}</h2>
+      <p class="section-subtitle">{t('categories.subtitle')}</p>
     </div>
   </div>
 
   <div class="categories-grid">
     {categoryData.map((cat, i) => (
       <a
-        href={`/gallery?category=${cat.slug}`}
+        href={`${translatePath('/gallery')}?category=${cat.slug}`}
         class="category-card reveal"
         style={`transition-delay: ${i * 0.06}s`}
-        aria-label={`Browse ${cat.label} photos`}
+        aria-label={lang === 'es' ? `Explorar colección de ${cat.label.toLowerCase()}` : `Browse ${cat.label} photos`}
       >
         {cat.cover && (
           <img
             src={cat.cover.src}
-            alt={`${cat.label} photography`}
-            width={cat.cover.width || 800}
-            height={cat.cover.height || 600}
+            alt={lang === 'es' ? `Fotografía de ${cat.label.toLowerCase()}` : `${cat.label} photography`}
+            width={cat.cover.width}
+            height={cat.cover.height}
             loading="lazy"
           />
         )}

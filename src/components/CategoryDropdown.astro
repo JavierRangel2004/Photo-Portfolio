@@ -1,39 +1,46 @@
 ---
+import { getLangFromUrl, useTranslations } from '../i18n/utils';
+
 interface Props {
   categories: string[];
   currentCategory?: string;
-  baseUrl?: string;
 }
 
-const { categories, currentCategory = 'all', baseUrl } = Astro.props;
+const { categories, currentCategory = 'all' } = Astro.props;
+
+const lang = getLangFromUrl(Astro.url);
+const t = useTranslations(lang);
 ---
 
 <div class="category-dropdown-wrapper">
-  <label for="categoryFilter" class="form-label">Filter by Category:</label>
+  <label for="categoryFilter" class="form-label">{t('gallery.filter')}</label>
   <select id="categoryFilter" class="form-select d-inline-block w-auto">
-    <option value="all" selected={currentCategory === 'all'}>All</option>
-    {categories.map((category) => (
-      <option 
-        value={category}
-        selected={currentCategory === category}
-      >
-        {category.charAt(0).toUpperCase() + category.slice(1)}
-      </option>
-    ))}
+    <option value="all" selected={currentCategory === 'all'}>{t('gallery.all')}</option>
+    {categories.map((category) => {
+      const displayCategory = t(`category.${category}` as any) || category;
+      return (
+        <option 
+          value={category}
+          selected={currentCategory === category}
+        >
+          {displayCategory}
+        </option>
+      )
+    })}
   </select>
 </div>
 
 <script>
   document.addEventListener('DOMContentLoaded', () => {
-    const categoryFilter = document.getElementById('categoryFilter');
+    const categoryFilter = document.getElementById('categoryFilter') as HTMLSelectElement | null;
     if (!categoryFilter) return;
     
     // Obtener todas las fotos usando data-category (carrusel o gallery)
     // Seleccionar solo las fotos (slides del carrusel o items de la gallery), no otros elementos
-    const allPhotoSlides = document.querySelectorAll('.home-carousel-slide[data-category], .masonry-item[data-category]');
+    const allPhotoSlides = document.querySelectorAll<HTMLElement>('.home-carousel-slide[data-category], .masonry-item[data-category]');
     
     // Función para filtrar fotos
-    const filterPhotos = (selectedCategory) => {
+    const filterPhotos = (selectedCategory: string) => {
       allPhotoSlides.forEach(slide => {
         const slideCategory = slide.getAttribute('data-category');
         const shouldShow = selectedCategory === 'all' || 
@@ -43,7 +50,7 @@ const { categories, currentCategory = 'all', baseUrl } = Astro.props;
       });
       
       // Actualizar URL sin recargar usando History API
-      const url = new URL(window.location);
+      const url = new URL(window.location.href);
       if (selectedCategory === 'all') {
         url.searchParams.delete('category');
       } else {
@@ -54,7 +61,7 @@ const { categories, currentCategory = 'all', baseUrl } = Astro.props;
     
     // Event listener para el dropdown
     categoryFilter.addEventListener('change', (e) => {
-      const selected = e.target.value;
+      const selected = (e.currentTarget as HTMLSelectElement).value;
       filterPhotos(selected);
     });
     
@@ -67,7 +74,7 @@ const { categories, currentCategory = 'all', baseUrl } = Astro.props;
     filterPhotos(initialCategory);
     
     // Manejar navegación del navegador (back/forward)
-    window.addEventListener('popstate', (e) => {
+    window.addEventListener('popstate', () => {
       const urlParams = new URLSearchParams(window.location.search);
       const category = urlParams.get('category') || 'all';
       categoryFilter.value = category;
@@ -120,4 +127,3 @@ const { categories, currentCategory = 'all', baseUrl } = Astro.props;
     }
   }
 </style>
-

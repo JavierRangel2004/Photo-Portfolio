@@ -1,4 +1,6 @@
 ---
+import { getLangFromUrl, getRouteWithoutLang } from '../i18n/utils';
+
 interface Props {
   title: string;
   description?: string;
@@ -6,17 +8,27 @@ interface Props {
 
 const { title, description = "Photography portfolio by Javier Rangel — Mexico City." } = Astro.props;
 const siteTitle = "JRMGraphy";
-const fullTitle = title === "Home" ? siteTitle : `${title} — ${siteTitle}`;
+const fullTitle = title === "Home" || title === "Inicio" ? siteTitle : `${title} — ${siteTitle}`;
+const lang = getLangFromUrl(Astro.url);
+const routeWithoutLang = getRouteWithoutLang(Astro.url);
+const siteUrl = Astro.site ? Astro.site.origin : 'https://jrmgraphy.com';
+
+const canonicalURL = new URL(`/${lang}${routeWithoutLang}`, siteUrl);
 ---
 
 <!DOCTYPE html>
-<html lang="en">
+<html lang={lang}>
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>{fullTitle}</title>
   <meta name="description" content={description} />
   <meta name="theme-color" content="#0A0A0A" />
+
+  <link rel="canonical" href={canonicalURL} />
+  <link rel="alternate" hreflang="es" href={`${siteUrl}/es${routeWithoutLang}`} />
+  <link rel="alternate" hreflang="en" href={`${siteUrl}/en${routeWithoutLang}`} />
+  <link rel="alternate" hreflang="x-default" href={`${siteUrl}/es${routeWithoutLang}`} />
 
   <!-- Open Graph -->
   <meta property="og:title" content={fullTitle} />
@@ -54,6 +66,7 @@ const fullTitle = title === "Home" ? siteTitle : `${title} — ${siteTitle}`;
     const toggle = document.getElementById('nav-toggle');
     const drawer = document.getElementById('nav-drawer');
     const overlay = document.getElementById('nav-overlay');
+    const closeButton = document.getElementById('nav-close');
 
     const openDrawer = () => {
       toggle?.classList.add('open');
@@ -75,6 +88,13 @@ const fullTitle = title === "Home" ? siteTitle : `${title} — ${siteTitle}`;
     });
 
     overlay?.addEventListener('click', closeDrawer);
+    closeButton?.addEventListener('click', closeDrawer);
+
+    document.addEventListener('keydown', (event) => {
+      if (event.key === 'Escape' && drawer?.classList.contains('open')) {
+        closeDrawer();
+      }
+    });
 
     document.querySelectorAll('.nav-drawer-link').forEach(link => {
       link.addEventListener('click', closeDrawer);
@@ -112,6 +132,17 @@ const fullTitle = title === "Home" ? siteTitle : `${title} — ${siteTitle}`;
 
       if (!lightbox || !lbImg) return;
 
+      function isVisibleCard(card: HTMLElement) {
+        const style = window.getComputedStyle(card);
+        return style.display !== 'none' && style.visibility !== 'hidden' && card.getClientRects().length > 0;
+      }
+
+      function getGroupCards(group: string) {
+        return Array.from(document.querySelectorAll<HTMLElement>('[data-lightbox-src]')).filter((card) => {
+          return (card.dataset.lightboxGroup || 'default') === group && isVisibleCard(card);
+        });
+      }
+
       function open(index: number) {
         currentIndex = index;
         const p = photos[index];
@@ -119,7 +150,7 @@ const fullTitle = title === "Home" ? siteTitle : `${title} — ${siteTitle}`;
         lbImg.src = p.src;
         lbImg.alt = p.category;
         if (lbCat) lbCat.textContent = p.category.charAt(0).toUpperCase() + p.category.slice(1);
-        if (lbCount) lbCount.textContent = `${index + 1} / ${photos.length}`;
+        if (lbCount) lbCount.textContent = `${index + 1} of ${photos.length}`;
         lightbox.classList.add('open');
         document.body.style.overflow = 'hidden';
       }
@@ -132,16 +163,31 @@ const fullTitle = title === "Home" ? siteTitle : `${title} — ${siteTitle}`;
       function prev() { open((currentIndex - 1 + photos.length) % photos.length); }
       function next() { open((currentIndex + 1) % photos.length); }
 
-      // Build photo list and attach click handlers
+      function activateCard(card: HTMLElement) {
+        const group = card.dataset.lightboxGroup || 'default';
+        const cards = getGroupCards(group);
+        photos = cards.map((item) => ({
+          src: item.dataset.lightboxSrc || '',
+          category: item.dataset.lightboxCat || '',
+          id: item.dataset.lightboxId || '',
+        }));
+
+        const index = cards.findIndex((item) => item === card);
+        if (index >= 0) {
+          open(index);
+        }
+      }
+
       function init() {
         const cards = document.querySelectorAll<HTMLElement>('[data-lightbox-src]');
-        photos = Array.from(cards).map(card => ({
-          src: card.dataset.lightboxSrc || '',
-          category: card.dataset.lightboxCat || '',
-          id: card.dataset.lightboxId || '',
-        }));
-        cards.forEach((card, i) => {
-          card.addEventListener('click', () => open(i));
+        cards.forEach((card) => {
+          card.addEventListener('click', () => activateCard(card));
+          card.addEventListener('keydown', (event) => {
+            if (event.key === 'Enter' || event.key === ' ') {
+              event.preventDefault();
+              activateCard(card);
+            }
+          });
         });
       }
 
@@ -192,10 +238,11 @@ const fullTitle = title === "Home" ? siteTitle : `${title} — ${siteTitle}`;
   </script>
 
   <!-- Google Analytics -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-5NLFSHDCBJ"></script>
+  <script is:inline async src="https://www.googletagmanager.com/gtag/js?id=G-5NLFSHDCBJ"></script>
   <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag() { dataLayer.push(arguments); }
+    const analyticsWindow = window as unknown as Window & { dataLayer: unknown[][] };
+    analyticsWindow.dataLayer = analyticsWindow.dataLayer || [];
+    function gtag(...args: unknown[]) { analyticsWindow.dataLayer.push(args); }
     gtag('js', new Date());
     gtag('config', 'G-5NLFSHDCBJ');
   </script>

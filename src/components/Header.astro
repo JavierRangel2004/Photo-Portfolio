@@ -1,29 +1,41 @@
 ---
+import { getLangFromUrl, useTranslations, useTranslatedPath } from '../i18n/utils';
+import LanguagePicker from './LanguagePicker.astro';
+
+const lang = getLangFromUrl(Astro.url);
+const t = useTranslations(lang);
+const translatePath = useTranslatedPath(lang);
+
 const siteTitle = "JRMGraphy";
 const navLinks = [
-  { href: "/", label: "Home" },
-  { href: "/gallery", label: "Archive" },
-  { href: "/about", label: "About" },
-  { href: "/contact", label: "Contact" },
+  { href: "/", label: t('nav.home') },
+  { href: "/gallery", label: t('nav.archive') },
+  { href: "/about", label: t('nav.about') },
+  { href: "/contact", label: t('nav.contact') },
 ];
 ---
 
 <nav class="site-nav site-nav--transparent" aria-label="Main navigation">
   <div class="container nav-inner">
-    <a href="/" class="nav-brand">{siteTitle}</a>
+    <a href={translatePath('/')} class="nav-brand">{siteTitle}</a>
 
     <!-- Desktop links -->
-    <div class="nav-links" role="list">
+    <ul class="nav-links">
       {navLinks.map(link => (
-        <a href={link.href} class="nav-link" role="listitem">{link.label}</a>
+        <li>
+          <a href={translatePath(link.href)} class="nav-link" aria-label={link.label}>{link.label}</a>
+        </li>
       ))}
-    </div>
+      <li>
+        <LanguagePicker />
+      </li>
+    </ul>
 
     <!-- Mobile hamburger -->
     <button
       class="nav-toggle"
       id="nav-toggle"
-      aria-label="Toggle navigation"
+      aria-label={t('header.toggle')}
       aria-expanded="false"
       aria-controls="nav-drawer"
     >
@@ -39,21 +51,35 @@ const navLinks = [
 
 <!-- Mobile drawer -->
 <nav class="nav-drawer" id="nav-drawer" aria-label="Mobile navigation">
-  <div class="nav-drawer-links">
-    {navLinks.map(link => (
-      <a href={link.href} class="nav-drawer-link">{link.label}</a>
-    ))}
+  <div class="nav-drawer-header">
+    <a href={translatePath('/')} class="nav-drawer-brand">{siteTitle}</a>
+    <button class="nav-drawer-close" id="nav-close" aria-label={t('header.close')}>
+      <span></span>
+      <span></span>
+    </button>
   </div>
-  <div class="nav-drawer-social">
-    <a href="https://www.instagram.com/JRM_Graphy" target="_blank" rel="noopener noreferrer" aria-label="Instagram">
-      <i class="fab fa-instagram"></i> @JRM_Graphy
-    </a>
+
+  <div class="nav-drawer-body">
+    <ul class="nav-drawer-links">
+      {navLinks.map(link => (
+        <li>
+          <a href={translatePath(link.href)} class="nav-drawer-link" aria-label={link.label}>{link.label}</a>
+        </li>
+      ))}
+    </ul>
+    <div class="nav-drawer-social">
+      <LanguagePicker />
+      <br/><br/>
+      <a href="https://www.instagram.com/JRM_Graphy" target="_blank" rel="noopener noreferrer" aria-label="Instagram">
+        <i class="fab fa-instagram" aria-hidden="true"></i>
+        <span>@JRM_Graphy</span>
+      </a>
+    </div>
   </div>
 </nav>
 
 <style>
   .nav-drawer-social {
-    margin-top: 2rem;
     padding-top: 1.5rem;
     border-top: 1px solid var(--color-border);
   }
@@ -69,5 +95,51 @@ const navLinks = [
 
   .nav-drawer-social a:hover {
     color: var(--color-accent);
+  }
+
+  .nav-drawer-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+  }
+
+  .nav-drawer-brand {
+    font-family: var(--font-serif);
+    font-size: var(--text-lg);
+    letter-spacing: 0.04em;
+  }
+
+  .nav-drawer-body {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 2rem;
+  }
+
+  .nav-drawer-close {
+    position: relative;
+    width: 2.75rem;
+    height: 2.75rem;
+    border: 1px solid var(--color-border);
+    border-radius: 9999px;
+  }
+
+  .nav-drawer-close span {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 1rem;
+    height: 1.5px;
+    background: var(--color-text);
+  }
+
+  .nav-drawer-close span:first-child {
+    transform: translate(-50%, -50%) rotate(45deg);
+  }
+
+  .nav-drawer-close span:last-child {
+    transform: translate(-50%, -50%) rotate(-45deg);
   }
 </style>

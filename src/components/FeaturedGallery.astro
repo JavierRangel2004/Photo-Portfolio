@@ -1,41 +1,37 @@
 ---
 import { getRandomPhotosFromAllCategories } from '../lib/photos';
 import type { Photo } from '../lib/photos';
+import PhotoCard from './PhotoCard.astro';
+import { getLangFromUrl, useTranslations, useTranslatedPath } from '../i18n/utils';
 
-// 9 photos for the editorial asymmetric grid
-const photos: Photo[] = getRandomPhotosFromAllCategories(2).slice(0, 9);
+const photos: Photo[] = getRandomPhotosFromAllCategories(5);
+
+const lang = getLangFromUrl(Astro.url);
+const t = useTranslations(lang);
+const translatePath = useTranslatedPath(lang);
 ---
 
-<section class="featured-section" aria-label="Selected works">
+<section class="featured-section" id="home-glance" aria-label="Selected works">
   <div class="featured-header reveal">
     <div class="section-heading">
-      <p class="section-eyebrow">Selected Works</p>
-      <h2 class="section-title">A curated view</h2>
+      <p class="section-eyebrow">{t('featured.eyebrow')}</p>
+      <h2 class="section-title">{t('featured.title')}</h2>
+      <p class="section-subtitle">{t('featured.subtitle')}</p>
     </div>
-    <a href="/gallery" class="view-all">View all &rarr;</a>
+    <a href={translatePath('/gallery')} class="view-all">{t('featured.viewAll')}</a>
   </div>
 
-  <div class="featured-grid">
+  <div class="masonry-gallery masonry-gallery--featured">
     {photos.map((photo, i) => (
       <div
-        class="featured-item reveal"
+        class="masonry-item reveal"
         style={`transition-delay: ${(i % 4) * 0.08}s`}
-        data-lightbox-src={photo.src}
-        data-lightbox-cat={photo.category}
-        data-lightbox-id={photo.id}
-        role="button"
-        tabindex="0"
-        aria-label={`View ${photo.category} photo`}
       >
-        <img
-          src={photo.src}
-          alt={`${photo.category} photography by JRMGraphy`}
-          width={photo.width || 800}
-          height={photo.height || 600}
-          loading={i < 3 ? 'eager' : 'lazy'}
+        <PhotoCard
+          photo={photo}
+          lightboxGroup="home-featured"
+          loading={i < 6 ? 'eager' : 'lazy'}
         />
-        <div class="featured-item-overlay"></div>
-        <span class="featured-item-label">{photo.category}</span>
       </div>
     ))}
   </div>

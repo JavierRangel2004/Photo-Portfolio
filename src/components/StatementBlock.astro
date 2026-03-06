@@ -1,13 +1,17 @@
 ---
+import { getLangFromUrl, useTranslations, useTranslatedPath } from '../i18n/utils';
+
+const lang = getLangFromUrl(Astro.url);
+const t = useTranslations(lang);
+const translatePath = useTranslatedPath(lang);
 ---
 
 <section class="statement-section" aria-label="Author statement">
   <div class="statement-inner reveal">
     <blockquote class="statement-quote">
-      "Photography is not about cameras or lenses — it's about seeing. About choosing 
-      what to look at and deciding how long to look."
+      "{t('statement.text')}"
     </blockquote>
-    <p class="statement-attribution">— Javier Rangel · JRMGraphy</p>
-    <a href="/about" class="btn btn-ghost">About me &rarr;</a>
+    <p class="statement-attribution">{t('statement.author')}</p>
+    <a href={translatePath('/about')} class="btn btn-ghost">{t('statement.cta')}</a>
   </div>
 </section>

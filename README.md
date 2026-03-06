@@ -1,156 +1,103 @@
 # JRMGraphy - Photography Portfolio
 
-Portfolio de fotografía profesional construido con **Astro**, optimizado para rendimiento y experiencia de usuario.
+Professional photography portfolio built with Astro and a manual photo library sync pipeline.
 
-## 🚀 Características
+## Features
 
-- **Pipeline automático de fotos**: Procesa y optimiza imágenes automáticamente desde Lightroom y utiliza pre-computación WebP.
-- **Ordenamiento por fecha**: Las fotos se ordenan automáticamente por fecha de captura (EXIF).
-- **Galería moderna**: Grid responsivo con CSS Grid y diseño Dark/Premium.
-- **Optimización de imágenes nativa**: Generación y entrega con el componente nativo `<Image />` de Astro (optimizaciones de performance de clase mundial).
-- **Filtros por categoría**: Navegación fácil entre categorías
-- **Preparado para features futuras**: Estructura lista para likes/popularidad (Firebase)
+- Astro-based static site
+- Manual photo pipeline with `sharp` and `exifr`
+- Generated `src/data/photos.json` metadata
+- Responsive masonry archive
+- Category filtering and lightbox viewer
 
-## 📁 Estructura del Proyecto
+## Project Structure
 
-```
+```text
 Photo-Portfolio/
-├── assets/images/          # Imágenes RAW (input)
-│   ├── portraits/
-│   ├── nature/
-│   ├── product/
-│   ├── concert/
-│   ├── city/
-│   └── creativity/
-├── src/
-│   ├── components/        # Componentes Astro
-│   ├── layouts/           # Layouts base
-│   ├── pages/             # Páginas del sitio
-│   ├── lib/               # Helpers y utilidades
-│   ├── data/              # photos.json (generado automáticamente)
-│   └── styles/            # Estilos CSS
-├── public/
-│   ├── photos/            # Imágenes optimizadas (generadas)
-│   └── assets/            # Assets estáticos (logo, etc.)
-├── scripts/
-│   └── generate-photos.mjs  # Script de procesamiento
-└── docs/                  # Documentación
+|-- assets/images/            # Raw source images by category
+|-- public/photos/            # Optimized generated images
+|-- scripts/generate-photos.mjs
+|-- src/components/
+|-- src/layouts/
+|-- src/lib/
+|-- src/pages/
+|-- src/data/photos.json      # Generated metadata
+|-- public/styles/styles.css
+`-- docs/
 ```
 
-## 🛠️ Instalación
+## Install
 
-1. **Clonar el repositorio**:
-   ```bash
-   git clone <repo-url>
-   cd Photo-Portfolio
-   ```
+```bash
+npm install
+```
 
-2. **Instalar dependencias**:
-   ```bash
-   npm install
-   ```
+## Local Development
 
-## 📸 Cómo Agregar Nuevas Fotos
+1. Sync photos when you add or update raw selections in `assets/images`:
 
-### Flujo de trabajo:
+```bash
+npm run prepare:photos
+```
 
-1. **Exportar desde Lightroom**:
-   - Exporta tus fotos con los nombres que prefieras
-   - No necesitas renombrarlas manualmente
+The command will ask which mode to use:
 
-2. **Copiar a la carpeta correspondiente**:
-   - Copia las fotos a `assets/images/<categoria>/`
-   - Ejemplo: `assets/images/portraits/DSC_1234.jpg`
+- `overwrite` - replace `public/photos` entirely from `assets/images`
+- `add` - add/update images by category and keep the current processed library
 
-3. **Commit y push**:
-   ```bash
-   git add assets/images/
-   git commit -m "Add new photos"
-   git push
-   ```
+In `add` mode, any brand new category must contain at least 20 images.
 
-4. **Build automático**:
-   - En Netlify, el build ejecutará automáticamente:
-     - `npm run prepare:photos` → Procesa y optimiza imágenes
-     - `npm run build` → Genera el sitio estático
+2. Start the Astro dev server:
 
-### El script automáticamente:
+```bash
+npm run dev
+```
 
-- ✅ Lee la fecha de captura desde EXIF (o usa mtime como fallback)
-- ✅ Optimiza las imágenes a WebP (1600px máximo, calidad 85%)
-- ✅ Genera `src/data/photos.json` ordenado por fecha
-- ✅ Agrupa fotos por sesión (mismo día)
+The site runs at `http://localhost:4321`.
 
-## 🏃 Desarrollo Local
+`npm run dev` only starts the dev server. It does not process photos automatically.
+The site data is built from `public/photos`, not directly from `assets/images`.
 
-1. **Procesar fotos** (primera vez o cuando agregues nuevas):
-   ```bash
-   npm run prepare:photos
-   ```
+## Production
 
-2. **Iniciar servidor de desarrollo**:
-   ```bash
-   npm run dev
-   ```
-   El sitio estará disponible en `http://localhost:4321`
+Build the site:
 
-3. **Build de producción**:
-   ```bash
-   npm run build
-   ```
-   Genera el sitio estático en `dist/`
+```bash
+npm run build
+```
 
-4. **Preview del build**:
-   ```bash
-   npm run preview
-   ```
+Preview the production build:
 
-## 📝 Scripts Disponibles
+```bash
+npm run preview
+```
 
-- `npm run prepare:photos` - Procesa y optimiza todas las imágenes
-- `npm run dev` - Inicia servidor de desarrollo (procesa fotos automáticamente)
-- `npm run build` - Build de producción (procesa fotos automáticamente)
-- `npm run preview` - Preview del build de producción
+## Available Scripts
 
-## 🎨 Categorías
+- `npm run prepare:photos` - Interactively sync `assets/images` into `public/photos` and rebuild `src/data/photos.json` from the processed library
+- `npm run dev` - Start the Astro dev server only
+- `npm run build` - Build the static site
+- `npm run preview` - Preview the production build
 
-Las categorías se detectan automáticamente desde las carpetas en `assets/images/`. Actualmente:
+## Photo Workflow
 
-- `portraits` - Retratos
-- `nature` - Naturaleza
-- `product` - Producto
-- `concert` - Conciertos
-- `city` - Ciudad
-- `creative` - Creatividad
+1. Cull and select new raw images into `assets/images/<category>/`
+2. Run `npm run prepare:photos`
+3. Choose `add` to append/update, or `overwrite` to replace the processed library
+4. Run `npm run dev` for local work, or `npm run build` for production output
 
-## 🔮 Features Futuras (Preparado)
+## Deploy
 
-El proyecto está estructurado para facilitar la implementación de:
+Netlify is configured to publish `dist/` using:
 
-- **Likes/Popularidad**: Cada foto tiene un `id` único que puede usarse con Firebase
-- **Filtro "Most Popular"**: Función `getPhotosByPopularity()` lista para integrar
-- **Agrupación por sesión**: Función `groupPhotosBySession()` disponible para UI
+- Build command: `npm run build`
+- Publish directory: `dist`
 
-Ver `docs/astro-migration.md` para más detalles.
+If the processed library changes, run `npm run prepare:photos` before deploying so `public/photos` and `src/data/photos.json` stay in sync.
 
-## 🌐 Deploy en Netlify
+## Stack
 
-El proyecto está configurado para deploy automático en Netlify:
-
-- **Build command**: `npm run build`
-- **Publish directory**: `dist`
-- **Node version**: 18
-
-El archivo `netlify.toml` contiene la configuración.
-
-## 📚 Tecnologías
-
-- **Astro 5.18.0+** - Framework estático con `<Image />` super rápido
-- **Sharp** - Procesamiento paralelo de imágenes
-- **Exifr** - Lectura de metadatos EXIF
-- **Bootstrap 5** - UI framework
-- **TypeScript** - Tipado (opcional)
-
-## 📄 Licencia
-
-Todos los derechos reservados - JRMGraphy
+- Astro
+- Sharp
+- Exifr
+- TypeScript support via Astro

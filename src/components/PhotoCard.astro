@@ -1,4 +1,6 @@
 ---
+import { getLangFromUrl, useTranslations } from '../i18n/utils';
+
 interface Props {
   photo: {
     id: string;
@@ -10,27 +12,53 @@ interface Props {
     width?: number;
     height?: number;
   };
+  lightboxGroup?: string;
+  loading?: 'eager' | 'lazy';
 }
 
-const { photo } = Astro.props;
+const {
+  photo,
+  lightboxGroup = 'default',
+  loading = 'lazy',
+} = Astro.props;
+
+const orientation =
+  !photo.width || !photo.height
+    ? 'landscape'
+    : photo.width === photo.height
+      ? 'square'
+      : photo.width > photo.height
+        ? 'landscape'
+        : 'portrait';
+
+const lang = getLangFromUrl(Astro.url);
+const t = useTranslations(lang);
+
+const displayCategory = t(`category.${photo.category}` as any) || photo.category;
+
+const altText = lang === 'es' 
+  ? `Fotografía ${displayCategory.toLowerCase()} por JRMGraphy` 
+  : `${displayCategory} photography by JRMGraphy`;
 ---
 
 <div
-  class="photo-card"
+  class={`photo-card photo-card--${orientation}`}
   data-lightbox-src={photo.src}
-  data-lightbox-cat={photo.category}
+  data-lightbox-cat={displayCategory}
   data-lightbox-id={photo.id}
+  data-lightbox-group={lightboxGroup}
+  data-orientation={orientation}
   role="button"
   tabindex="0"
-  aria-label={`View ${photo.category} photo`}
+  aria-label={lang === 'es' ? `Ver fotografía de ${displayCategory.toLowerCase()}` : `View ${displayCategory} photo`}
 >
   <img
     src={photo.src}
-    alt={`${photo.category} photography by JRMGraphy`}
-    width={photo.width || 800}
-    height={photo.height || 600}
-    loading="lazy"
+    alt={altText}
+    width={photo.width}
+    height={photo.height}
+    loading={loading}
   />
   <div class="photo-card-overlay"></div>
-  <span class="photo-card-cat">{photo.category}</span>
+  <span class="photo-card-cat">{displayCategory}</span>
 </div>

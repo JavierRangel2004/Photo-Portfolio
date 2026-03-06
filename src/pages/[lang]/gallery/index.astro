@@ -1,0 +1,54 @@
+---
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import Header from '../../../components/Header.astro';
+import Footer from '../../../components/Footer.astro';
+import GalleryGrid from '../../../components/GalleryGrid.astro';
+import CategoryFilter from '../../../components/CategoryFilter.astro';
+import Modal from '../../../components/Modal.astro';
+import { getAllPhotos, getCategories } from '../../../lib/photos';
+import { getLangFromUrl, useTranslations } from '../../../i18n/utils';
+
+export function getStaticPaths() {
+  return [
+    { params: { lang: 'en' } },
+    { params: { lang: 'es' } },
+  ];
+}
+
+const lang = getLangFromUrl(Astro.url);
+const t = useTranslations(lang);
+
+const category = Astro.url.searchParams.get('category') || 'all';
+const categories = getCategories();
+const allPhotos = getAllPhotos();
+const photoCount = allPhotos.length;
+---
+
+<BaseLayout
+  title={t('gallery.title')}
+  description={t('gallery.desc')}
+>
+  <Header />
+
+  <main class="site-main">
+    <div class="gallery-page-header">
+      <div class="container">
+        <h1 class="gallery-page-title reveal">{t('gallery.title')}</h1>
+        <p class="gallery-page-meta reveal stagger-1">{photoCount} fotografías</p>
+      </div>
+    </div>
+
+    <div class="container">
+      <CategoryFilter categories={categories} currentCategory={category} />
+
+      {allPhotos.length > 0 ? (
+        <GalleryGrid photos={allPhotos} initialCategory={category} />
+      ) : (
+        <p style="text-align:center; color: var(--color-text-muted); padding: 4rem 0;">No photographs found.</p>
+      )}
+    </div>
+  </main>
+
+  <Footer />
+  <Modal />
+</BaseLayout>

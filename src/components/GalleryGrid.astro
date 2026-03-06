@@ -19,7 +19,7 @@ const { photos, initialCategory = 'all' } = Astro.props;
         data-category={photo.category}
         style={isVisible ? '' : 'display: none;'}
       >
-        <PhotoCard photo={photo} />
+        <PhotoCard photo={photo} lightboxGroup="archive" />
       </div>
     );
   })}

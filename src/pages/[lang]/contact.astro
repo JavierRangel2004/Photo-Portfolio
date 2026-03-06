@@ -1,18 +1,30 @@
 ---
-import BaseLayout from '../layouts/BaseLayout.astro';
-import Header from '../components/Header.astro';
-import Footer from '../components/Footer.astro';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Header from '../../components/Header.astro';
+import Footer from '../../components/Footer.astro';
 import { Image } from 'astro:assets';
+import yoImage from '../../assets/images/yo.jpg';
+import { getLangFromUrl, useTranslations } from '../../i18n/utils';
+
+export function getStaticPaths() {
+  return [
+    { params: { lang: 'en' } },
+    { params: { lang: 'es' } },
+  ];
+}
+
+const lang = getLangFromUrl(Astro.url);
+const t = useTranslations(lang);
 ---
 
-<BaseLayout title="Contact" description="Get in touch with Javier Rangel — available for portrait, editorial, concert, and visual collaboration work.">
+<BaseLayout title={t('contact.title')} description={t('contact.desc')}>
   <Header />
 
   <!-- Hero -->
   <div class="contact-hero">
     <div class="contact-hero-bg">
       <Image
-        src="/assets/images/yo.jpg"
+        src={yoImage}
         alt="Contact JRMGraphy"
         width={1920}
         height={1280}
@@ -22,8 +34,9 @@ import { Image } from 'astro:assets';
     </div>
     <div class="contact-hero-overlay"></div>
     <div class="contact-hero-content">
-      <p class="contact-hero-eyebrow">Let's talk</p>
-      <h1 class="contact-hero-title">Get in Touch</h1>
+      <p class="contact-hero-eyebrow">{t('contact.hero.eyebrow')}</p>
+      <h1 class="contact-hero-title">{t('contact.hero.title')}</h1>
+      <p class="contact-hero-sub">{t('contact.hero.sub')}</p>
     </div>
   </div>
 
@@ -32,18 +45,12 @@ import { Image } from 'astro:assets';
     <div class="contact-grid">
       <!-- Info column -->
       <div class="contact-info reveal">
-        <h2 class="contact-info-title">Ready to create something?</h2>
-        <p class="contact-info-desc">
-          Whether it's a portrait session, editorial project, concert coverage, 
-          or a collaboration you have in mind — reach out and let's talk.
-        </p>
+        <h2 class="contact-info-title">{t('contact.info.title')}</h2>
+        <p class="contact-info-desc">{t('contact.info.desc')}</p>
 
         <div class="contact-avail">
-          <p class="contact-avail-label">Currently available for</p>
-          <p class="contact-avail-text">
-            Portrait sessions · Concert coverage · Editorial projects · 
-            Product photography · Visual collaborations · Select events
-          </p>
+          <p class="contact-avail-label">{t('contact.avail.label')}</p>
+          <p class="contact-avail-text">{t('contact.avail.text')}</p>
         </div>
 
         <div class="contact-links">
@@ -83,63 +90,63 @@ import { Image } from 'astro:assets';
           </p>
 
           <div class="form-group">
-            <label for="name" class="form-label">Name *</label>
+            <label for="name" class="form-label">{t('contact.form.name')}</label>
             <input
               type="text"
               class="form-input"
               id="name"
               name="name"
-              placeholder="Your name"
+              placeholder={t('contact.form.namePlaceholder')}
               required
             />
           </div>
 
           <div class="form-group">
-            <label for="email" class="form-label">Email *</label>
+            <label for="email" class="form-label">{t('contact.form.email')}</label>
             <input
               type="email"
               class="form-input"
               id="email"
               name="email"
-              placeholder="you@example.com"
+              placeholder={t('contact.form.emailPlaceholder')}
               required
             />
           </div>
 
           <div class="form-group">
-            <label for="inquiry-type" class="form-label">Type of inquiry *</label>
+            <label for="inquiry-type" class="form-label">{t('contact.form.type')}</label>
             <select id="inquiry-type" name="type" class="form-select" required>
-              <option value="">Select a type...</option>
-              <option value="portrait">Portrait session</option>
-              <option value="concert">Concert coverage</option>
-              <option value="editorial">Editorial project</option>
-              <option value="product">Product photography</option>
-              <option value="collaboration">Visual collaboration</option>
-              <option value="general">General inquiry</option>
+              <option value="">{t('contact.form.typeSelect')}</option>
+              <option value="portrait">{t('about.services.portrait')}</option>
+              <option value="concert">{t('about.services.concert')}</option>
+              <option value="editorial">{t('about.services.editorial')}</option>
+              <option value="product">{t('about.services.product')}</option>
+              <option value="collaboration">{t('about.services.visual')}</option>
+              <option value="general">{t('contact.form.typeGeneral')}</option>
             </select>
           </div>
 
           <div class="form-group">
-            <label for="message" class="form-label">Message *</label>
+            <label for="message" class="form-label">{t('contact.form.message')}</label>
             <textarea
               class="form-textarea"
               id="message"
               name="message"
               rows="5"
-              placeholder="Tell me about your project…"
+              placeholder={t('contact.form.messagePlaceholder')}
               required
             ></textarea>
           </div>
 
           <div class="form-submit">
-            <button type="submit" class="btn btn-primary" id="submit-btn" style="width: 100%;">
-              Send Message
+            <button type="submit" class="btn btn-primary" id="submit-btn" style="width: 100%;" data-sending={t('contact.form.sending')} data-submit={t('contact.form.submit')}>
+              {t('contact.form.submit')}
             </button>
           </div>
 
           <div class="form-feedback" id="contact-confirmation">
             <i class="fas fa-check-circle"></i>
-            <span>Thank you — I'll be in touch soon.</span>
+            <span>{t('contact.form.success')}</span>
           </div>
         </form>
       </div>
@@ -155,7 +162,7 @@ import { Image } from 'astro:assets';
     const submitBtn = document.getElementById('submit-btn') as HTMLButtonElement;
     const confirmation = document.getElementById('contact-confirmation');
 
-    if (!form) return;
+    if (!form || !submitBtn) return;
 
     form.addEventListener('submit', async (e) => {
       e.preventDefault();
@@ -163,14 +170,17 @@ import { Image } from 'astro:assets';
       const name = (document.getElementById('name') as HTMLInputElement).value.trim();
       const email = (document.getElementById('email') as HTMLInputElement).value.trim();
       const message = (document.getElementById('message') as HTMLTextAreaElement).value.trim();
+      const txtSending = submitBtn.dataset.sending || 'Sending…';
+      const txtSubmit = submitBtn.dataset.submit || 'Send Message';
 
       if (!name || !/\S+@\S+\.\S+/.test(email) || !message) {
+        // Simple fallback alert for validation
         alert('Please fill out all required fields correctly.');
         return;
       }
 
       submitBtn.disabled = true;
-      submitBtn.textContent = 'Sending…';
+      submitBtn.textContent = txtSending;
 
       const formData = new FormData(form);
       const params = new URLSearchParams();
@@ -192,7 +202,7 @@ import { Image } from 'astro:assets';
         alert('There was a problem sending your message. Please try again.');
       } finally {
         submitBtn.disabled = false;
-        submitBtn.textContent = 'Send Message';
+        submitBtn.textContent = txtSubmit;
       }
     });
   });
