@@ -10,16 +10,33 @@ interface Props {
     width?: number;
     height?: number;
   };
+  lightboxGroup?: string;
+  loading?: 'eager' | 'lazy';
 }
 
-const { photo } = Astro.props;
+const {
+  photo,
+  lightboxGroup = 'default',
+  loading = 'lazy',
+} = Astro.props;
+
+const orientation =
+  !photo.width || !photo.height
+    ? 'landscape'
+    : photo.width === photo.height
+      ? 'square'
+      : photo.width > photo.height
+        ? 'landscape'
+        : 'portrait';
 ---
 
 <div
-  class="photo-card"
+  class={`photo-card photo-card--${orientation}`}
   data-lightbox-src={photo.src}
   data-lightbox-cat={photo.category}
   data-lightbox-id={photo.id}
+  data-lightbox-group={lightboxGroup}
+  data-orientation={orientation}
   role="button"
   tabindex="0"
   aria-label={`View ${photo.category} photo`}
@@ -27,9 +44,9 @@ const { photo } = Astro.props;
   <img
     src={photo.src}
     alt={`${photo.category} photography by JRMGraphy`}
-    width={photo.width || 800}
-    height={photo.height || 600}
-    loading="lazy"
+    width={photo.width}
+    height={photo.height}
+    loading={loading}
   />
   <div class="photo-card-overlay"></div>
   <span class="photo-card-cat">{photo.category}</span>

@@ -3,13 +3,6 @@ const currentYear = new Date().getFullYear();
 const siteTitle = "JRMGraphy";
 const email = "inspecjrm@gmail.com";
 const instagram = "https://www.instagram.com/JRM_Graphy";
-
-const navLinks = [
-  { href: "/", label: "Home" },
-  { href: "/gallery", label: "Archive" },
-  { href: "/about", label: "About" },
-  { href: "/contact", label: "Contact" },
-];
 ---
 
 <footer class="site-footer">
@@ -19,18 +12,14 @@ const navLinks = [
       <div class="footer-copy">&copy; {currentYear} {siteTitle}. All rights reserved.</div>
     </div>
 
-    <nav class="footer-nav" aria-label="Footer navigation">
-      {navLinks.map(link => (
-        <a href={link.href}>{link.label}</a>
-      ))}
-    </nav>
-
     <div class="footer-social">
       <a href={`mailto:${email}`} aria-label="Email">
         <i class="fa fa-envelope" aria-hidden="true"></i>
+        <span>{email}</span>
       </a>
       <a href={instagram} target="_blank" rel="noopener noreferrer" aria-label="Instagram">
         <i class="fab fa-instagram" aria-hidden="true"></i>
+        <span>Instagram</span>
       </a>
     </div>
   </div>

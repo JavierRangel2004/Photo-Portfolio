@@ -20,11 +20,12 @@ const categoryData = categories.map(cat => {
 });
 ---
 
-<section class="categories-section" aria-label="Photography categories">
+<section class="categories-section" id="home-themes" aria-label="Photography categories">
   <div class="categories-header reveal">
     <div class="section-heading">
-      <p class="section-eyebrow">Visual Worlds</p>
-      <h2 class="section-title">Explore by theme</h2>
+      <p class="section-eyebrow">Start here</p>
+      <h2 class="section-title">First explore by theme</h2>
+      <p class="section-subtitle">Jump into a visual world first, then continue into a mixed glance of the archive.</p>
     </div>
   </div>
 
@@ -40,8 +41,8 @@ const categoryData = categories.map(cat => {
           <img
             src={cat.cover.src}
             alt={`${cat.label} photography`}
-            width={cat.cover.width || 800}
-            height={cat.cover.height || 600}
+            width={cat.cover.width}
+            height={cat.cover.height}
             loading="lazy"
           />
         )}

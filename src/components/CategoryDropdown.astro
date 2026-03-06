@@ -2,10 +2,9 @@
 interface Props {
   categories: string[];
   currentCategory?: string;
-  baseUrl?: string;
 }
 
-const { categories, currentCategory = 'all', baseUrl } = Astro.props;
+const { categories, currentCategory = 'all' } = Astro.props;
 ---
 
 <div class="category-dropdown-wrapper">
@@ -25,15 +24,15 @@ const { categories, currentCategory = 'all', baseUrl } = Astro.props;
 
 <script>
   document.addEventListener('DOMContentLoaded', () => {
-    const categoryFilter = document.getElementById('categoryFilter');
+    const categoryFilter = document.getElementById('categoryFilter') as HTMLSelectElement | null;
     if (!categoryFilter) return;
     
     // Obtener todas las fotos usando data-category (carrusel o gallery)
     // Seleccionar solo las fotos (slides del carrusel o items de la gallery), no otros elementos
-    const allPhotoSlides = document.querySelectorAll('.home-carousel-slide[data-category], .masonry-item[data-category]');
+    const allPhotoSlides = document.querySelectorAll<HTMLElement>('.home-carousel-slide[data-category], .masonry-item[data-category]');
     
     // Función para filtrar fotos
-    const filterPhotos = (selectedCategory) => {
+    const filterPhotos = (selectedCategory: string) => {
       allPhotoSlides.forEach(slide => {
         const slideCategory = slide.getAttribute('data-category');
         const shouldShow = selectedCategory === 'all' || 
@@ -43,7 +42,7 @@ const { categories, currentCategory = 'all', baseUrl } = Astro.props;
       });
       
       // Actualizar URL sin recargar usando History API
-      const url = new URL(window.location);
+      const url = new URL(window.location.href);
       if (selectedCategory === 'all') {
         url.searchParams.delete('category');
       } else {
@@ -54,7 +53,7 @@ const { categories, currentCategory = 'all', baseUrl } = Astro.props;
     
     // Event listener para el dropdown
     categoryFilter.addEventListener('change', (e) => {
-      const selected = e.target.value;
+      const selected = (e.currentTarget as HTMLSelectElement).value;
       filterPhotos(selected);
     });
     
@@ -67,7 +66,7 @@ const { categories, currentCategory = 'all', baseUrl } = Astro.props;
     filterPhotos(initialCategory);
     
     // Manejar navegación del navegador (back/forward)
-    window.addEventListener('popstate', (e) => {
+    window.addEventListener('popstate', () => {
       const urlParams = new URLSearchParams(window.location.search);
       const category = urlParams.get('category') || 'all';
       categoryFilter.value = category;
@@ -120,4 +119,3 @@ const { categories, currentCategory = 'all', baseUrl } = Astro.props;
     }
   }
 </style>
-

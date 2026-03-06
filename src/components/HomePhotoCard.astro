@@ -1,30 +1,20 @@
 ---
-import type { PhotoOrientation } from '../lib/photos';
+import type { Photo, PhotoOrientation } from '../lib/photos';
 
 interface Props {
-  photo: {
-    id: string;
-    category: string;
-    src: string;
-    date: string;
-    sessionDate: string;
-    originalName: string;
-    width?: number;
-    height?: number;
-  };
+  photo: Photo;
   orientation: PhotoOrientation;
 }
-import { Image } from 'astro:assets';
 
 const { photo, orientation } = Astro.props;
 ---
 
 <div class="home-photo-card" data-photo-id={photo.id}>
-  <Image 
-    src={photo.src} 
+  <img
+    src={photo.src}
     alt={`${photo.category} - ${photo.originalName}`}
-    width={photo.width || 800}
-    height={photo.height || 600}
+    width={photo.width}
+    height={photo.height}
     loading="lazy"
     class={`home-carousel-image home-carousel-image--${orientation}`}
     data-modal-src={photo.src}
@@ -79,4 +69,3 @@ const { photo, orientation } = Astro.props;
     transform: scale(1.03);
   }
 </style>
-

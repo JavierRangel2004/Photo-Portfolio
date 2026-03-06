@@ -9,11 +9,11 @@ const heroPhoto = getRandomPhotosByCategory('portraits', 1)[0]
 <section class="hero" aria-label="Hero">
   <div class="hero-bg" id="hero-bg">
     {heroPhoto && (
-      <img 
+      <img
         src={heroPhoto.src}
         alt="JRMGraphy hero"
-        width="1920"
-        height="1280"
+        width={heroPhoto.width || 1920}
+        height={heroPhoto.height || 1280}
         loading="eager"
         fetchpriority="high"
         id="hero-img"
@@ -33,10 +33,10 @@ const heroPhoto = getRandomPhotosByCategory('portraits', 1)[0]
     </div>
   </div>
 
-  <div class="hero-scroll" aria-hidden="true">
-    <span>Scroll</span>
-    <div class="hero-scroll-line"></div>
-  </div>
+  <a class="hero-scroll" id="hero-scroll" href="#home-themes" aria-label="Explore themes">
+    <span class="hero-scroll-text">Explore themes</span>
+    <span class="hero-scroll-icon" aria-hidden="true"></span>
+  </a>
 </section>
 
 <script>
@@ -50,16 +50,31 @@ const heroPhoto = getRandomPhotosByCategory('portraits', 1)[0]
   }
 
   // Small zoom-out on load for cinematic feel
-  const heroImg = document.getElementById('hero-img');
+  const heroImg = document.getElementById('hero-img') as HTMLImageElement | null;
   if (heroImg) {
     heroImg.addEventListener('load', () => heroImg.classList.add('loaded'));
     if (heroImg.complete) heroImg.classList.add('loaded');
+  }
+
+  const heroScroll = document.getElementById('hero-scroll');
+  if (heroScroll) {
+    const toggleHeroScroll = () => {
+      const shouldHide = window.scrollY > 24;
+      heroScroll.classList.toggle('is-hidden', shouldHide);
+      heroScroll.classList.toggle('is-visible', !shouldHide);
+    };
+
+    requestAnimationFrame(toggleHeroScroll);
+    window.addEventListener('scroll', toggleHeroScroll, { passive: true });
   }
 </script>
 
 <style>
   .hero-actions {
     display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
     gap: 1rem;
     margin-top: 2rem;
     opacity: 0;
@@ -67,10 +82,18 @@ const heroPhoto = getRandomPhotosByCategory('portraits', 1)[0]
     animation: reveal 0.7s cubic-bezier(0.16, 1, 0.3, 1) 0.8s forwards;
   }
 
-  @media (max-width: 480px) {
+  @media (max-width: 768px) {
+    .hero-content {
+      text-align: center;
+    }
+
+    .hero-subtitle {
+      margin-inline: auto;
+    }
+
     .hero-actions {
       flex-direction: column;
-      width: fit-content;
+      width: 100%;
     }
   }
 </style>

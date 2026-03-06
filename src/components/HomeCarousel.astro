@@ -46,7 +46,7 @@ const { photos, initialCategory = 'all' } = Astro.props;
     // Función para calcular y aplicar altura uniforme
     const updateCarouselHeight = () => {
       // Solo considerar slides visibles (no ocultos por el filtro)
-      const allSlides = container.querySelectorAll('.home-carousel-slide');
+      const allSlides = container.querySelectorAll<HTMLElement>('.home-carousel-slide');
       const visibleSlides = Array.from(allSlides).filter(slide => {
         const style = window.getComputedStyle(slide);
         return style.display !== 'none';
@@ -54,7 +54,7 @@ const { photos, initialCategory = 'all' } = Astro.props;
       
       if (!visibleSlides.length) return;
       
-      const images = Array.from(container.querySelectorAll('.home-carousel-image'))
+      const images = Array.from(container.querySelectorAll<HTMLImageElement>('.home-carousel-image'))
         .filter(img => {
           const slide = img.closest('.home-carousel-slide');
           return slide && window.getComputedStyle(slide).display !== 'none';
@@ -92,7 +92,7 @@ const { photos, initialCategory = 'all' } = Astro.props;
     };
     
     // Ejecutar cuando las imágenes se carguen
-    const allImages = container.querySelectorAll('.home-carousel-image');
+    const allImages = container.querySelectorAll<HTMLImageElement>('.home-carousel-image');
     let loadedCount = 0;
     const totalImages = allImages.length;
     
@@ -117,7 +117,7 @@ const { photos, initialCategory = 'all' } = Astro.props;
     }
     
     // Recalcular en resize
-    let resizeTimeout;
+    let resizeTimeout: ReturnType<typeof setTimeout> | undefined;
     window.addEventListener('resize', () => {
       clearTimeout(resizeTimeout);
       resizeTimeout = setTimeout(updateCarouselHeight, 250);
@@ -286,4 +286,3 @@ const { photos, initialCategory = 'all' } = Astro.props;
     }
   }
 </style>
-
