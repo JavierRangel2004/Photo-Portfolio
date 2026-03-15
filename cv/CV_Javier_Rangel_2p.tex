@@ -1,0 +1,263 @@
+%% CV_Javier_Rangel_2p.tex  —  Startup / Technical deep-dive version  (2 pages)
+%% Follows cvAdvice.txt: action+tools+result bullets, curated skills,
+%% all projects, architecture detail, both backend + mobile for LegalTec.
+
+\documentclass[11pt, letterpaper]{article}
+
+\usepackage[top=0.55in, bottom=0.55in, left=0.65in, right=0.65in]{geometry}
+\usepackage{parskip}
+\usepackage{titlesec}
+\usepackage{enumitem}
+\usepackage{hyperref}
+\usepackage[protrusion=true,expansion=false]{microtype}
+\usepackage[T1]{fontenc}
+
+\hypersetup{colorlinks=true, urlcolor=black, linkcolor=black}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{0pt}
+
+\titleformat{\section}{\scshape\large}{}{0em}{}[\titlerule]
+\titlespacing{\section}{0pt}{6pt}{4pt}
+
+\newcommand{\entry}[2]{%
+  \noindent\begin{tabular*}{\textwidth}{@{}l@{\extracolsep{\fill}}r@{}}
+    #1 & #2
+  \end{tabular*}}
+
+\newenvironment{cvlist}{%
+  \begin{itemize}[leftmargin=1.4em,itemsep=1.5pt,topsep=3pt,parsep=0pt]
+}{\end{itemize}}
+
+\newcommand{\project}[2]{\noindent\textbf{#1}\hspace{4pt}\textit{| #2}}
+
+%% ─────────────────────────────────────────────────────────────────────────────
+\begin{document}
+\pagestyle{empty}
+
+%% ── HEADER ──────────────────────────────────────────────────────────────────
+\begin{center}
+  {\Huge\bfseries Javier Rangel Murillo}\\[4pt]
+  Mexico City, Mexico\\[2pt]
+  \href{mailto:inspecjrm@gmail.com}{inspecjrm@gmail.com}
+  \enspace|\enspace
+  \href{https://linkedin.com/in/javierramu2004}{linkedin.com/in/javierramu2004}
+  \enspace|\enspace
+  \href{https://github.com/JavierRangel2004}{github.com/JavierRangel2004}
+  \enspace|\enspace
+  \href{https://jrmgraphy.com}{jrmgraphy.com}
+\end{center}
+
+%% ── SUMMARY ─────────────────────────────────────────────────────────────────
+\section{Summary}
+
+Backend and Mobile Engineer with startup experience building production systems
+end-to-end across platform architecture, cloud infrastructure, and cross-platform
+mobile delivery.
+Sole author of 91.6\% of a production legal-tech backend (Node.js/TypeScript/GCP)
+and full mobile client (React Native/Expo) — both integrated into a live platform.
+Currently pursuing a Bachelor's in Data Intelligence and Cybersecurity.
+
+%% ── SELECTED IMPACT ─────────────────────────────────────────────────────────
+\section{Selected Impact}
+
+\begin{cvlist}
+  \item End-to-end backend architecture in startup environment — sole author of
+        a production system handling payments, scheduling, identity verification,
+        and video workflows.
+  \item Cross-platform mobile implementation fully integrated with backend —
+        auth lifecycle, push notifications, appointments, and profile management.
+  \item Cloud infrastructure and CI/CD on Google Cloud — Terraform IaC, Cloud Run,
+        GitHub Actions pipelines, Prometheus observability.
+  \item Payments, notifications, and third-party integrations — PayPal, Google Meet,
+        Firebase Cloud Messaging, Twilio, SendGrid, RENAPO, SEP.
+  \item Technical mentorship and backend leadership — promoted to lead, guiding
+        students and university engineering projects.
+\end{cvlist}
+
+%% ── EXPERIENCE ───────────────────────────────────────────────────────────────
+\section{Experience}
+
+\entry{\textbf{LegalTec} \quad Mexico City, Mexico}{}\\
+\entry{\textit{Founding Backend \& Mobile Systems Engineer}}{\textit{Oct 2025 -- Mar 2026}}
+
+\vspace{3pt}
+\textit{Backend Platform}
+\begin{cvlist}
+  \item Architected and built the entire backend platform (Node.js, TypeScript, Express.js)
+        with \textbf{91.6\% sole authorship} across 66 API routes, 78+ services, and 11
+        background workers — taking a legal-tech startup from prototype to production.
+  \item Designed a domain-driven, dependency-injected system on GCP (Cloud Run, Pub/Sub,
+        Tasks, KMS, Secret Manager, Storage) with Firebase Auth/Firestore, enabling
+        high-availability distributed processing and encryption at rest for sensitive data.
+  \item Built 11 specialized workers with BullMQ + Redis (payment retry, hold cleanup,
+        Google Meet event processing, video ETL, recording TTL, verification pipelines),
+        supporting reliable async workflows across the platform.
+  \item Enabled full platform monetization by integrating PayPal APIs (Orders, Vault,
+        Subscriptions, Webhooks), supporting appointment billing and recurring charges
+        with idempotent retry logic.
+  \item Automated virtual appointment workflows via Google Workspace/Meet API (event
+        lifecycle, meeting creation, post-meeting video ETL); integrated Twilio SMS
+        verification and SendGrid transactional emails.
+  \item Engineered Puppeteer-based scrapers for CURP/RENAPO and SEP C\'{e}dula
+        Profesional validation, eliminating dependency on costly third-party APIs
+        for Mexican identity verification.
+  \item Delivered production observability: Prometheus metrics, Pino structured logging,
+        audit trail, circuit breakers (Opossum), advanced rate limiting, and 25-file
+        OpenAPI documentation suite.
+  \item Provisioned and maintained infrastructure-as-code with Terraform on GCP;
+        configured GitHub Actions CI/CD pipelines to Cloud Run for staging and
+        production environments.
+\end{cvlist}
+
+\vspace{5pt}
+\textit{Mobile Platform}
+\begin{cvlist}
+  \item Built cross-platform mobile app (React Native/Expo, 8\,826 TS/TSX lines across
+        89 files) fully integrated with the backend — architected from routing bootstrap
+        to domain feature delivery.
+  \item Engineered secure session lifecycle management using Expo Secure Store with
+        encrypted token storage, refresh-token handling, and a queued Axios interceptor
+        strategy to prevent parallel 401 races under network instability.
+  \item Enabled real-time push notifications via Firebase Cloud Messaging — device
+        registration, foreground handling, and notification-driven navigation flows
+        across the mobile app.
+  \item Developed modular domain layers (appointments, notifications, profiles,
+        dashboards) using TanStack Query, Zustand, and React Hook Form + Zod,
+        with role-based data contracts and conditional polling per appointment state.
+  \item Built role-aware routing with Expo Router: session-hydration guards, profile
+        completion flows, and tab navigation — supporting lawyer and client personas.
+\end{cvlist}
+
+\bigskip
+
+\entry{\textbf{Universidad Panamericana -- iOS Development Lab} \quad Mexico City, Mexico}{}\\
+\entry{\textit{Backend Development Lead}}{\textit{Sep 2025 -- Present}}
+
+\begin{cvlist}
+  \item Promoted to lead to mentor incoming students on Python, clean architecture,
+        and modern API development; guides technical planning for multiple university
+        projects transitioning to microservices and Docker.
+\end{cvlist}
+
+\vspace{3pt}
+\entry{\textit{Backend Developer}}{\textit{Oct 2022 -- Sep 2025}}
+
+\begin{cvlist}
+  \item Built and deployed production APIs with Django and Flask to support native
+        Swift iOS applications; designed and managed PostgreSQL and MongoDB databases
+        for performance and data security.
+\end{cvlist}
+
+%% ── HIGHLIGHTED PROJECTS ─────────────────────────────────────────────────────
+\section{Highlighted Projects}
+
+\project{Notadio}%
+        {React/Vite, Express, TypeScript, whisper.cpp, Ollama, Python, FFmpeg}
+
+\begin{cvlist}
+  \item Built a local-first audio/video transcription application — processes media
+        locally with whisper.cpp (no API costs) and generates structured AI summaries
+        via Ollama using a MapReduce chunking pipeline for long transcripts.
+  \item Implemented speaker diarization, SRT/JSON/TXT export, live progress telemetry
+        (elapsed time, ETA, backend status), and an adaptive summarization fallback
+        when LLM is unavailable.
+  \item Deployed to a VPS as a single-user tool: Caddy reverse proxy, HTTP Basic Auth,
+        and systemd service management; FFmpeg-based media normalization pipeline.
+  \item \href{https://github.com/JavierRangel2004/Notadio}{github.com/JavierRangel2004/Notadio}
+\end{cvlist}
+
+\vspace{4pt}
+
+\project{PhotoCat}%
+        {Python, SigLIP2, YOLOv8, BLIP, NLTK, Machine Learning}
+
+\begin{cvlist}
+  \item AI-powered local pipeline to classify and organize large photo libraries
+        using SigLIP2 zero-shot genre classification fused with YOLOv8
+        object-evidence scoring and BLIP captioning.
+  \item Confidence-gated decisions (auto / review / title-inferred), audit CSV
+        reporting, optional XMP metadata writing, and automatic genre-based
+        directory organization for streamlined curation workflows.
+  \item \href{https://github.com/JavierRangel2004/PhotoCat}{github.com/JavierRangel2004/PhotoCat}
+\end{cvlist}
+
+\vspace{4pt}
+
+\project{Redes que Cambian}%
+        {Django, Angular, PostgreSQL, Docker}
+
+\begin{cvlist}
+  \item Platform to connect individuals with NGOs across Mexico; deployed for a
+        local organization with modules for volunteer coordination, project
+        management, and social-impact metrics.
+  \item \href{https://github.com/JavierRangel2004/redes-que-cambian}{github.com/JavierRangel2004/redes-que-cambian}
+\end{cvlist}
+
+\vspace{4pt}
+
+\project{Sustainability Certifications Platform}%
+        {Django, PostgreSQL}
+
+\begin{cvlist}
+  \item Built and sold an API to a sustainability consultancy enabling companies
+        to meet ESG standards — integrated self-assessment tools, custom consulting
+        workflows, and a sustainable-supplier directory.
+  \item \href{https://github.com/JavierRangel2004/sustentabilidad}{github.com/JavierRangel2004/sustentabilidad}
+\end{cvlist}
+
+\vspace{4pt}
+
+\project{Photo Portfolio}%
+        {Astro, TypeScript, React, Tailwind CSS, i18n}
+
+\begin{cvlist}
+  \item Rebuilt personal photography portfolio as a bilingual (EN/ES) Astro static
+        site with route-based internationalization, dynamic category navigation, and
+        lazy-loaded gallery components.
+  \item Deployed at \href{https://jrmgraphy.com}{jrmgraphy.com} —
+        \href{https://github.com/JavierRangel2004/Photo-Portfolio}{github.com/JavierRangel2004/Photo-Portfolio}
+\end{cvlist}
+
+\vspace{4pt}
+
+\project{Wayfinder}%
+        {C++, Graph Algorithms, CSV}
+
+\begin{cvlist}
+  \item CLI app for campus route planning using weighted graph structures and CSV
+        data; supports shortest/longest-path queries — deployed for a university
+        to improve visitor navigation.
+  \item \href{https://github.com/JavierRangel2004/Wayfinder}{github.com/JavierRangel2004/Wayfinder}
+\end{cvlist}
+
+%% ── EDUCATION ─────────────────────────────────────────────────────────────────
+\section{Education}
+
+\entry{%
+  \textbf{Universidad Panamericana (UP)} \quad Mexico City, Mexico
+}{\textit{Aug 2022 -- Jun 2027}}\\
+\textit{Bachelor of Engineering in Data Intelligence and Cybersecurity}
+
+%% ── TECHNICAL SKILLS ──────────────────────────────────────────────────────────
+\section{Technical Skills}
+
+\setlength{\tabcolsep}{0pt}
+\begin{tabular}{@{}p{1.6in}p{\dimexpr\textwidth-1.6in}@{}}
+  \textbf{Core}
+  & TypeScript, Node.js, Express.js, React Native (Expo), Python,
+    GCP (Cloud Run, Pub/Sub, Tasks, KMS, Storage, Secret Manager),
+    Firebase / Firestore, PostgreSQL, Redis \\[3pt]
+
+  \textbf{Also used}
+  & Django, Flask, Astro, React, Angular, Tailwind CSS, MongoDB,
+    Terraform, Docker, GitHub Actions, BullMQ, TanStack Query,
+    Zustand, React Hook Form, Zod, Expo Router, NativeWind,
+    PayPal API, Firebase Cloud Messaging, Twilio, SendGrid,
+    Google Workspace APIs, Puppeteer, Prometheus, Pino, OpenAPI,
+    Opossum, Jest, C++, Rust, PHP \\[3pt]
+
+  \textbf{Languages}
+  & Spanish (native) \textbullet\ English C1 -- TOEFL iBT 607 \\
+\end{tabular}
+
+\end{document}

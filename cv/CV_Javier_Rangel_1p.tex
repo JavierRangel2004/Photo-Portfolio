@@ -1,0 +1,150 @@
+%% CV_Javier_Rangel_1p.tex  —  Recruiter / ATS version  (1 page)
+%% Follows cvAdvice.txt: concise bullets, action+tools+result, curated skills,
+%% top 3 projects. No over-technical internals.
+
+\documentclass[10pt, letterpaper]{article}
+
+\usepackage[top=0.45in, bottom=0.45in, left=0.55in, right=0.55in]{geometry}
+\usepackage{parskip}
+\usepackage{titlesec}
+\usepackage{enumitem}
+\usepackage{hyperref}
+\usepackage[protrusion=true,expansion=false]{microtype}
+\usepackage[T1]{fontenc}
+
+\hypersetup{colorlinks=true, urlcolor=black, linkcolor=black}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{0pt}
+
+%% Sections: small caps + rule
+\titleformat{\section}{\scshape\normalsize}{}{0em}{}[\titlerule]
+\titlespacing{\section}{0pt}{5pt}{3pt}
+
+%% Two-column header row
+\newcommand{\entry}[2]{%
+  \noindent\begin{tabular*}{\textwidth}{@{}l@{\extracolsep{\fill}}r@{}}
+    #1 & #2
+  \end{tabular*}}
+
+%% Compact bullet list
+\newenvironment{cvlist}{%
+  \begin{itemize}[leftmargin=1.2em,itemsep=0.5pt,topsep=2pt,parsep=0pt]
+}{\end{itemize}}
+
+%% ─────────────────────────────────────────────────────────────────────────────
+\begin{document}
+\pagestyle{empty}
+
+%% ── HEADER ──────────────────────────────────────────────────────────────────
+\begin{center}
+  {\LARGE\bfseries Javier Rangel Murillo}\\[2pt]
+  Mexico City, Mexico \enspace|\enspace
+  \href{mailto:inspecjrm@gmail.com}{inspecjrm@gmail.com} \enspace|\enspace
+  \href{https://linkedin.com/in/javierramu2004}{linkedin.com/in/javierramu2004} \enspace|\enspace
+  \href{https://github.com/JavierRangel2004}{github.com/JavierRangel2004} \enspace|\enspace
+  \href{https://jrmgraphy.com}{jrmgraphy.com}
+\end{center}
+
+%% ── SUMMARY ─────────────────────────────────────────────────────────────────
+\section{Summary}
+
+Backend and Mobile Engineer with startup experience building production systems
+end-to-end across platform architecture, cloud infrastructure, integrations, and
+cross-platform mobile delivery.
+Strong focus on TypeScript, Node.js, React Native, and Google Cloud Platform.
+Currently pursuing a Bachelor's in Data Intelligence and Cybersecurity.
+
+%% ── EXPERIENCE ───────────────────────────────────────────────────────────────
+\section{Experience}
+
+\entry{\textbf{LegalTec} \quad Mexico City, Mexico}{}\\
+\entry{\textit{Founding Backend \& Mobile Engineer}}{\textit{Oct 2025 -- Mar 2026}}
+
+\smallskip
+\textit{Backend}
+\begin{cvlist}
+  \item Architected and built the entire backend platform (Node.js, TypeScript, Express.js)
+        as \textbf{91.6\% sole author} across 66 API routes — taking a legal-tech startup from
+        prototype to production.
+  \item Designed GCP infrastructure (Cloud Run, Pub/Sub, Tasks, KMS, Secret Manager, Firebase)
+        enabling high-availability distributed processing and encryption at rest for sensitive
+        legal data.
+  \item Built 11 background workers with BullMQ + Redis (payment retry, scheduling, video ETL,
+        verification pipelines), enabling reliable async workflows at scale.
+  \item Enabled full platform monetization via PayPal APIs (Orders, Vault, Subscriptions),
+        automated Google Meet virtual appointments, and Twilio/SendGrid notification flows.
+  \item Engineered Puppeteer scrapers for CURP/RENAPO and SEP C\'{e}dula validation,
+        eliminating third-party API costs for Mexican identity verification.
+\end{cvlist}
+
+\smallskip
+\textit{Mobile}
+\begin{cvlist}
+  \item Built cross-platform mobile app (React Native/Expo, 8\,826 TS/TSX lines, 89 files)
+        with encrypted session lifecycle, token-refresh resilience, and role-aware navigation.
+  \item Enabled real-time push notifications via Firebase Cloud Messaging, supporting device
+        registration, foreground handling, and notification-driven routing across the app.
+  \item Developed domain modules (appointments, profiles, notifications) using TanStack Query
+        and Zustand, accelerating cross-platform product delivery.
+\end{cvlist}
+
+\medskip
+
+\entry{\textbf{Universidad Panamericana -- iOS Development Lab} \quad Mexico City, Mexico}{}\\
+\entry{\textit{Backend Development Lead (promoted) \textnormal{|} Backend Developer}}%
+      {\textit{Oct 2022 -- Present}}
+
+\begin{cvlist}
+  \item Promoted to lead in Sep 2025; mentors students on Python, clean architecture, and
+        modern API design while guiding multiple university projects to production.
+  \item Built and deployed APIs with Django and Flask for native Swift iOS applications;
+        managed PostgreSQL and MongoDB databases for performance and data security.
+\end{cvlist}
+
+%% ── SELECTED PROJECTS ────────────────────────────────────────────────────────
+\section{Selected Projects}
+
+\noindent\textbf{Notadio} \textit{| React/Vite, Express, TypeScript, whisper.cpp, Ollama, Python}
+\begin{cvlist}
+  \item Full-stack local-first transcription app — processes audio/video with whisper.cpp
+        and generates AI summaries via Ollama (MapReduce for long media); no API costs.
+  \item Supports speaker diarization, SRT/JSON/TXT export, live progress telemetry;
+        deployed to VPS with Caddy reverse proxy and systemd service management.
+\end{cvlist}
+
+\noindent\textbf{PhotoCat} \textit{| Python, SigLIP2, YOLOv8, BLIP, NLTK}
+\begin{cvlist}
+  \item AI pipeline that auto-classifies large photo libraries using zero-shot genre
+        classification fused with object-evidence scoring and captioning; exports
+        audit CSVs and writes XMP metadata for automated curation workflows.
+\end{cvlist}
+
+\noindent\textbf{Redes que Cambian} \textit{| Django, Angular, PostgreSQL, Docker}
+\begin{cvlist}
+  \item Platform connecting individuals with NGOs across Mexico; deployed for a local
+        organization with modules for volunteer management and social-project metrics.
+\end{cvlist}
+
+%% ── EDUCATION ─────────────────────────────────────────────────────────────────
+\section{Education}
+
+\entry{\textbf{Universidad Panamericana (UP)} \quad
+       \textit{B.Eng. in Data Intelligence and Cybersecurity}}%
+      {\textit{Aug 2022 -- Jun 2027}}
+
+%% ── TECHNICAL SKILLS ──────────────────────────────────────────────────────────
+\section{Technical Skills}
+
+\textbf{Core:} TypeScript \textbullet\ Node.js \textbullet\ Express.js \textbullet\
+React Native (Expo) \textbullet\ Python \textbullet\ GCP \textbullet\
+Firebase \textbullet\ PostgreSQL \textbullet\ Redis \textbullet\ Docker
+
+\textbf{Also used:} Django \textbullet\ Flask \textbullet\ Astro \textbullet\
+React \textbullet\ Angular \textbullet\ MongoDB \textbullet\ Terraform \textbullet\
+BullMQ \textbullet\ TanStack Query \textbullet\ Zustand \textbullet\ PayPal API
+\textbullet\ Twilio \textbullet\ SendGrid \textbullet\ Puppeteer \textbullet\
+Jest \textbullet\ C++ \textbullet\ Rust
+
+\textbf{Languages:} Spanish (native) \textbullet\ English C1 -- TOEFL iBT 607
+
+\end{document}

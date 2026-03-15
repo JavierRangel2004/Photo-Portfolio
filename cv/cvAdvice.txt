@@ -1,0 +1,371 @@
+Sí tiene buen nivel, pero todavía se puede mejorar bastante para RH, headhunting y ATS.
+Tu CV ya comunica que eres fuerte técnicamente, pero hoy está más cargado a “impresionar a ingenieros” que a “hacer fácil la lectura para reclutadores”. Eso importa mucho, porque normalmente el primer filtro no es técnico sino de reclutamiento + ATS. Las mejores prácticas actuales favorecen formatos simples, secciones estándar, palabras clave del puesto y bullets centrados en logros medibles, no solo en complejidad técnica.  ￼
+
+Revisé tu CV actual en PDF.  ￼
+
+Veredicto general
+
+Tu CV está en un nivel bueno a muy bueno para perfiles técnicos, pero para hiring real yo lo pondría así:
+	•	Fuerte en contenido técnico
+	•	Medio en claridad para reclutador
+	•	Bueno en ATS
+	•	Mejorable en enfoque comercial / positioning
+
+Ahorita transmite algo como:
+“este candidato hizo cosas complejas”.
+
+Lo ideal sería que transmitiera:
+“este candidato hizo cosas complejas, tuvo ownership real, generó impacto y encaja perfecto para este tipo de roles”.
+
+⸻
+
+Lo que está muy bien
+
+Hay varias cosas que ya juegan a tu favor:
+
+1. Tu headline es potente
+
+“Founding Backend & Mobile Engineer” te posiciona fuerte y te diferencia. Para startups y roles de ownership está muy bien.  ￼
+
+2. Tienes evidencia cuantificada
+
+Mencionar cosas como:
+	•	178K+ live LOC
+	•	91.6% sole authorship
+	•	11 workers
+	•	66 routes
+	•	25 spec files
+
+sí ayuda a dar credibilidad.  ￼
+
+3. El stack es sólido y actual
+
+Node, TypeScript, GCP, React Native, Expo, Firebase, Terraform, BullMQ, PayPal, etc. Eso ayuda mucho para búsquedas ATS por keywords.  ￼
+
+4. Tienes breadth real
+
+No te vendes solo como backend; ya reflejas mobile, infra, observability, integrations. Eso te hace muy atractivo para startups y equipos pequeños.  ￼
+
+⸻
+
+Lo principal que hoy te perjudica
+
+Aquí está lo más importante.
+
+1. Está demasiado denso
+
+Para RH, la sección de LegalTec está muy cargada.
+Técnicamente se ve impresionante, pero un reclutador dedica muy poco tiempo al primer escaneo. Harvard Career Services insiste en que el resume debe ser claro, conciso y fácil de leer rápidamente.  ￼
+
+Ahorita tu sección principal parece casi una auditoría técnica resumida, no un CV.
+
+Problema:
+si el lector no es técnico, puede perder el hilo.
+
+Qué conviene más:
+menos bullets, más estratégicos, más impacto.
+
+⸻
+
+2. Hay exceso de detalle técnico “interno”
+
+Ejemplos como:
+	•	“queued refresh strategy to prevent parallel 401 races”
+	•	“conditional polling strategies (30 s – 3 min per appointment state)”
+	•	“DI-based architecture”
+	•	“recording TTL”
+
+son buenos, pero algunos están demasiado abajo en el nivel de detalle para CV general.  ￼
+
+Eso sirve en:
+	•	entrevista técnica
+	•	portfolio
+	•	case study
+	•	LinkedIn long-form
+	•	documento técnico
+
+Pero en CV, RH quiere entender rápido:
+	•	qué construiste
+	•	qué tan senior eres
+	•	qué tan autónomo fuiste
+	•	qué impacto tuvo
+
+⸻
+
+3. Falta más lenguaje orientado a negocio / resultado
+
+Tu CV habla mucho de cómo lo hiciste, pero menos de para qué importó.
+
+Por ejemplo, en vez de solo decir:
+	•	“Implemented PayPal APIs…”
+
+conviene decir algo más cercano a:
+	•	“Enabled secure recurring billing and appointment payments for the platform’s monetization flows.”
+
+Es decir, pasar de implementación a impacto funcional de producto.
+
+⸻
+
+4. El CV está un poco largo para tu etapa
+
+Tienes 3 páginas. Para ATS no necesariamente es un problema si el formato es limpio, pero para recruiters tempranos/intermedios generalmente funciona mejor un resume de 1 página o máximo 2 páginas, sobre todo cuando todavía estás en carrera. Los consejos ATS más comunes recomiendan formato simple y contenido priorizado, no inflado.  ￼
+
+En tu caso yo haría:
+	•	versión 1 página para aplicaciones generales / internships / recruiter screens
+	•	versión 2 páginas para startups, founding roles, backend/mobile product roles
+
+3 páginas sí puede sentirse demasiado si no vas a roles muy senior.
+
+⸻
+
+5. “Highlighted Projects” está bien, pero le falta jerarquía
+
+Tienes varios proyectos buenos, pero no todos deben pesar igual.  ￼
+
+A ojos de headhunting:
+	•	PhotoCat sí destaca
+	•	Photo Portfolio ayuda, pero es más complementario
+	•	Redes que Cambian sí aporta
+	•	Sustainability Certifications Platform sí aporta
+	•	Wayfinder quizá sobra o debería ir más compacto
+
+La regla práctica es: no pongas proyectos solo porque existen; pon los que mejor apoyan el tipo de rol al que aplicas.
+
+⸻
+
+6. Skills section demasiado completa
+
+Está buena, pero para recruiter review puede sentirse “stack dump”.  ￼
+
+No está mal tener muchas skills, pero conviene priorizarlas por objetivo.
+Por ejemplo, si aplicas a backend/mobile product roles, no necesitas que C++, Rust y PHP compitan visualmente con Node.js, TypeScript, React Native y GCP.
+
+⸻
+
+Qué buscaría un headhunter y cómo ajustar tu CV
+
+Un recruiter o headhunter normalmente quiere responder estas preguntas en segundos:
+
+1. ¿Qué eres?
+
+Hoy sí lo dices, pero puede quedar todavía más claro.
+
+Algo como:
+Backend / Mobile Product Engineer with startup ownership across platform architecture, cloud infrastructure, integrations, and mobile delivery.
+
+Eso aterriza tu perfil mejor para mercado.
+
+⸻
+
+2. ¿A qué nivel estás?
+
+Tu CV insinúa seniority alto, pero siendo estudiante eso puede generar una mezcla rara si no está bien balanceado.
+
+Mi recomendación:
+mantén un posicionamiento fuerte, pero evita frases que puedan sonar infladas sin contexto.
+
+“Founding Backend & Mobile Engineer” está bien.
+“Enterprise-grade distributed systems” también puede quedarse, pero usaría menos términos grandilocuentes por bloque.
+
+⸻
+
+3. ¿Qué resultados has generado?
+
+Aquí debes mejorar más.
+
+Ejemplos de resultados más potentes:
+	•	reduced dependency on third-party APIs
+	•	enabled recurring monetization flows
+	•	supported production deployment pipelines
+	•	improved app session reliability
+	•	accelerated cross-platform product delivery
+	•	mentored junior developers/students
+
+Ese tipo de lenguaje vende mejor que puro listado técnico.
+
+⸻
+
+Cambios concretos que te recomiendo
+
+1. Reduce LegalTec a 8–10 bullets máximo
+
+Ahorita está demasiado extenso.
+Yo lo dejaría en:
+	•	5–6 bullets backend/platform
+	•	3–4 bullets mobile
+
+No más.
+
+⸻
+
+2. Cambia bullets de “tecnología” a “logro + tecnología + impacto”
+
+La estructura ideal del bullet es:
+
+Action + scope + tools + result
+
+Ejemplo actual:
+
+Implemented Firebase Cloud Messaging push notifications…
+
+Mejor:
+
+Implemented push notification flows with Firebase Cloud Messaging, enabling real-time user alerts, device registration, and notification-driven navigation across the mobile app.
+
+Así sigue técnico, pero con sentido de producto.
+
+⸻
+
+3. Quita parte de las métricas demasiado raras
+
+Sí dejaría algunas, pero no todas.
+
+Sí dejaría
+	•	91.6% sole authorship
+	•	11 workers
+	•	66 routes
+	•	8,826 TS/TSX lines
+	•	89 tracked files
+
+Quitaría o movería
+	•	demasiados nombres internos de workers
+	•	demasiados detalles de mecanismos internos
+	•	intervalos específicos salvo que realmente aporten
+
+⸻
+
+4. Haz el summary más corto
+
+Tu summary actual está bien, pero podría ser más directo.  ￼
+
+Hoy dice mucho.
+Yo lo dejaría en 3 líneas compactas.
+
+Ejemplo de estilo:
+
+Backend and Mobile Engineer with startup experience building production systems end to end across backend architecture, cloud infrastructure, integrations, and cross-platform mobile delivery. Strong focus on TypeScript, Node.js, React Native, and Google Cloud. Currently pursuing a Bachelor’s in Data Intelligence and Cybersecurity.
+
+Eso recluta mejor.
+
+⸻
+
+5. Reordena proyectos por relevancia laboral
+
+Para roles de software pondría:
+	1.	PhotoCat
+	2.	Redes que Cambian
+	3.	Sustainability Certifications Platform
+	4.	Photo Portfolio
+	5.	Wayfinder
+
+O incluso quitaría Wayfinder en la versión corta.
+
+⸻
+
+6. Skills más curadas
+
+En lugar de una lista tan horizontal, conviene una priorización más agresiva:
+
+Core: TypeScript, Node.js, Express.js, React Native, Expo, Python, GCP, Firebase, PostgreSQL, Redis
+Also worked with: Django, Flask, MongoDB, Terraform, Docker, BullMQ, TanStack Query, Zustand, PayPal API, Twilio, SendGrid
+
+Esto hace más legible el perfil.
+
+⸻
+
+7. Considera una sección “Selected Impact” o “Core Strengths”
+
+Muy útil para headhunting.
+
+Ejemplo:
+	•	End-to-end backend architecture in startup environment
+	•	Cross-platform mobile implementation integrated with backend
+	•	Cloud infrastructure and CI/CD on Google Cloud
+	•	Payments, notifications, and third-party integrations
+	•	Mentorship and technical leadership
+
+Eso ayuda mucho cuando RH no sabe leer detalle técnico.
+
+⸻
+
+8. Personal website: sí, pero revisa si aporta al objetivo
+
+jrmgraphy.com se ve bien como marca personal, pero si ese sitio es más de fotografía que de ingeniería, puede distraer un poco en CV tech.  ￼
+
+Opciones:
+	•	dejarlo solo si está muy limpio/profesional
+	•	o moverlo a LinkedIn
+	•	o cambiarlo por un portfolio técnico/GitHub destacado en ciertas aplicaciones
+
+⸻
+
+9. Cuida la consistencia visual y de encoding
+
+En el texto parseado se ven algunos caracteres raros como:
+	•	C´edula
+	•	Web￾hooks
+	•	Type￾Script
+	•	Opos￾sum
+
+Eso puede venir del PDF/export, pero sí es una alerta.  ￼
+
+ATS-friendly guides recomiendan formato limpio, sin elementos raros ni diseño complejo.  ￼
+
+Te conviene revisar:
+	•	fuente usada
+	•	exportado a PDF
+	•	guiones especiales
+	•	ligaduras raras
+	•	encoding Unicode
+
+Porque aunque visualmente quizá se vea bien, al parsear puede romper palabras clave.
+
+⸻
+
+Mi evaluación por criterio
+
+Para ATS: 8/10
+
+Bien por keywords y headings estándar.
+Baja un poco por posible problema de encoding y exceso de densidad.  ￼
+
+Para recruiter RH: 7/10
+
+Se entiende que eres fuerte, pero cuesta leerlo rápido.
+
+Para hiring manager técnico: 8.8/10
+
+Muy sólido. Aquí sí impresiona.
+
+Para headhunter/startup founder: 8.5/10
+
+Muy atractivo, pero mejoraría si estuviera más “comercializado” en impacto.
+
+⸻
+
+Mi recomendación estratégica
+
+Haz dos versiones:
+
+Versión A — Recruiter / ATS
+	•	1 página
+	•	más impacto
+	•	menos detalle interno
+	•	foco en keywords, ownership, resultados
+
+Versión B — Startup / technical hiring
+	•	2 páginas
+	•	sí incluir backend + mobile con algo más de detalle
+	•	projects curados
+	•	más fuerza en arquitectura e integraciones
+
+Eso suele funcionar mucho mejor que intentar que una sola versión haga todo.
+
+⸻
+
+Si yo lo resumiera en una frase
+
+Tu CV demuestra capacidad real, pero todavía puede vender mejor tu valor.
+Hoy ya prueba que sabes construir; el siguiente paso es que también haga evidente, en segundos, por qué un reclutador debería entrevistarte.
+
+Puedo ayudarte a hacer el siguiente paso: te lo rehago con formato ATS + recruiter + headhunter, y te dejo una versión final mucho más pulida en inglés.
