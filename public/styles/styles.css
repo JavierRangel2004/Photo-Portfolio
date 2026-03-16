@@ -109,19 +109,7 @@ html {
   -webkit-text-size-adjust: 100%;
 }
 
-@media (prefers-reduced-motion: reduce) {
-  html {
-    scroll-behavior: auto;
-  }
-
-  *,
-  *::before,
-  *::after {
-    animation-duration: 0.01ms !important;
-    animation-iteration-count: 1 !important;
-    transition-duration: 0.01ms !important;
-  }
-}
+/* Animations enabled globally */
 
 body {
   background-color: var(--color-bg);
@@ -222,6 +210,9 @@ ol {
   right: 0;
   height: var(--nav-height);
   z-index: var(--z-nav);
+  border-bottom: 1px solid transparent;
+  transform: translateZ(0);
+  will-change: background, backdrop-filter, border-color;
   transition: background var(--dur-base) var(--ease-in-out),
     border-color var(--dur-base) var(--ease-in-out);
 }
@@ -1523,6 +1514,7 @@ ol {
   max-width: var(--max-width);
   margin-inline: auto;
   width: 100%;
+  margin-top: calc(var(--nav-height) + 2rem);
 }
 
 .contact-hero-eyebrow {

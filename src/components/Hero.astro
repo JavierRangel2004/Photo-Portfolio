@@ -48,7 +48,7 @@ const translatePath = useTranslatedPath(lang);
 <script>
   // Subtle parallax on hero bg
   const heroBg = document.getElementById('hero-bg');
-  if (heroBg && window.matchMedia('(prefers-reduced-motion: no-preference)').matches) {
+  if (heroBg) {
     window.addEventListener('scroll', () => {
       const scrolled = window.scrollY;
       heroBg.style.transform = `translateY(${scrolled * 0.35}px)`;
