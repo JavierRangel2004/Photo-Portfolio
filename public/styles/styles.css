@@ -1480,13 +1480,13 @@ ol {
    ============================================ */
 .contact-hero {
   position: relative;
-  height: 42vh;
-  min-height: 300px;
+  min-height: 45vh;
   display: flex;
   align-items: center;
   overflow: hidden;
   margin-top: calc(-1 * var(--nav-height));
-  padding-top: var(--nav-height);
+  padding-top: calc(var(--nav-height) + 3rem);
+  padding-bottom: 3rem;
 }
 
 .contact-hero-bg {
@@ -1514,7 +1514,6 @@ ol {
   max-width: var(--max-width);
   margin-inline: auto;
   width: 100%;
-  margin-top: calc(var(--nav-height) + 2rem);
 }
 
 .contact-hero-eyebrow {
