@@ -9,6 +9,7 @@
   "type": "module",
   "scripts": {
     "prepare:photos": "node scripts/generate-photos.mjs",
+    "diff:log": "node --experimental-strip-types scripts/generateDiff.ts",
     "dev": "astro dev",
     "build": "astro build",
     "preview": "astro preview"

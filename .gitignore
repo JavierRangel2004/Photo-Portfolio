@@ -157,6 +157,7 @@ coverage/
 /test/tmp/
 /test/version_tmp/
 /tmp/
+/temp/
 .bundle/
 vendor/bundle
 lib/bundler/man/
