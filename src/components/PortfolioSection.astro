@@ -1,0 +1,41 @@
+---
+import PhotoCard from './PhotoCard.astro';
+import type { Photo } from '../lib/photos';
+
+interface Props {
+  id: string;
+  title: string;
+  description: string;
+  label: string;
+  notes: { title: string; body: string }[];
+  photos: Photo[];
+  sectionIndex?: number;
+}
+
+const { id, title, description, label, notes, photos, sectionIndex = 0 } = Astro.props;
+---
+
+<section class="portfolio-section" id={id}>
+  <div class="portfolio-section-head reveal">
+    <p class="portfolio-section-label">{label}</p>
+    <h2 class="portfolio-section-title">{title}</h2>
+    <p class="portfolio-section-description">{description}</p>
+  </div>
+
+  <div class="portfolio-notes">
+    {notes.map((note, index) => (
+      <article class="portfolio-note reveal" style={`transition-delay: ${index * 0.08}s`}>
+        <h3>{note.title}</h3>
+        <p>{note.body}</p>
+      </article>
+    ))}
+  </div>
+
+  <div class="masonry-gallery portfolio-gallery">
+    {photos.map((photo, index) => (
+      <div class="masonry-item reveal" style={`transition-delay: ${(index % 4) * 0.08}s`}>
+        <PhotoCard photo={photo} lightboxGroup={id} label={label} loading={sectionIndex === 0 && index < 6 ? 'eager' : 'lazy'} />
+      </div>
+    ))}
+  </div>
+</section>

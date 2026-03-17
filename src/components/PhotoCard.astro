@@ -15,12 +15,14 @@ interface Props {
   };
   lightboxGroup?: string;
   loading?: 'eager' | 'lazy';
+  label?: string;
 }
 
 const {
   photo,
   lightboxGroup = 'default',
   loading = 'lazy',
+  label,
 } = Astro.props;
 
 const orientation =
@@ -35,22 +37,21 @@ const orientation =
 const lang = getLangFromUrl(Astro.url);
 const t = useTranslations(lang);
 
-const displayCategory = t(`category.${photo.category}` as any) || photo.category;
+const displayCategory = label || t(`category.${photo.category}` as any) || photo.category;
 
 const altText = lang === 'es' 
   ? `Fotografía ${displayCategory.toLowerCase()} por JRMGraphy` 
   : `${displayCategory} photography by JRMGraphy`;
 ---
 
-<div
+<button
+  type="button"
   class={`photo-card photo-card--${orientation}`}
   data-lightbox-src={photo.src}
   data-lightbox-cat={displayCategory}
   data-lightbox-id={photo.id}
   data-lightbox-group={lightboxGroup}
   data-orientation={orientation}
-  role="button"
-  tabindex="0"
   aria-label={lang === 'es' ? `Ver fotografía de ${displayCategory.toLowerCase()}` : `View ${displayCategory} photo`}
 >
   <Image
@@ -58,8 +59,9 @@ const altText = lang === 'es'
     alt={altText}
     width={photo.width}
     height={photo.height}
+    sizes="(min-width: 1400px) 20vw, (min-width: 1024px) 33vw, 50vw"
     loading={loading}
   />
   <div class="photo-card-overlay"></div>
   <span class="photo-card-cat">{displayCategory}</span>
-</div>
+</button>

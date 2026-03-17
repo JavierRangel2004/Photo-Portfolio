@@ -2,10 +2,11 @@
 import BaseLayout from '../../../layouts/BaseLayout.astro';
 import Header from '../../../components/Header.astro';
 import Footer from '../../../components/Footer.astro';
-import GalleryGrid from '../../../components/GalleryGrid.astro';
-import CategoryFilter from '../../../components/CategoryFilter.astro';
+import ContactCTA from '../../../components/ContactCTA.astro';
 import Modal from '../../../components/Modal.astro';
-import { getAllPhotos, getCategories } from '../../../lib/photos';
+import PortfolioSection from '../../../components/PortfolioSection.astro';
+import { getCuratedPhotosByGroup, getPortfolioGroups } from '../../../lib/photos';
+import type { PortfolioGroupId } from '../../../lib/photos';
 import { getLangFromUrl, useTranslations } from '../../../i18n/utils';
 
 export function getStaticPaths() {
@@ -18,10 +19,33 @@ export function getStaticPaths() {
 const lang = getLangFromUrl(Astro.url);
 const t = useTranslations(lang);
 
-const category = Astro.url.searchParams.get('category') || 'all';
-const categories = getCategories();
-const allPhotos = getAllPhotos();
-const photoCount = allPhotos.length;
+const groupKeyMap: Record<PortfolioGroupId, string> = {
+  branding: 'branding',
+  events: 'events',
+  'author-archive': 'archive',
+};
+
+const sections = getPortfolioGroups().map((group) => {
+  const key = groupKeyMap[group.id];
+
+  return {
+    id: group.id,
+    label: t(`group.${key}` as any),
+    title: t(`portfolio.group.${key}.title` as any),
+    description: t(`portfolio.group.${key}.desc` as any),
+    notes: [
+      {
+        title: t(`portfolio.group.${key}.note1.title` as any),
+        body: t(`portfolio.group.${key}.note1.body` as any),
+      },
+      {
+        title: t(`portfolio.group.${key}.note2.title` as any),
+        body: t(`portfolio.group.${key}.note2.body` as any),
+      },
+    ],
+    photos: getCuratedPhotosByGroup(group.id, group.portfolioCount),
+  };
+});
 ---
 
 <BaseLayout
@@ -33,22 +57,40 @@ const photoCount = allPhotos.length;
   <main class="site-main">
     <div class="gallery-page-header">
       <div class="container">
-        <h1 class="gallery-page-title reveal">{t('gallery.title')}</h1>
-        <p class="gallery-page-meta reveal stagger-1">{photoCount} fotografías</p>
+        <div class="gallery-page-copy">
+          <p class="section-eyebrow reveal">{t('gallery.eyebrow')}</p>
+          <h1 class="gallery-page-title reveal stagger-1">{t('gallery.heading')}</h1>
+          <p class="gallery-page-subtitle reveal stagger-2">{t('gallery.subtitle')}</p>
+        </div>
+        <div class="portfolio-jump reveal stagger-3">
+          <span>{t('gallery.jump')}</span>
+          {sections.map((section) => (
+            <a href={`#${section.id}`}>{section.label}</a>
+          ))}
+        </div>
       </div>
     </div>
 
     <div class="container">
-      <CategoryFilter categories={categories} currentCategory={category} />
-
-      {allPhotos.length > 0 ? (
-        <GalleryGrid photos={allPhotos} initialCategory={category} />
+      {sections.length > 0 ? (
+        sections.map((section, sectionIdx) => (
+          <PortfolioSection
+            id={section.id}
+            title={section.title}
+            description={section.description}
+            label={section.label}
+            notes={section.notes}
+            photos={section.photos}
+            sectionIndex={sectionIdx}
+          />
+        ))
       ) : (
-        <p style="text-align:center; color: var(--color-text-muted); padding: 4rem 0;">No photographs found.</p>
+        <p style="text-align:center; color: var(--color-text-muted); padding: 4rem 0;">{t('gallery.empty')}</p>
       )}
     </div>
   </main>
 
+  <ContactCTA />
   <Footer />
   <Modal />
 </BaseLayout>
