@@ -24,6 +24,7 @@ export interface Photo {
 
 export type PhotoOrientation = 'landscape' | 'portrait' | 'square';
 export type PortfolioGroupId = 'branding' | 'events' | 'author-archive';
+export type PortfolioGroupSlug = 'branding' | 'events' | 'archive';
 export type RawCategory =
   | 'portraits'
   | 'concert'
@@ -33,7 +34,7 @@ export type RawCategory =
   | 'creativity'
   | 'travel-cityscape';
 
-interface PortfolioGroup {
+export interface PortfolioGroup {
   id: PortfolioGroupId;
   categories: RawCategory[];
   homepageCount: number;
@@ -73,6 +74,18 @@ export const portfolioGroups: PortfolioGroup[] = [
     portfolioCount: 10,
   },
 ];
+
+const groupSlugMap: Record<PortfolioGroupId, PortfolioGroupSlug> = {
+  branding: 'branding',
+  events: 'events',
+  'author-archive': 'archive',
+};
+
+const slugGroupMap: Record<PortfolioGroupSlug, PortfolioGroupId> = {
+  branding: 'branding',
+  events: 'events',
+  archive: 'author-archive',
+};
 
 function sortByDateDesc(photos: Photo[]): Photo[] {
   return [...photos].sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
@@ -140,6 +153,18 @@ export function getPortfolioGroups(): PortfolioGroup[] {
   return portfolioGroups.filter((group) =>
     group.categories.some((category) => getPhotosByCategory(category).length > 0),
   );
+}
+
+export function getPortfolioGroup(groupId: PortfolioGroupId): PortfolioGroup | undefined {
+  return portfolioGroups.find((group) => group.id === groupId);
+}
+
+export function getPortfolioGroupSlug(groupId: PortfolioGroupId): PortfolioGroupSlug {
+  return groupSlugMap[groupId];
+}
+
+export function getPortfolioGroupIdFromSlug(slug: string): PortfolioGroupId | undefined {
+  return slugGroupMap[slug as PortfolioGroupSlug];
 }
 
 export function getPhotosByGroup(groupId: PortfolioGroupId): Photo[] {
