@@ -1,0 +1,139 @@
+---
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import Header from '../../../components/Header.astro';
+import Footer from '../../../components/Footer.astro';
+import ContactCTA from '../../../components/ContactCTA.astro';
+import { getLangFromUrl, useTranslations } from '../../../i18n/utils';
+
+export function getStaticPaths() {
+  return [
+    { params: { lang: 'en' } },
+    { params: { lang: 'es' } },
+  ];
+}
+
+const lang = getLangFromUrl(Astro.url);
+const t = useTranslations(lang);
+
+const packages = [
+  {
+    id: 'branding',
+    title: t('services.package.branding.title'),
+    audience: t('services.package.branding.for'),
+    includes: t('services.package.branding.includes'),
+    delivery: t('services.package.branding.delivery'),
+    price: t('services.package.branding.price'),
+  },
+  {
+    id: 'gastronomy',
+    title: t('services.package.gastronomy.title'),
+    audience: t('services.package.gastronomy.for'),
+    includes: t('services.package.gastronomy.includes'),
+    delivery: t('services.package.gastronomy.delivery'),
+    price: t('services.package.gastronomy.price'),
+  },
+  {
+    id: 'events',
+    title: t('services.package.events.title'),
+    audience: t('services.package.events.for'),
+    includes: t('services.package.events.includes'),
+    delivery: t('services.package.events.delivery'),
+    price: t('services.package.events.price'),
+  },
+];
+
+const processSteps = [
+  {
+    title: t('services.process.step1.title'),
+    body: t('services.process.step1.body'),
+  },
+  {
+    title: t('services.process.step2.title'),
+    body: t('services.process.step2.body'),
+  },
+  {
+    title: t('services.process.step3.title'),
+    body: t('services.process.step3.body'),
+  },
+];
+---
+
+<BaseLayout title={t('services.title')} description={t('services.desc')}>
+  <Header />
+
+  <main class="site-main services-page">
+    <section class="services-hero">
+      <div class="container">
+        <p class="section-eyebrow reveal">{t('services.hero.eyebrow')}</p>
+        <h1 class="services-hero-title reveal stagger-1">{t('services.hero.title')}</h1>
+        <p class="services-hero-subtitle reveal stagger-2">{t('services.hero.sub')}</p>
+      </div>
+    </section>
+
+    <section class="services-intro">
+      <div class="container services-intro-shell reveal">
+        <h2>{t('services.intro.title')}</h2>
+        <p>{t('services.intro.body')}</p>
+      </div>
+    </section>
+
+    <section class="services-packages">
+      <div class="container">
+        <div class="services-packages-grid">
+          {packages.map((item, index) => (
+            <article id={item.id} class="service-package-card reveal" style={`transition-delay: ${index * 0.08}s`}>
+              <div class="service-package-header">
+                <h2>{item.title}</h2>
+              </div>
+              <div class="service-package-details">
+                <div class="service-package-detail">
+                  <p class="service-package-detail-label">{t('services.label.for')}</p>
+                  <p>{item.audience}</p>
+                </div>
+                <div class="service-package-detail">
+                  <p class="service-package-detail-label">{t('services.label.includes')}</p>
+                  <p>{item.includes}</p>
+                </div>
+                <div class="service-package-detail">
+                  <p class="service-package-detail-label">{t('services.label.delivery')}</p>
+                  <p>{item.delivery}</p>
+                </div>
+              </div>
+              <div class="service-package-price">
+                <p>{item.price}</p>
+              </div>
+              <a href={`/${lang}/contact`} class="btn btn-ghost service-package-cta">{t('services.package.cta')}</a>
+            </article>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <section class="services-process">
+      <div class="container">
+        <div class="section-heading reveal">
+          <h2 class="section-title">{t('services.process.title')}</h2>
+        </div>
+        <div class="services-process-grid">
+          {processSteps.map((step, index) => (
+            <article class="services-process-card reveal" style={`transition-delay: ${index * 0.08}s`}>
+              <h3>{step.title}</h3>
+              <p>{step.body}</p>
+            </article>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <section class="services-inline-cta">
+      <div class="container services-inline-cta-shell reveal">
+        <h2>{t('services.cta.title')}</h2>
+        <p>{t('services.cta.body')}</p>
+      </div>
+    </section>
+
+    <ContactCTA />
+  </main>
+
+  <Footer />
+</BaseLayout>

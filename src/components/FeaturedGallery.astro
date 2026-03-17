@@ -1,14 +1,20 @@
 ---
-import { getRandomPhotosFromAllCategories } from '../lib/photos';
-import type { Photo } from '../lib/photos';
+import { getHomepageFeaturedPhotos, getPhotoGroup } from '../lib/photos';
+import type { Photo, PortfolioGroupId } from '../lib/photos';
 import PhotoCard from './PhotoCard.astro';
 import { getLangFromUrl, useTranslations, useTranslatedPath } from '../i18n/utils';
 
-const photos: Photo[] = getRandomPhotosFromAllCategories(5);
+const photos: Photo[] = getHomepageFeaturedPhotos();
 
 const lang = getLangFromUrl(Astro.url);
 const t = useTranslations(lang);
 const translatePath = useTranslatedPath(lang);
+
+const groupLabelKey: Record<PortfolioGroupId, string> = {
+  branding: 'group.branding',
+  events: 'group.events',
+  'author-archive': 'group.archive',
+};
 ---
 
 <section class="featured-section" id="home-glance" aria-label="Selected works">
@@ -29,6 +35,7 @@ const translatePath = useTranslatedPath(lang);
       >
         <PhotoCard
           photo={photo}
+          label={t(groupLabelKey[getPhotoGroup(photo)] as any)}
           lightboxGroup="home-featured"
           loading={i < 6 ? 'eager' : 'lazy'}
         />

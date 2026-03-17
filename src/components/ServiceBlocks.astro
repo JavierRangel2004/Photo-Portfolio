@@ -1,0 +1,95 @@
+---
+import { Image } from 'astro:assets';
+import { getPortfolioGroups, getServiceCoverPhoto } from '../lib/photos';
+import type { PortfolioGroupId } from '../lib/photos';
+import { getLangFromUrl, useTranslations, useTranslatedPath } from '../i18n/utils';
+
+const lang = getLangFromUrl(Astro.url);
+const t = useTranslations(lang);
+const translatePath = useTranslatedPath(lang);
+
+const copyByGroup: Record<
+  PortfolioGroupId,
+  { title: string; description: string; points: string[]; cta: string }
+> = {
+  branding: {
+    title: t('service.branding.title'),
+    description: t('service.branding.desc'),
+    cta: t('service.branding.cta'),
+    points: [
+      t('service.branding.point.one'),
+      t('service.branding.point.two'),
+      t('service.branding.point.three'),
+    ],
+  },
+  events: {
+    title: t('service.events.title'),
+    description: t('service.events.desc'),
+    cta: t('service.events.cta'),
+    points: [
+      t('service.events.point.one'),
+      t('service.events.point.two'),
+      t('service.events.point.three'),
+    ],
+  },
+  'author-archive': {
+    title: t('service.archive.title'),
+    description: t('service.archive.desc'),
+    cta: t('service.archive.cta'),
+    points: [
+      t('service.archive.point.one'),
+      t('service.archive.point.two'),
+      t('service.archive.point.three'),
+    ],
+  },
+};
+
+const serviceGroups = getPortfolioGroups().map((group) => ({
+  ...group,
+  cover: getServiceCoverPhoto(group.id),
+  copy: copyByGroup[group.id],
+}));
+---
+
+<section class="services-overview" id="home-services" aria-label={t('servicesBlocks.title')}>
+  <div class="services-overview-header reveal">
+    <div class="section-heading">
+      <p class="section-eyebrow">{t('servicesBlocks.eyebrow')}</p>
+      <h2 class="section-title">{t('servicesBlocks.title')}</h2>
+      <p class="section-subtitle">{t('servicesBlocks.subtitle')}</p>
+    </div>
+  </div>
+
+  <div class="services-overview-grid">
+    {serviceGroups.map((group, index) => (
+      <a
+        href={`${translatePath('/services')}#${group.id}`}
+        class="service-overview-card reveal"
+        style={`transition-delay: ${index * 0.08}s`}
+      >
+        <div class="service-overview-media">
+          {group.cover && (
+            <Image
+              src={group.cover.src}
+              alt={group.copy.title}
+              width={group.cover.width || 1600}
+              height={group.cover.height || 1200}
+              sizes="(min-width: 1024px) 33vw, (min-width: 768px) 50vw, 100vw"
+              loading="lazy"
+            />
+          )}
+        </div>
+        <div class="service-overview-body">
+          <p class="service-overview-kicker">{group.copy.cta}</p>
+          <h3>{group.copy.title}</h3>
+          <p>{group.copy.description}</p>
+          <ul class="service-overview-points">
+            {group.copy.points.map((point) => (
+              <li>{point}</li>
+            ))}
+          </ul>
+        </div>
+      </a>
+    ))}
+  </div>
+</section>

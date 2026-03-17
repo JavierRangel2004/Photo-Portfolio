@@ -1,0 +1,44 @@
+---
+import { getLangFromUrl, useTranslations } from '../i18n/utils';
+
+const lang = getLangFromUrl(Astro.url);
+const t = useTranslations(lang);
+
+const items = [
+  {
+    title: t('trust.clients.title'),
+    body: t('trust.clients.body'),
+  },
+  {
+    title: t('trust.location.title'),
+    body: t('trust.location.body'),
+  },
+  {
+    title: t('trust.delivery.title'),
+    body: t('trust.delivery.body'),
+  },
+  {
+    title: t('trust.process.title'),
+    body: t('trust.process.body'),
+  },
+];
+---
+
+<section class="trust-section" aria-label={t('trust.title')}>
+  <div class="trust-shell">
+    <div class="trust-header reveal">
+      <p class="section-eyebrow">{t('trust.eyebrow')}</p>
+      <h2 class="section-title">{t('trust.title')}</h2>
+      <p class="section-subtitle">{t('trust.subtitle')}</p>
+    </div>
+
+    <div class="trust-grid">
+      {items.map((item, index) => (
+        <article class="trust-card reveal" style={`transition-delay: ${index * 0.07}s`}>
+          <h3>{item.title}</h3>
+          <p>{item.body}</p>
+        </article>
+      ))}
+    </div>
+  </div>
+</section>
