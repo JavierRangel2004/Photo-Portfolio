@@ -64,7 +64,7 @@ const serviceGroups = getPortfolioGroups().map((group) => ({
     {serviceGroups.map((group, index) => (
       <a
         href={`${translatePath('/services')}#${group.id}`}
-        class="service-overview-card reveal"
+        class={`service-overview-card reveal ${index === 0 ? 'service-overview-card--featured' : ''}`}
         style={`transition-delay: ${index * 0.08}s`}
       >
         <div class="service-overview-media">

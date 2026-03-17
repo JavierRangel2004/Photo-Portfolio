@@ -16,6 +16,7 @@ interface Props {
   lightboxGroup?: string;
   loading?: 'eager' | 'lazy';
   label?: string;
+  sizes?: string;
 }
 
 const {
@@ -23,6 +24,7 @@ const {
   lightboxGroup = 'default',
   loading = 'lazy',
   label,
+  sizes = '(min-width: 1400px) 20vw, (min-width: 1024px) 33vw, 50vw',
 } = Astro.props;
 
 const orientation =
@@ -59,7 +61,7 @@ const altText = lang === 'es'
     alt={altText}
     width={photo.width}
     height={photo.height}
-    sizes="(min-width: 1400px) 20vw, (min-width: 1024px) 33vw, 50vw"
+    sizes={sizes}
     loading={loading}
   />
   <div class="photo-card-overlay"></div>
