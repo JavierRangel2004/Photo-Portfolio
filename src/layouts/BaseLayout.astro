@@ -24,6 +24,7 @@ const canonicalURL = new URL(`/${lang}${routeWithoutLang}`, siteUrl);
   <title>{fullTitle}</title>
   <meta name="description" content={description} />
   <meta name="theme-color" content="#0A0A0A" />
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 
   <link rel="canonical" href={canonicalURL} />
   <link rel="alternate" hreflang="es" href={`${siteUrl}/es${routeWithoutLang}`} />
@@ -70,16 +71,23 @@ const canonicalURL = new URL(`/${lang}${routeWithoutLang}`, siteUrl);
 
     const openDrawer = () => {
       toggle?.classList.add('open');
+      toggle?.setAttribute('aria-expanded', 'true');
       drawer?.classList.add('open');
       overlay?.classList.add('open');
       document.body.style.overflow = 'hidden';
+      // Focus the first link in the drawer
+      const firstLink = drawer?.querySelector<HTMLElement>('.nav-drawer-link');
+      firstLink?.focus();
     };
 
     const closeDrawer = () => {
       toggle?.classList.remove('open');
+      toggle?.setAttribute('aria-expanded', 'false');
       drawer?.classList.remove('open');
       overlay?.classList.remove('open');
       document.body.style.overflow = '';
+      // Return focus to toggle
+      toggle?.focus();
     };
 
     toggle?.addEventListener('click', () => {
@@ -124,6 +132,7 @@ const canonicalURL = new URL(`/${lang}${routeWithoutLang}`, siteUrl);
       let photos: { src: string; category: string; id: string }[] = [];
       let currentIndex = 0;
       let touchStartX = 0;
+      let triggerElement: HTMLElement | null = null;
 
       const lightbox = document.getElementById('lightbox');
       const lbImg    = document.getElementById('lb-img') as HTMLImageElement | null;
@@ -131,6 +140,22 @@ const canonicalURL = new URL(`/${lang}${routeWithoutLang}`, siteUrl);
       const lbCount  = document.getElementById('lb-count');
 
       if (!lightbox || !lbImg) return;
+
+      // Focus trap: keep Tab cycling within lightbox
+      function trapFocus(e: KeyboardEvent) {
+        if (e.key !== 'Tab' || !lightbox.classList.contains('open')) return;
+        const focusable = lightbox.querySelectorAll<HTMLElement>(
+          'button, [href], [tabindex]:not([tabindex="-1"])'
+        );
+        if (focusable.length === 0) return;
+        const first = focusable[0];
+        const last = focusable[focusable.length - 1];
+        if (e.shiftKey) {
+          if (document.activeElement === first) { e.preventDefault(); last.focus(); }
+        } else {
+          if (document.activeElement === last) { e.preventDefault(); first.focus(); }
+        }
+      }
 
       function isVisibleCard(card: HTMLElement) {
         const style = window.getComputedStyle(card);
@@ -152,18 +177,27 @@ const canonicalURL = new URL(`/${lang}${routeWithoutLang}`, siteUrl);
         if (lbCat) lbCat.textContent = p.category.charAt(0).toUpperCase() + p.category.slice(1);
         if (lbCount) lbCount.textContent = `${index + 1} of ${photos.length}`;
         lightbox.classList.add('open');
+        lightbox.setAttribute('aria-hidden', 'false');
         document.body.style.overflow = 'hidden';
+        // Focus close button inside lightbox
+        const closeBtn = document.getElementById('lb-close');
+        closeBtn?.focus();
       }
 
       function close() {
         lightbox.classList.remove('open');
+        lightbox.setAttribute('aria-hidden', 'true');
         document.body.style.overflow = '';
+        // Return focus to the card that triggered the lightbox
+        triggerElement?.focus();
+        triggerElement = null;
       }
 
       function prev() { open((currentIndex - 1 + photos.length) % photos.length); }
       function next() { open((currentIndex + 1) % photos.length); }
 
       function activateCard(card: HTMLElement) {
+        triggerElement = card;
         const group = card.dataset.lightboxGroup || 'default';
         const cards = getGroupCards(group);
         photos = cards.map((item) => ({
@@ -205,6 +239,7 @@ const canonicalURL = new URL(`/${lang}${routeWithoutLang}`, siteUrl);
         if (e.key === 'Escape') close();
         if (e.key === 'ArrowLeft') prev();
         if (e.key === 'ArrowRight') next();
+        trapFocus(e);
       });
 
       // Touch / swipe

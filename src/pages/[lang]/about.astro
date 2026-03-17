@@ -29,14 +29,14 @@ const t = useTranslations(lang);
         alt="Javier Rangel"
         width={1920}
         height={1280}
+        sizes="100vw"
         loading="eager"
         fetchpriority="high"
       />
     </div>
     <div class="about-hero-overlay"></div>
     <div class="about-hero-content">
-      <p class="about-hero-eyebrow">{t('about.hero.eyebrow')}</p>
-      <h1 class="about-hero-title">{t('about.hero.title')}</h1>
+      <h1 class="about-hero-title">{t('about.name')}</h1>
       <p class="about-hero-sub">{t('about.hero.sub')}</p>
     </div>
   </div>
@@ -52,13 +52,14 @@ const t = useTranslations(lang);
           class="about-photo"
           width={900}
           height={1200}
+          sizes="(min-width: 900px) 50vw, 100vw"
           loading="eager"
         />
       </div>
 
       <!-- Text -->
       <div class="about-text reveal stagger-2">
-        <h2 class="about-name">{t('about.name')}</h2>
+        <h2 class="about-name">{t('about.hero.title')}</h2>
         <p class="about-location">{t('about.location')}</p>
 
         <div class="about-manifesto">
@@ -99,8 +100,8 @@ const t = useTranslations(lang);
         </div>
 
         <div class="about-cta">
-          <a href={`/${lang}/contact`} class="btn btn-primary">{t('hero.cta.secondary')}</a>
-          <a href={`/${lang}/gallery`} class="btn btn-ghost">{t('hero.cta.primary')}</a>
+          <a href={`/${lang}/contact`} class="btn btn-primary">{t('hero.cta.primary')}</a>
+          <a href={`/${lang}/services`} class="btn btn-ghost">{t('hero.cta.secondary')}</a>
         </div>
       </div>
     </div>

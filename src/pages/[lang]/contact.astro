@@ -83,6 +83,8 @@ const t = useTranslations(lang);
           method="POST"
           data-netlify="true"
           netlify-honeypot="bot-field"
+          data-error-fields={t('contact.form.errorFields')}
+          data-error-send={t('contact.form.errorSend')}
         >
           <input type="hidden" name="form-name" value="contact" />
           <p style="display:none;">
@@ -117,11 +119,11 @@ const t = useTranslations(lang);
             <label for="inquiry-type" class="form-label">{t('contact.form.type')}</label>
             <select id="inquiry-type" name="type" class="form-select" required>
               <option value="">{t('contact.form.typeSelect')}</option>
-              <option value="portrait">{t('about.services.portrait')}</option>
-              <option value="concert">{t('about.services.concert')}</option>
-              <option value="editorial">{t('about.services.editorial')}</option>
-              <option value="product">{t('about.services.product')}</option>
-              <option value="collaboration">{t('about.services.visual')}</option>
+              <option value="branding">{t('contact.form.typeBranding')}</option>
+              <option value="gastronomy">{t('contact.form.typeGastronomy')}</option>
+              <option value="events">{t('contact.form.typeEvents')}</option>
+              <option value="portraits">{t('contact.form.typePortraits')}</option>
+              <option value="archive">{t('contact.form.typeArchive')}</option>
               <option value="general">{t('contact.form.typeGeneral')}</option>
             </select>
           </div>
@@ -172,10 +174,11 @@ const t = useTranslations(lang);
       const message = (document.getElementById('message') as HTMLTextAreaElement).value.trim();
       const txtSending = submitBtn.dataset.sending || 'Sending…';
       const txtSubmit = submitBtn.dataset.submit || 'Send Message';
+      const txtErrorFields = form.dataset.errorFields || 'Please fill out all required fields correctly.';
+      const txtErrorSend = form.dataset.errorSend || 'There was a problem sending your message. Please try again.';
 
       if (!name || !/\S+@\S+\.\S+/.test(email) || !message) {
-        // Simple fallback alert for validation
-        alert('Please fill out all required fields correctly.');
+        alert(txtErrorFields);
         return;
       }
 
@@ -199,7 +202,7 @@ const t = useTranslations(lang);
           throw new Error('Submission failed');
         }
       } catch {
-        alert('There was a problem sending your message. Please try again.');
+        alert(txtErrorSend);
       } finally {
         submitBtn.disabled = false;
         submitBtn.textContent = txtSubmit;
