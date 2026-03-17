@@ -13,9 +13,6 @@ export function getStaticPaths() {
 
 const lang = getLangFromUrl(Astro.url);
 const t = useTranslations(lang);
-const inquiryTemplate = lang === 'es'
-  ? 'Interesado en: {package}\n\nPresupuesto aproximado:\nFecha o periodo:\nUbicaci\u00f3n:\nObjetivo del proyecto:\n'
-  : 'Interested in: {package}\n\nEstimated budget:\nDate or time frame:\nLocation:\nProject goal:\n';
 ---
 
 <BaseLayout title={t('contact.title')} description={t('contact.desc')}>
@@ -187,13 +184,16 @@ const inquiryTemplate = lang === 'es'
     const search = new URLSearchParams(window.location.search);
     const prefilledType = search.get('type');
     const prefilledPackage = search.get('package');
+    const inquiryTemplate = document.documentElement.lang === 'es'
+      ? 'Interesado en: {package}\n\nPresupuesto aproximado:\nFecha o periodo:\nUbicaci\u00f3n:\nObjetivo del proyecto:\n'
+      : 'Interested in: {package}\n\nEstimated budget:\nDate or time frame:\nLocation:\nProject goal:\n';
 
     if (prefilledType && typeSelect) {
       typeSelect.value = prefilledType;
     }
 
     if (prefilledPackage && messageField && !messageField.value.trim()) {
-      messageField.value = `{inquiryTemplate}`.replace('{package}', prefilledPackage);
+      messageField.value = inquiryTemplate.replace('{package}', prefilledPackage);
     }
 
     form.addEventListener('submit', async (e) => {

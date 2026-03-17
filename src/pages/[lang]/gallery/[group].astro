@@ -121,7 +121,7 @@ const navGroups = getPortfolioGroups().map((group) => {
     </div>
 
     <section class="portfolio-section portfolio-section--archive bg-background" id={groupId}>
-      <div class="masonry-gallery portfolio-gallery mx-auto w-full max-w-7xl columns-1 gap-4 px-6 sm:columns-2 md:columns-3 xl:columns-4">
+      <div class="masonry-gallery portfolio-gallery mx-auto w-full max-w-7xl columns-2 gap-4 px-6 md:columns-3 xl:columns-4">
         {photos.map((photo, index) => (
           <div class="masonry-item reveal mb-4 break-inside-avoid" style={`transition-delay: ${(index % 4) * 0.06}s`}>
             <PhotoCard
@@ -129,7 +129,7 @@ const navGroups = getPortfolioGroups().map((group) => {
               lightboxGroup={groupId}
               label={label}
               loading={index < 6 ? 'eager' : 'lazy'}
-              sizes="(min-width: 1600px) 18vw, (min-width: 1200px) 22vw, (min-width: 900px) 30vw, 46vw"
+              sizes="(min-width: 1600px) 18vw, (min-width: 1200px) 22vw, (min-width: 900px) 30vw, 44vw"
             />
           </div>
         ))}
