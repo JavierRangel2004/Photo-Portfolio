@@ -26,29 +26,82 @@ codex --version
 
 ```bash
 codex mcp list
-codex mcp add ruflo -- npx ruflo mcp start
+codex mcp add claude-flow -- npx @claude-flow/cli@latest mcp start
 ```
 
-If your environment standardizes on `claude-flow@alpha` naming, keep the MCP command aligned to that installation pattern.
+This repository uses the `claude-flow` MCP server name. Do not register it as `ruflo` if Codex is configured to call `mcp__claude-flow__...` tools.
+
+If Codex reports:
+
+```text
+MCP client for `claude-flow` timed out after 10 seconds
+MCP startup incomplete (failed: claude-flow)
+```
+
+increase the startup timeout in your Codex config:
+
+```toml
+[mcp_servers.claude-flow]
+startup_timeout_sec = 30
+```
+
+If you need to re-add the server cleanly, use the same `claude-flow` name and command:
+
+```bash
+codex mcp remove claude-flow
+codex mcp add claude-flow -- npx @claude-flow/cli@latest mcp start
+```
 
 ---
 
-## Critical execution truth (must follow)
+## Critical Execution Truth: Parallelism & Timeout Issues (MUST FOLLOW)
 
-- `swarm_init`, `agent_spawn`, and related MCP calls manage orchestration metadata and state.
-- In headless Codex runs, they do **not** guarantee real OS-level parallel processes.
-- For actual parallelism, fork separate CLI processes with `&` and synchronize with `wait`.
+When Codex attempts to spawn internal sub-agents in parallel (e.g., `Spawned [explorer]`), **they frequently timeout, appear to "die", or stall in a "Waiting" state without completing until much later.** This happens because internal Codex sub-agents lack native fault tolerance and can block each other or timeout if a peer stalls. 
 
-Real parallel pattern:
+To run parallel tasks successfully, you must use one of the two **dependable patterns** below:
 
+### Pattern 1: OS-Level Forking (The "Real Parallel" CLI Pattern)
+For shell-driven workflows, bypass internal agent spawning and fork separate CLI processes natively via your operating system's shell. This guarantees isolation and prevents a stalled agent from taking down the session.
+
+**Mac/Linux (Bash/Zsh):**
 ```bash
-codex --session-id "agent-researcher" "Review summaryService.ts for bottlenecks" &
-codex --session-id "agent-architect"  "Design diagnostics data model for Notadio" &
-codex --session-id "agent-tester"     "Write tests for summary diagnostics API" &
+codex --session-id "worker-a-researcher" "Review summaryService.ts for bottlenecks" &
+codex --session-id "worker-b-architect"  "Design diagnostics data model for Notadio" &
+codex --session-id "worker-c-tester"     "Write tests for summary diagnostics API" &
 wait
 ```
 
-This is the only dependable pattern for true concurrent execution in shell-driven Codex flows.
+**Windows (PowerShell):**
+```powershell
+$job1 = Start-Job { codex --session-id "worker-a-researcher" "Review summaryService.ts for bottlenecks" }
+$job2 = Start-Job { codex --session-id "worker-b-architect"  "Design diagnostics data model for Notadio" }
+$job3 = Start-Job { codex --session-id "worker-c-tester"     "Write tests for summary diagnostics API" }
+Wait-Job $job1, $job2, $job3
+Receive-Job $job1, $job2, $job3
+```
+
+### Pattern 2: Claude-Flow Native Orchestration
+Instead of using Codex to manually coordinate MCP tasks, rely on `claude-flow`'s native orchestrator which handles parallel distribution robustly.
+
+```bash
+# Initialize a mesh swarm for maximum peer-to-peer parallel efficiency
+claude-flow hive init --topology mesh --agents 5
+
+# Distribute tasks using the native parallel strategy
+claude-flow orchestrate "your objective" --agents 5 --parallel
+```
+
+---
+
+## Handling Agent Timeouts via MCP (If manual coordination is required)
+
+If you must manage swarm execution via MCP tools inside a session, you must actively handle timeouts and agent failure:
+
+1.  **Initialize Topology:** Define the swarm structure first (e.g., `mcp__claude-flow__swarm_init` with `topology: "mesh"`).
+2.  **Resource Allocation:** Use `mcp__claude-flow__daa_resource_alloc` before running parallel tasks to avoid bottlenecks.
+3.  **Fault Tolerance (`DAA_FAULT_TOLERANCE`):** Set up recovery strategies so if an agent becomes unresponsive, it can be restarted.
+4.  **Sync Coordination (`COORDINATION_SYNC`):** Periodically synchronize agents so they don't drift or timeout while waiting for a peer.
+5.  **State Snapshots (`STATE_SNAPSHOT` & `CONTEXT_RESTORE`):** Save context before parallel execution to prevent data loss if an agent dies.
 
 ---
 
@@ -65,40 +118,14 @@ codex --session-id "feat-pagination" "add cursor-based pagination to /users"
 For multi-step objectives:
 
 1. Run a planner/researcher session first.
-2. Fork implementation/testing sessions in parallel with `&`.
-3. Run a reviewer session after `wait`.
-
----
-
-## Ruflo full-use workflow in Codex mode
-
-```bash
-# 1) Prime memory/context
-claude-flow memory search "task keywords" --limit 10
-
-# 2) Initialize orchestration state
-claude-flow hive init --topology hierarchical --agents 5
-
-# 3) Start one orchestrated pass
-claude-flow orchestrate "your objective" --agents 5 --parallel
-
-# 4) Fork real workers for throughput
-codex --session-id "worker-a" "subtask A" &
-codex --session-id "worker-b" "subtask B" &
-wait
-
-# 5) Persist outcomes
-claude-flow memory store "patterns/your-objective" "approach + constraints + gotchas"
-
-# 6) Measure
-claude-flow performance report --format summary
-```
+2. Fork implementation/testing sessions in parallel (using `&` and `wait` on Mac/Linux, or `Start-Job` and `Wait-Job` on Windows).
+3. Run a reviewer session once parallel jobs complete.
 
 ---
 
 ## Non-interactive / CI patterns
 
-Official non-interactive guide emphasizes machine-readable output and explicit headless flags:
+Official non-interactive guide emphasizes machine-readable output and explicit headless flags. Using these is preferred over interactive sub-agents.
 
 ```bash
 npx claude-flow@alpha swarm "analyze code quality and security" \
@@ -136,10 +163,11 @@ Use template pipelines for repeatable stages; use explicit `codex ... &` workers
 
 ## Operational guardrails
 
+- **Do not rely on internal Codex sub-agents for long-running parallel tasks.** They will often stall or timeout. Use `claude-flow orchestrate --parallel` or OS-level native parallelism (`&` + `wait` on Mac/Linux, `Start-Job` on Windows).
 - Use unique `--session-id` values for every worker.
 - Keep subtasks independent to avoid file-lock and merge conflicts.
 - Prefer short, bounded worker prompts with clear output contracts.
-- Always run a final consolidation/review pass after `wait`.
+- Always run a final consolidation/review pass after `wait` or a parallel orchestration.
 - Persist successful patterns to memory for future task acceleration.
 
 ---
@@ -151,4 +179,3 @@ Use template pipelines for repeatable stages; use explicit `codex ... &` workers
 - [Non-Interactive Mode](https://github.com/ruvnet/ruflo/wiki/Non-Interactive-Mode)
 - [Installation Guide](https://github.com/ruvnet/ruflo/wiki/Installation-Guide)
 - [Quick Start](https://github.com/ruvnet/ruflo/wiki/Quick-Start)
-

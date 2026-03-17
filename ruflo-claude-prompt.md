@@ -139,10 +139,25 @@ claude-flow reset --hard && claude-flow init
 
 Environment tuning:
 
+**Mac/Linux (Bash/Zsh):**
 ```bash
 export CLAUDE_FLOW_MAX_AGENTS=12
 export CLAUDE_FLOW_MEMORY_SIZE=2GB
 export CLAUDE_FLOW_ENABLE_NEURAL=true
+```
+
+**Windows (PowerShell):**
+```powershell
+$env:CLAUDE_FLOW_MAX_AGENTS="12"
+$env:CLAUDE_FLOW_MEMORY_SIZE="2GB"
+$env:CLAUDE_FLOW_ENABLE_NEURAL="true"
+```
+
+**Windows (CMD):**
+```cmd
+set CLAUDE_FLOW_MAX_AGENTS=12
+set CLAUDE_FLOW_MEMORY_SIZE=2GB
+set CLAUDE_FLOW_ENABLE_NEURAL=true
 ```
 
 ---
