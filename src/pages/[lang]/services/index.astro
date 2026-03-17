@@ -3,7 +3,7 @@ import BaseLayout from '../../../layouts/BaseLayout.astro';
 import Header from '../../../components/Header.astro';
 import Footer from '../../../components/Footer.astro';
 import ContactCTA from '../../../components/ContactCTA.astro';
-import { getLangFromUrl, useTranslations } from '../../../i18n/utils';
+import { getLangFromUrl, useTranslations, useTranslatedPath } from '../../../i18n/utils';
 
 export function getStaticPaths() {
   return [
@@ -14,6 +14,7 @@ export function getStaticPaths() {
 
 const lang = getLangFromUrl(Astro.url);
 const t = useTranslations(lang);
+const translatePath = useTranslatedPath(lang);
 
 const packages = [
   {
@@ -23,6 +24,7 @@ const packages = [
     includes: t('services.package.branding.includes'),
     delivery: t('services.package.branding.delivery'),
     price: t('services.package.branding.price'),
+    cta: t('services.package.branding.cta'),
   },
   {
     id: 'gastronomy',
@@ -31,6 +33,7 @@ const packages = [
     includes: t('services.package.gastronomy.includes'),
     delivery: t('services.package.gastronomy.delivery'),
     price: t('services.package.gastronomy.price'),
+    cta: t('services.package.gastronomy.cta'),
   },
   {
     id: 'events',
@@ -39,6 +42,7 @@ const packages = [
     includes: t('services.package.events.includes'),
     delivery: t('services.package.events.delivery'),
     price: t('services.package.events.price'),
+    cta: t('services.package.events.cta'),
   },
 ];
 
@@ -56,83 +60,146 @@ const processSteps = [
     body: t('services.process.step3.body'),
   },
 ];
+
+const stripStepPrefix = (value: string) => value.replace(/^\s*\d+\.\s*/, '');
 ---
 
 <BaseLayout title={t('services.title')} description={t('services.desc')}>
   <Header />
 
-  <main class="site-main services-page">
-    <section class="services-hero">
-      <div class="container">
-        <p class="section-eyebrow reveal">{t('services.hero.eyebrow')}</p>
-        <h1 class="services-hero-title reveal stagger-1">{t('services.hero.title')}</h1>
-        <p class="services-hero-subtitle reveal stagger-2">{t('services.hero.sub')}</p>
+  <main class="site-main bg-[#0A0A0A] pb-40">
+    <section class="bg-[#0A0A0A] pt-16 pb-20 md:pt-20 md:pb-24 lg:pt-24 lg:pb-28">
+      <div class="mx-auto w-full max-w-7xl px-6">
+        <p class="mb-4 font-sans text-xs font-medium uppercase tracking-[0.2em] text-[#D6B36A]">
+          {t('services.hero.eyebrow')}
+        </p>
+        <h1 class="max-w-5xl !font-heading text-5xl leading-[0.98] tracking-[-0.03em] text-[#FFFFFF] lg:text-7xl">
+          {t('services.hero.title')}
+        </h1>
+        <p class="mt-6 max-w-3xl text-base leading-8 text-[#A8A29E] lg:text-lg">
+          {t('services.hero.sub')}
+        </p>
       </div>
     </section>
 
-    <section class="services-intro">
-      <div class="container services-intro-shell reveal">
-        <h2>{t('services.intro.title')}</h2>
-        <p>{t('services.intro.body')}</p>
+    <section class="bg-[#0A0A0A] pb-16 md:pb-20">
+      <div class="mx-auto w-full max-w-7xl px-6">
+        <div class="max-w-3xl">
+          <h2 class="!font-heading text-4xl leading-[1.02] tracking-[-0.02em] text-[#FFFFFF] lg:text-5xl">
+            {t('services.intro.title')}
+          </h2>
+          <p class="mt-4 max-w-2xl text-base leading-8 text-[#A8A29E]">
+            {t('services.intro.body')}
+          </p>
+        </div>
       </div>
     </section>
 
-    <section class="services-packages">
-      <div class="container">
-        <div class="services-packages-grid">
-          {packages.map((item, index) => (
-            <article id={item.id} class="service-package-card reveal" style={`transition-delay: ${index * 0.08}s`}>
-              <div class="service-package-header">
-                <h2>{item.title}</h2>
-              </div>
-              <div class="service-package-details">
-                <div class="service-package-detail">
-                  <p class="service-package-detail-label">{t('services.label.for')}</p>
-                  <p>{item.audience}</p>
+    <section class="bg-[#0A0A0A] pb-24 md:pb-28 lg:pb-32">
+      <div class="mx-auto w-full max-w-7xl px-6">
+        <div class="grid grid-cols-1 gap-12 lg:grid-cols-3 lg:gap-8 lg:divide-x lg:divide-white/10">
+          {packages.map((item) => (
+            <article
+              id={item.id}
+              class="flex h-full flex-col gap-6 px-0 text-left lg:px-8 lg:first:pl-0 lg:last:pr-0"
+            >
+              <div class="flex flex-1 flex-col gap-6">
+                <div class="space-y-4 border-b border-white/10 pb-6">
+                  <p class="font-sans text-xs font-medium uppercase tracking-[0.18em] text-[#D6B36A]">
+                    {t('services.package.eyebrow')}
+                  </p>
+                  <h2 class="!font-heading text-3xl leading-[1.05] tracking-[-0.02em] text-[#FFFFFF] lg:text-[2.35rem]">
+                    {item.title}
+                  </h2>
                 </div>
-                <div class="service-package-detail">
-                  <p class="service-package-detail-label">{t('services.label.includes')}</p>
-                  <p>{item.includes}</p>
+                <div class="space-y-3">
+                  <p class="font-sans text-xs font-medium uppercase tracking-[0.18em] text-[#D6B36A]">
+                    {t('services.label.for')}
+                  </p>
+                  <p class="max-w-[30ch] text-base leading-8 text-[#A8A29E]">
+                    {item.audience}
+                  </p>
                 </div>
-                <div class="service-package-detail">
-                  <p class="service-package-detail-label">{t('services.label.delivery')}</p>
-                  <p>{item.delivery}</p>
+                <div class="space-y-3">
+                  <p class="font-sans text-xs font-medium uppercase tracking-[0.18em] text-[#D6B36A]">
+                    {t('services.label.includes')}
+                  </p>
+                  <p class="text-base leading-8 text-[#A8A29E]">
+                    {item.includes}
+                  </p>
                 </div>
               </div>
-              <div class="service-package-price">
-                <p>{item.price}</p>
+              <div class="mt-auto space-y-6 pt-6">
+                <div class="border-t border-white/10 pt-6">
+                  <p class="!font-heading text-2xl leading-none text-[#FFFFFF]">{item.price}</p>
+                  <span class="mt-2 block font-sans text-sm uppercase tracking-[0.18em] text-[#A8A29E]">
+                    {item.delivery}
+                  </span>
+                </div>
+                <div class="border-t border-white/10 pt-6">
+                  <a
+                    href={`/${lang}/contact?${new URLSearchParams({ type: item.id, package: item.title }).toString()}`}
+                    class="inline-flex min-h-12 w-full items-center justify-center rounded-full border border-white/15 px-6 py-3 font-sans text-sm font-medium uppercase tracking-[0.08em] text-[#FFFFFF] transition-all duration-base hover:-translate-y-px hover:border-[#D6B36A] hover:text-[#D6B36A] lg:w-auto"
+                  >
+                    {item.cta}
+                  </a>
+                </div>
               </div>
-              <a href={`/${lang}/contact`} class="btn btn-ghost service-package-cta">{t('services.package.cta')}</a>
             </article>
           ))}
         </div>
       </div>
     </section>
 
-    <section class="services-process">
-      <div class="container">
-        <div class="section-heading reveal">
-          <h2 class="section-title">{t('services.process.title')}</h2>
+    <section class="bg-[#0A0A0A] py-32 pb-40 md:py-36 md:pb-48 lg:py-48 lg:pb-56">
+      <div class="mx-auto w-full max-w-7xl px-6">
+        <div class="max-w-3xl">
+          <h2 class="!font-heading text-4xl leading-[1.02] tracking-[-0.02em] text-[#FFFFFF] lg:text-6xl">
+            {t('services.process.title')}
+          </h2>
         </div>
-        <div class="services-process-grid">
+        <div class="mt-16 grid grid-cols-1 gap-16 lg:grid-cols-3 lg:gap-16">
           {processSteps.map((step, index) => (
-            <article class="services-process-card reveal" style={`transition-delay: ${index * 0.08}s`}>
-              <h3>{step.title}</h3>
-              <p>{step.body}</p>
+            <article class="flex flex-col">
+              <span class="mb-6 !font-heading text-6xl leading-none text-[#D6B36A]">
+                {index + 1}.
+              </span>
+              <h3 class="!font-heading text-3xl leading-[1.05] tracking-[-0.02em] text-[#FFFFFF] lg:text-[2.2rem]">
+                {stripStepPrefix(step.title)}
+              </h3>
+              <p class="mt-4 max-w-[32ch] text-base leading-8 text-[#A8A29E]">
+                {step.body}
+              </p>
             </article>
           ))}
         </div>
       </div>
     </section>
 
-    <section class="services-inline-cta">
-      <div class="container services-inline-cta-shell reveal">
-        <h2>{t('services.cta.title')}</h2>
-        <p>{t('services.cta.body')}</p>
+    <section class="bg-[#0A0A0A] pb-40">
+      <div class="mx-auto w-full max-w-7xl px-6">
+        <div class="grid gap-6 border-l-2 border-[#D6B36A] py-12 pl-6 lg:grid-cols-[minmax(0,1fr)_auto] lg:items-center lg:gap-10">
+          <div>
+            <h2 class="max-w-[18ch] !font-heading text-3xl leading-[1.05] tracking-[-0.02em] text-[#FFFFFF] lg:text-5xl">
+              {t('services.cta.title')}
+            </h2>
+            <p class="mt-3 max-w-3xl text-base leading-8 text-[#A8A29E]">
+              {t('services.cta.body')}
+            </p>
+          </div>
+          <a
+            href={translatePath('/contact')}
+            class="inline-flex min-h-12 items-center justify-center rounded-full border border-[#D6B36A] bg-[#D6B36A] px-6 py-3 font-sans text-sm font-medium uppercase tracking-[0.08em] text-[#0A0A0A] transition-all duration-base hover:-translate-y-px hover:border-[#FFFFFF] hover:bg-[#FFFFFF]"
+          >
+            {t('hero.cta.primary')}
+          </a>
+        </div>
       </div>
     </section>
 
-    <ContactCTA />
+    <div class="mt-24">
+      <ContactCTA />
+    </div>
   </main>
 
   <Footer />
