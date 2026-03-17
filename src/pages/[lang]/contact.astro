@@ -16,146 +16,178 @@ export function getStaticPaths() {
 const lang = getLangFromUrl(Astro.url);
 const t = useTranslations(lang);
 const inquiryTemplate = lang === 'es'
-  ? 'Interesado en: {package}\n\nPresupuesto aproximado:\nFecha o periodo:\nUbicación:\nObjetivo del proyecto:\n'
+  ? 'Interesado en: {package}\n\nPresupuesto aproximado:\nFecha o periodo:\nUbicaci\u00f3n:\nObjetivo del proyecto:\n'
   : 'Interested in: {package}\n\nEstimated budget:\nDate or time frame:\nLocation:\nProject goal:\n';
 ---
 
 <BaseLayout title={t('contact.title')} description={t('contact.desc')}>
   <Header />
 
-  <!-- Hero -->
-  <div class="contact-hero">
-    <div class="contact-hero-bg">
-      <Image
-        src={yoImage}
-        alt="Contact JRMGraphy"
-        width={1920}
-        height={1280}
-        loading="eager"
-        fetchpriority="high"
-      />
-    </div>
-    <div class="contact-hero-overlay"></div>
-    <div class="contact-hero-content">
-      <p class="contact-hero-eyebrow">{t('contact.hero.eyebrow')}</p>
-      <h1 class="contact-hero-title">{t('contact.hero.title')}</h1>
-      <p class="contact-hero-sub">{t('contact.hero.sub')}</p>
-    </div>
-  </div>
+  <main class="site-main bg-background pb-40">
+    <section class="border-b border-white/5 bg-background py-20 md:py-28">
+      <div class="mx-auto w-full max-w-7xl px-6">
+        <div class="grid gap-10 lg:grid-cols-[minmax(0,1fr)_minmax(280px,340px)] lg:items-center">
+          <div>
+            <p class="section-eyebrow reveal text-left uppercase tracking-[0.2em] text-[#D6B36A]">
+              {t('contact.hero.eyebrow')}
+            </p>
+            <h1 class="gallery-page-title reveal stagger-1 mt-4 max-w-5xl text-left font-heading text-5xl leading-[1.02] tracking-[-0.02em] text-text lg:text-7xl">
+              {t('contact.hero.title')}
+            </h1>
+            <p class="gallery-page-subtitle reveal stagger-2 mt-6 max-w-3xl text-left text-base leading-7 text-text-muted lg:text-lg">
+              {t('contact.hero.sub')}
+            </p>
+          </div>
 
-  <!-- Main content -->
-  <main class="contact-main">
-    <div class="contact-grid">
-      <!-- Info column -->
-      <div class="contact-info reveal">
-        <h2 class="contact-info-title">{t('contact.info.title')}</h2>
-        <p class="contact-info-desc">{t('contact.info.desc')}</p>
-
-        <div class="contact-avail">
-          <p class="contact-avail-label">{t('contact.avail.label')}</p>
-          <p class="contact-avail-text">{t('contact.avail.text')}</p>
-        </div>
-
-        <div class="contact-links">
-          <a href="mailto:inspecjrm@gmail.com" class="contact-link">
-            <i class="fa fa-envelope" aria-hidden="true"></i>
-            inspecjrm@gmail.com
-          </a>
-          <a
-            href="https://www.instagram.com/JRM_Graphy"
-            target="_blank"
-            rel="noopener noreferrer"
-            class="contact-link"
-          >
-            <i class="fab fa-instagram" aria-hidden="true"></i>
-            @JRM_Graphy
-          </a>
-          <div class="contact-link" style="cursor: default;">
-            <i class="fa fa-map-marker-alt" aria-hidden="true"></i>
-            Mexico City, Mexico
+          <div class="reveal relative overflow-hidden rounded-[32px] border border-white/10 bg-[#111111] shadow-[0_20px_60px_rgba(0,0,0,0.65)]">
+            <Image
+              src={yoImage}
+              alt="Javier Rangel portrait"
+              width={960}
+              height={960}
+              sizes="(min-width: 1200px) 340px, 40vw"
+              class="h-full w-full object-cover"
+              loading="eager"
+            />
+            <div class="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent"></div>
           </div>
         </div>
       </div>
+    </section>
 
-      <!-- Form column -->
-      <div class="contact-form-wrap reveal stagger-2">
-        <form
-          id="contact-form"
-          class="contact-form"
-          name="contact"
-          method="POST"
-          data-netlify="true"
-          netlify-honeypot="bot-field"
-          data-error-fields={t('contact.form.errorFields')}
-          data-error-send={t('contact.form.errorSend')}
-        >
-          <input type="hidden" name="form-name" value="contact" />
-          <p style="display:none;">
-            <label>Don't fill this out: <input name="bot-field" /></label>
-          </p>
+    <section class="bg-background py-20 md:py-24">
+      <div class="mx-auto w-full max-w-7xl px-6">
+        <div class="grid gap-10 lg:grid-cols-[minmax(0,0.92fr)_minmax(0,1.08fr)] lg:gap-12">
+          <article class="reveal rounded-[32px] border border-white/10 bg-gradient-to-br from-[#0D0D0D] to-[#070707] p-8 shadow-[0_30px_60px_rgba(0,0,0,0.55)]">
+            <p class="section-eyebrow text-xs uppercase tracking-[0.2em] text-[#D6B36A]">
+              {t('nav.contact')}
+            </p>
+            <h2 class="mt-4 font-heading text-3xl leading-[1.05] tracking-[-0.02em] text-text lg:text-4xl">
+              {t('contact.info.title')}
+            </h2>
+            <p class="mt-4 max-w-[34rem] text-base leading-8 text-text-muted">
+              {t('contact.info.desc')}
+            </p>
 
-          <div class="form-group">
-            <label for="name" class="form-label">{t('contact.form.name')}</label>
-            <input
-              type="text"
-              class="form-input"
-              id="name"
-              name="name"
-              placeholder={t('contact.form.namePlaceholder')}
-              required
-            />
-          </div>
+            <div class="mt-8 space-y-4 rounded-[24px] border border-white/10 bg-white/[0.04] p-6">
+              <p class="text-xs font-medium uppercase tracking-[0.3em] text-[#D6B36A]">
+                {t('contact.avail.label')}
+              </p>
+              <p class="text-base leading-8 text-text-muted">
+                {t('contact.avail.text')}
+              </p>
+            </div>
 
-          <div class="form-group">
-            <label for="email" class="form-label">{t('contact.form.email')}</label>
-            <input
-              type="email"
-              class="form-input"
-              id="email"
-              name="email"
-              placeholder={t('contact.form.emailPlaceholder')}
-              required
-            />
-          </div>
+            <div class="mt-8 space-y-4 border-t border-white/10 pt-8">
+              <a
+                href="mailto:inspecjrm@gmail.com"
+                class="flex items-center gap-4 text-base text-text-muted transition hover:text-text"
+              >
+                <i class="fa fa-envelope text-[#D6B36A]" aria-hidden="true"></i>
+                <span>inspecjrm@gmail.com</span>
+              </a>
+              <a
+                href="https://www.instagram.com/JRM_Graphy"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="flex items-center gap-4 text-base text-text-muted transition hover:text-text"
+              >
+                <i class="fab fa-instagram text-[#D6B36A]" aria-hidden="true"></i>
+                <span>@JRM_Graphy</span>
+              </a>
+              <div class="flex items-center gap-4 text-base text-text-muted">
+                <i class="fa fa-map-marker-alt text-[#D6B36A]" aria-hidden="true"></i>
+                <span>Mexico City, Mexico</span>
+              </div>
+            </div>
+          </article>
 
-          <div class="form-group">
-            <label for="inquiry-type" class="form-label">{t('contact.form.type')}</label>
-            <select id="inquiry-type" name="type" class="form-select" required>
-              <option value="">{t('contact.form.typeSelect')}</option>
-              <option value="branding">{t('contact.form.typeBranding')}</option>
-              <option value="gastronomy">{t('contact.form.typeGastronomy')}</option>
-              <option value="events">{t('contact.form.typeEvents')}</option>
-              <option value="portraits">{t('contact.form.typePortraits')}</option>
-              <option value="archive">{t('contact.form.typeArchive')}</option>
-              <option value="general">{t('contact.form.typeGeneral')}</option>
-            </select>
-          </div>
+          <article class="reveal stagger-2 rounded-[32px] border border-white/10 bg-[#0A0A0A]/80 p-8 shadow-[0_30px_60px_rgba(0,0,0,0.55)]">
+            <form
+              id="contact-form"
+              class="space-y-6"
+              name="contact"
+              method="POST"
+              data-netlify="true"
+              netlify-honeypot="bot-field"
+              data-error-fields={t('contact.form.errorFields')}
+              data-error-send={t('contact.form.errorSend')}
+            >
+              <input type="hidden" name="form-name" value="contact" />
+              <p class="hidden">
+                <label>Don't fill this out: <input name="bot-field" /></label>
+              </p>
 
-          <div class="form-group">
-            <label for="message" class="form-label">{t('contact.form.message')}</label>
-            <textarea
-              class="form-textarea"
-              id="message"
-              name="message"
-              rows="5"
-              placeholder={t('contact.form.messagePlaceholder')}
-              required
-            ></textarea>
-          </div>
+              <div class="form-group">
+                <label for="name" class="form-label">{t('contact.form.name')}</label>
+                <input
+                  type="text"
+                  class="form-input"
+                  id="name"
+                  name="name"
+                  placeholder={t('contact.form.namePlaceholder')}
+                  required
+                />
+              </div>
 
-          <div class="form-submit">
-            <button type="submit" class="btn btn-primary" id="submit-btn" style="width: 100%;" data-sending={t('contact.form.sending')} data-submit={t('contact.form.submit')}>
-              {t('contact.form.submit')}
-            </button>
-          </div>
+              <div class="form-group">
+                <label for="email" class="form-label">{t('contact.form.email')}</label>
+                <input
+                  type="email"
+                  class="form-input"
+                  id="email"
+                  name="email"
+                  placeholder={t('contact.form.emailPlaceholder')}
+                  required
+                />
+              </div>
 
-          <div class="form-feedback" id="contact-confirmation">
-            <i class="fas fa-check-circle"></i>
-            <span>{t('contact.form.success')}</span>
-          </div>
-        </form>
+              <div class="form-group">
+                <label for="inquiry-type" class="form-label">{t('contact.form.type')}</label>
+                <select id="inquiry-type" name="type" class="form-select" required>
+                  <option value="">{t('contact.form.typeSelect')}</option>
+                  <option value="branding">{t('contact.form.typeBranding')}</option>
+                  <option value="gastronomy">{t('contact.form.typeGastronomy')}</option>
+                  <option value="events">{t('contact.form.typeEvents')}</option>
+                  <option value="portraits">{t('contact.form.typePortraits')}</option>
+                  <option value="archive">{t('contact.form.typeArchive')}</option>
+                  <option value="general">{t('contact.form.typeGeneral')}</option>
+                </select>
+              </div>
+
+              <div class="form-group">
+                <label for="message" class="form-label">{t('contact.form.message')}</label>
+                <textarea
+                  class="form-textarea"
+                  id="message"
+                  name="message"
+                  rows="5"
+                  placeholder={t('contact.form.messagePlaceholder')}
+                  required
+                ></textarea>
+              </div>
+
+              <div>
+                <button
+                  type="submit"
+                  class="btn btn-primary w-full"
+                  id="submit-btn"
+                  data-sending={t('contact.form.sending')}
+                  data-submit={t('contact.form.submit')}
+                >
+                  {t('contact.form.submit')}
+                </button>
+              </div>
+
+              <div class="form-feedback" id="contact-confirmation">
+                <i class="fas fa-check-circle"></i>
+                <span>{t('contact.form.success')}</span>
+              </div>
+            </form>
+          </article>
+        </div>
       </div>
-    </div>
+    </section>
   </main>
 
   <Footer />
@@ -189,7 +221,7 @@ const inquiryTemplate = lang === 'es'
       const name = (document.getElementById('name') as HTMLInputElement).value.trim();
       const email = (document.getElementById('email') as HTMLInputElement).value.trim();
       const message = (document.getElementById('message') as HTMLTextAreaElement).value.trim();
-      const txtSending = submitBtn.dataset.sending || 'Sending…';
+      const txtSending = submitBtn.dataset.sending || 'Sending...';
       const txtSubmit = submitBtn.dataset.submit || 'Send Message';
       const txtErrorFields = form.dataset.errorFields || 'Please fill out all required fields correctly.';
       const txtErrorSend = form.dataset.errorSend || 'There was a problem sending your message. Please try again.';

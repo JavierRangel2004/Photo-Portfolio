@@ -5,7 +5,7 @@ import Footer from '../../components/Footer.astro';
 import ContactCTA from '../../components/ContactCTA.astro';
 import { Image } from 'astro:assets';
 import yoImage from '../../assets/images/yo.jpg';
-import { getLangFromUrl, useTranslations } from '../../i18n/utils';
+import { getLangFromUrl, useTranslations, useTranslatedPath } from '../../i18n/utils';
 
 export function getStaticPaths() {
   return [
@@ -16,95 +16,121 @@ export function getStaticPaths() {
 
 const lang = getLangFromUrl(Astro.url);
 const t = useTranslations(lang);
+const translatePath = useTranslatedPath(lang);
+
+const manifesto = [
+  t('about.manifesto.p1'),
+  t('about.manifesto.p2'),
+  t('about.manifesto.p3'),
+  t('about.manifesto.p4'),
+];
+
+const services = [
+  t('about.services.portrait'),
+  t('about.services.concert'),
+  t('about.services.editorial'),
+  t('about.services.product'),
+  t('about.services.visual'),
+  t('about.services.events'),
+];
 ---
 
 <BaseLayout title={t('about.title')} description={t('about.desc')}>
   <Header />
 
-  <!-- Hero -->
-  <div class="about-hero">
-    <div class="about-hero-bg">
-      <Image
-        src={yoImage}
-        alt="Javier Rangel"
-        width={1920}
-        height={1280}
-        sizes="100vw"
-        loading="eager"
-        fetchpriority="high"
-      />
-    </div>
-    <div class="about-hero-overlay"></div>
-    <div class="about-hero-content">
-      <h1 class="about-hero-title">{t('about.name')}</h1>
-      <p class="about-hero-sub">{t('about.hero.sub')}</p>
-    </div>
-  </div>
-
-  <!-- Main content -->
-  <main class="about-main">
-    <div class="about-grid">
-      <!-- Photo -->
-      <div class="about-photo-wrap reveal">
-        <Image
-          src={yoImage}
-          alt="Javier Rangel — photographer"
-          class="about-photo"
-          width={900}
-          height={1200}
-          sizes="(min-width: 900px) 50vw, 100vw"
-          loading="eager"
-        />
+  <main class="site-main bg-background pb-40">
+    <section class="border-b border-white/5 bg-background py-20 md:py-28">
+      <div class="mx-auto w-full max-w-7xl px-6">
+        <p class="section-eyebrow reveal text-left uppercase tracking-[0.2em] text-[#D6B36A]">
+          {t('about.hero.eyebrow')}
+        </p>
+        <h1 class="gallery-page-title reveal stagger-1 mt-4 max-w-5xl text-left font-heading text-5xl leading-[1.02] tracking-[-0.02em] text-text lg:text-7xl">
+          {t('about.name')}
+        </h1>
+        <p class="gallery-page-subtitle reveal stagger-2 mt-6 max-w-3xl text-left text-base leading-7 text-text-muted lg:text-lg">
+          {t('about.hero.sub')}
+        </p>
       </div>
+    </section>
 
-      <!-- Text -->
-      <div class="about-text reveal stagger-2">
-        <h2 class="about-name">{t('about.hero.title')}</h2>
-        <p class="about-location">{t('about.location')}</p>
+    <section class="border-b border-white/10 bg-background py-20 md:py-24">
+      <div class="mx-auto w-full max-w-7xl px-6">
+        <div class="grid gap-12 lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)] lg:items-center">
+          <div class="reveal relative rounded-[32px] border border-white/10 bg-gradient-to-br from-white/5 to-white/0 p-1 shadow-[0_20px_60px_rgba(0,0,0,0.45)]">
+            <div class="overflow-hidden rounded-[30px] bg-black">
+              <Image
+                src={yoImage}
+                alt="Javier Rangel portrait"
+                width={1600}
+                height={2100}
+                class="h-full w-full object-cover"
+                sizes="(min-width: 1280px) 38vw, 80vw"
+                loading="eager"
+              />
+            </div>
+          </div>
 
-        <div class="about-manifesto">
-          <p>{t('about.manifesto.p1')}</p>
-          <p>{t('about.manifesto.p2')}</p>
-          <p>{t('about.manifesto.p3')}</p>
-          <p>{t('about.manifesto.p4')}</p>
-        </div>
+          <div class="reveal stagger-2 space-y-6">
+            <div class="space-y-2">
+              <p class="section-eyebrow text-xs uppercase tracking-[0.2em] text-[#D6B36A]">
+                {t('about.location')}
+              </p>
+              <h2 class="font-heading text-4xl leading-[1.05] tracking-[-0.02em] text-text lg:text-5xl">
+                {t('about.hero.title')}
+              </h2>
+            </div>
 
-        <div class="about-services">
-          <p class="about-services-title">{t('about.services.title')}</p>
-          <div class="services-grid">
-            <div class="service-item">
-              <span class="service-dot"></span>
-              <span>{t('about.services.portrait')}</span>
+            <div class="space-y-5 text-base leading-8 text-text-muted">
+              {manifesto.map((line) => (
+                <p>{line}</p>
+              ))}
             </div>
-            <div class="service-item">
-              <span class="service-dot"></span>
-              <span>{t('about.services.concert')}</span>
-            </div>
-            <div class="service-item">
-              <span class="service-dot"></span>
-              <span>{t('about.services.editorial')}</span>
-            </div>
-            <div class="service-item">
-              <span class="service-dot"></span>
-              <span>{t('about.services.product')}</span>
-            </div>
-            <div class="service-item">
-              <span class="service-dot"></span>
-              <span>{t('about.services.visual')}</span>
-            </div>
-            <div class="service-item">
-              <span class="service-dot"></span>
-              <span>{t('about.services.events')}</span>
+
+            <div class="flex flex-wrap gap-3 pt-2">
+              <a href={translatePath('/contact')} class="btn btn-primary">
+                {t('hero.cta.primary')}
+              </a>
+              <a href={translatePath('/services')} class="btn btn-ghost">
+                {t('hero.cta.secondary')}
+              </a>
             </div>
           </div>
         </div>
+      </div>
+    </section>
 
-        <div class="about-cta">
-          <a href={`/${lang}/contact`} class="btn btn-primary">{t('hero.cta.primary')}</a>
-          <a href={`/${lang}/services`} class="btn btn-ghost">{t('hero.cta.secondary')}</a>
+    <section class="bg-background py-20 md:py-24">
+      <div class="mx-auto w-full max-w-7xl px-6">
+        <div class="reveal border-b border-white/10 pb-12">
+          <p class="section-eyebrow text-xs uppercase tracking-[0.2em] text-[#D6B36A]">
+            {t('about.services.title')}
+          </p>
+          <h2 class="mt-4 max-w-4xl font-heading text-4xl leading-[1.05] tracking-[-0.02em] text-text lg:text-5xl">
+            {t('about.hero.title')}
+          </h2>
+          <p class="mt-4 max-w-3xl text-base leading-7 text-text-muted">
+            {t('about.desc')}
+          </p>
+        </div>
+
+        <div class="mt-10 grid gap-6 md:grid-cols-2 xl:grid-cols-3">
+          {services.map((label, index) => (
+            <article
+              class="reveal group flex flex-col gap-6 rounded-[28px] border border-white/10 bg-white/[0.03] p-6 transition duration-base hover:-translate-y-px hover:border-secondary"
+              style={`transition-delay: ${(index % 3) * 0.08}s`}
+            >
+              <div class="flex items-center justify-between text-xs uppercase tracking-[0.3em] text-[#D6B36A]">
+                <span>{t('about.services.title')}</span>
+                <span>{`0${index + 1}`}</span>
+              </div>
+              <h3 class="font-heading text-2xl leading-[1.2] text-text">
+                {label}
+              </h3>
+            </article>
+          ))}
         </div>
       </div>
-    </div>
+    </section>
   </main>
 
   <ContactCTA />
