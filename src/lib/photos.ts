@@ -31,7 +31,6 @@ export type RawCategory =
   | 'city'
   | 'nature'
   | 'product'
-  | 'creativity'
   | 'travel-cityscape';
 
 export interface PortfolioGroup {
@@ -57,7 +56,7 @@ const sortedPhotos = [...allPhotos].sort((a, b) => new Date(b.date).getTime() - 
 export const portfolioGroups: PortfolioGroup[] = [
   {
     id: 'branding',
-    categories: ['portraits', 'product', 'creativity'],
+    categories: ['portraits', 'product'],
     homepageCount: 3,
     portfolioCount: 12,
   },
