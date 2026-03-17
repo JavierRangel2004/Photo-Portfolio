@@ -2,8 +2,6 @@
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import Header from '../../components/Header.astro';
 import Footer from '../../components/Footer.astro';
-import { Image } from 'astro:assets';
-import yoImage from '../../assets/images/yo.jpg';
 import { getLangFromUrl, useTranslations } from '../../i18n/utils';
 
 export function getStaticPaths() {
@@ -26,32 +24,15 @@ const inquiryTemplate = lang === 'es'
   <main class="site-main bg-background pb-40">
     <section class="border-b border-white/5 bg-background py-20 md:py-28">
       <div class="mx-auto w-full max-w-7xl px-6">
-        <div class="grid gap-10 lg:grid-cols-[minmax(0,1fr)_minmax(280px,340px)] lg:items-center">
-          <div>
-            <p class="section-eyebrow reveal text-left uppercase tracking-[0.2em] text-[#D6B36A]">
-              {t('contact.hero.eyebrow')}
-            </p>
-            <h1 class="gallery-page-title reveal stagger-1 mt-4 max-w-5xl text-left font-heading text-5xl leading-[1.02] tracking-[-0.02em] text-text lg:text-7xl">
-              {t('contact.hero.title')}
-            </h1>
-            <p class="gallery-page-subtitle reveal stagger-2 mt-6 max-w-3xl text-left text-base leading-7 text-text-muted lg:text-lg">
-              {t('contact.hero.sub')}
-            </p>
-          </div>
-
-          <div class="reveal relative overflow-hidden rounded-[32px] border border-white/10 bg-[#111111] shadow-[0_20px_60px_rgba(0,0,0,0.65)]">
-            <Image
-              src={yoImage}
-              alt="Javier Rangel portrait"
-              width={960}
-              height={960}
-              sizes="(min-width: 1200px) 340px, 40vw"
-              class="h-full w-full object-cover"
-              loading="eager"
-            />
-            <div class="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent"></div>
-          </div>
-        </div>
+        <p class="section-eyebrow reveal text-left uppercase tracking-[0.2em] text-[#D6B36A]">
+          {t('contact.hero.eyebrow')}
+        </p>
+        <h1 class="gallery-page-title reveal stagger-1 mt-4 max-w-5xl text-left font-heading text-5xl leading-[1.02] tracking-[-0.02em] text-text lg:text-7xl">
+          {t('contact.hero.title')}
+        </h1>
+        <p class="gallery-page-subtitle reveal stagger-2 mt-6 max-w-3xl text-left text-base leading-7 text-text-muted lg:text-lg">
+          {t('contact.hero.sub')}
+        </p>
       </div>
     </section>
 
