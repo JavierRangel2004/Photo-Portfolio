@@ -1,0 +1,212 @@
+%% CV_Javier_Rangel_ES_esteban.tex — CV en Español siguiendo estructura de Esteban
+%% Marzo 2026
+
+\documentclass[10pt, letterpaper]{article}
+
+\usepackage[top=0.5in, bottom=0.5in, left=0.6in, right=0.6in]{geometry}
+\usepackage{parskip}
+\usepackage{titlesec}
+\usepackage{enumitem}
+\usepackage{hyperref}
+\usepackage[protrusion=true,expansion=false]{microtype}
+\usepackage[T1]{fontenc}
+\usepackage[spanish]{babel}
+\usepackage{array}
+\usepackage{amssymb}
+
+\hypersetup{colorlinks=true, urlcolor=black, linkcolor=black}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{0pt}
+
+%% Section style: small caps + rule (matching Esteban's)
+\titleformat{\section}{\scshape\large}{}{0em}{}[\titlerule]
+\titlespacing{\section}{0pt}{8pt}{4pt}
+
+%% Two-column header row
+\newcommand{\entry}[2]{%
+  \noindent\begin{tabular*}{\textwidth}{@{}l@{\extracolsep{\fill}}r@{}}
+    #1 & #2
+  \end{tabular*}}
+
+%% Compact bullet list
+\newenvironment{cvlist}{%
+  \begin{itemize}[leftmargin=1.4em,itemsep=1pt,topsep=2pt,parsep=0pt]
+}{\end{itemize}}
+
+%% Skill bar: 5 squares, #1 filled
+\newcommand{\skillbar}[1]{%
+  \foreach \i in {1,...,5}{%
+    \ifnum\i>#1 $\square$\else $\blacksquare$\fi
+  }%
+}
+\usepackage{pgffor}
+
+%% ─────────────────────────────────────────────────────────────────────────────
+\begin{document}
+\pagestyle{empty}
+
+%% ── HEADER ──────────────────────────────────────────────────────────────────
+\begin{center}
+  {\LARGE\bfseries Javier Rangel Murillo}\\[3pt]
+  Ciudad de M\'{e}xico, M\'{e}xico\\[1pt]
+  \href{mailto:inspecjrm@gmail.com}{inspecjrm@gmail.com} \enspace|\enspace
+  \href{https://linkedin.com/in/javierramu2004}{LinkedIn} \enspace|\enspace
+  \href{https://github.com/JavierRangel2004}{GitHub}
+\end{center}
+
+%% ── RESUMEN PROFESIONAL ────────────────────────────────────────────────────
+\section{Resumen Profesional}
+
+\textbf{Ingeniero Backend y M\'{o}vil} especializado en construir sistemas de
+producci\'{o}n de extremo a extremo, abarcando arquitectura de plataforma,
+infraestructura en la nube, integraciones y entrega m\'{o}vil multiplataforma.
+Experiencia implementando \textbf{APIs RESTful, workers as\'{i}ncronos, sistemas
+de pago y pipelines de verificaci\'{o}n de identidad} usando arquitecturas
+cloud-native modernas.
+
+Competente en el dise\~{n}o y despliegue de plataformas backend y aplicaciones
+m\'{o}viles usando \textbf{TypeScript, Node.js, Express.js, React Native, GCP y
+sistemas dirigidos por eventos}. H\'{a}bil en el desarrollo de servicios de alto
+rendimiento para agendamiento en tiempo real, monetizaci\'{o}n y flujos de
+trabajo as\'{i}ncronos distribuidos.
+
+Experiencia pr\'{a}ctica con \textbf{infraestructura en GCP (Cloud Run, Pub/Sub,
+Tasks, KMS, Secret Manager), Firebase, Terraform IaC y pipelines CI/CD}.
+Experiencia aprovisionando entornos de producci\'{o}n con observabilidad,
+cifrado en reposo y despliegues automatizados.
+
+Combina una s\'{o}lida ingenier\'{i}a backend con experiencia en desarrollo
+m\'{o}vil multiplataforma, facilitando la colaboraci\'{o}n entre equipos de
+infraestructura, producto e ingenier\'{i}a. Apasionado por construir sistemas
+de producci\'{o}n confiables, escalables y mantenibles.
+
+%% ── HABILIDADES TÉCNICAS ───────────────────────────────────────────────────
+\section{Habilidades T\'{e}cnicas}
+
+\noindent
+\begin{tabular*}{\textwidth}{@{}p{0.48\textwidth}@{\extracolsep{\fill}}p{0.48\textwidth}@{}}
+  Programaci\'{o}n (TypeScript, Python, SQL) \skillbar{5}
+  & Backend (Node.js, Express, APIs) \skillbar{5} \\[4pt]
+  M\'{o}vil (React Native, Expo) \skillbar{5}
+  & Cloud e Infra (GCP, Firebase, Terraform) \skillbar{4} \\[4pt]
+  DevOps (Docker, CI/CD, GitHub Actions) \skillbar{4}
+  & Bases de Datos (PostgreSQL, Redis, MongoDB) \skillbar{4} \\[4pt]
+  Sistemas As\'{i}nc. (BullMQ, Pub/Sub, Workers) \skillbar{4}
+  & Integraciones (PayPal, Twilio, SendGrid) \skillbar{4} \\[4pt]
+  Frameworks (Django, Flask, Astro, React) \skillbar{4}
+  & Herramientas (Linux, Git, Puppeteer) \skillbar{5} \\
+\end{tabular*}
+
+%% ── EXPERIENCIA PROFESIONAL ────────────────────────────────────────────────
+\section{Experiencia Profesional}
+
+\entry{\textbf{LegalTec}}{\textit{Ingeniero Backend \& M\'{o}vil Fundador \enspace|\enspace Oct 2025 -- Mar 2026}}
+
+\begin{cvlist}
+  \item Dise\~{n}\'{e} y constru\'{i} toda la plataforma backend usando
+        \textbf{Node.js, TypeScript y Express.js} como \textbf{autor \'{u}nico
+        del 91.6\%} a trav\'{e}s de 66 rutas API, 78+ servicios y 11 workers
+        en segundo plano --- llevando una startup legal-tech del prototipo a
+        producci\'{o}n.
+  \item Dise\~{n}\'{e} infraestructura en \textbf{GCP (Cloud Run, Pub/Sub,
+        Tasks, KMS, Secret Manager, Firebase)} habilitando procesamiento
+        distribuido de alta disponibilidad y cifrado en reposo para datos
+        legales sensibles.
+  \item Constru\'{i} 11 workers especializados con \textbf{BullMQ + Redis}
+        (reintentos de pago, limpieza de holds, procesamiento Google Meet,
+        ETL de video, pipelines de verificaci\'{o}n), habilitando flujos
+        as\'{i}ncronos confiables a escala.
+  \item Habilit\'{e} la monetizaci\'{o}n completa de la plataforma v\'{i}a
+        \textbf{APIs de PayPal} (Orders, Vault, Subscriptions), citas
+        virtuales automatizadas con \textbf{Google Meet} y flujos de
+        notificaci\'{o}n con \textbf{Twilio/SendGrid}.
+  \item Desarroll\'{e} scrapers con \textbf{Puppeteer} para validaci\'{o}n de
+        CURP/RENAPO y C\'{e}dula Profesional SEP, eliminando costos de APIs
+        de terceros para verificaci\'{o}n de identidad mexicana.
+  \item Constru\'{i} la app m\'{o}vil multiplataforma (\textbf{React
+        Native/Expo}, 8\,826 l\'{i}neas TS/TSX, 89 archivos) con ciclo de
+        vida de sesi\'{o}n cifrado, resiliencia de token-refresh y navegaci\'{o}n
+        basada en roles, completamente integrada con el backend.
+  \item Habilit\'{e} notificaciones push en tiempo real v\'{i}a \textbf{Firebase
+        Cloud Messaging}, soportando registro de dispositivos, manejo en
+        foreground y ruteo dirigido por notificaciones en toda la app.
+  \item Aprovision\'{e} infraestructura como c\'{o}digo con \textbf{Terraform}
+        en GCP; configur\'{e} pipelines CI/CD con \textbf{GitHub Actions} a
+        Cloud Run para entornos de staging y producci\'{o}n.
+\end{cvlist}
+
+\medskip
+
+\entry{\textbf{Universidad Panamericana -- Laboratorio de Desarrollo iOS}}{%
+  \textit{L\'{i}der de Desarrollo Backend \enspace|\enspace Oct 2022 -- Presente}}
+
+\begin{cvlist}
+  \item Promovido a l\'{i}der en Sep 2025; mentor de estudiantes en
+        \textbf{Python, arquitectura limpia y dise\~{n}o moderno de APIs},
+        guiando m\'{u}ltiples proyectos universitarios a producci\'{o}n.
+  \item Constru\'{i} y despleg\'{u}e APIs con \textbf{Django y Flask} para
+        aplicaciones iOS nativas en Swift; administr\'{e} bases de datos
+        \textbf{PostgreSQL y MongoDB} para rendimiento y seguridad de datos.
+\end{cvlist}
+
+%% ── PROYECTOS Y LOGROS ─────────────────────────────────────────────────────
+\section{Proyectos y Logros}
+
+\noindent\textbf{Notadio} (React/Vite, Express, TypeScript, whisper.cpp, Ollama, Python)
+
+\begin{cvlist}
+  \item Constru\'{i} una aplicaci\'{o}n de \textbf{transcripci\'{o}n local de
+        audio/video} --- procesa medios con \textbf{whisper.cpp} (sin costos
+        de API) y genera res\'{u}menes con IA v\'{i}a \textbf{Ollama} usando un
+        pipeline MapReduce para transcripciones largas.
+  \item Implement\'{e} diarizaci\'{o}n de hablantes, exportaci\'{o}n SRT/JSON/TXT,
+        telemetr\'{i}a de progreso en vivo; desplegado en VPS con \textbf{Caddy}
+        como reverse proxy y gesti\'{o}n de servicios systemd.
+\end{cvlist}
+
+\smallskip
+
+\noindent\textbf{PhotoCat} (Python, SigLIP2, YOLOv8, BLIP, NLTK)
+
+\begin{cvlist}
+  \item Pipeline de IA que clasifica autom\'{a}ticamente grandes bibliotecas
+        fotogr\'{a}ficas usando \textbf{clasificaci\'{o}n zero-shot por g\'{e}nero}
+        fusionada con puntuaci\'{o}n de evidencia de objetos y captioning;
+        exporta CSVs de auditor\'{i}a y escribe metadatos XMP para flujos de
+        curaci\'{o}n automatizada.
+\end{cvlist}
+
+\smallskip
+
+\noindent\textbf{Redes que Cambian} (Django, Angular, PostgreSQL, Docker)
+
+\begin{cvlist}
+  \item Plataforma que conecta personas con ONGs en M\'{e}xico; desplegada
+        para una organizaci\'{o}n local con m\'{o}dulos de \textbf{gesti\'{o}n de
+        voluntarios y m\'{e}tricas de impacto social}.
+\end{cvlist}
+
+\smallskip
+
+\noindent\textbf{Photo Portfolio} (Astro, TypeScript, React, Tailwind CSS, i18n)
+
+\begin{cvlist}
+  \item Reconstru\'{i} mi portafolio fotogr\'{a}fico personal como un
+        \textbf{sitio est\'{a}tico biling\"{u}e (EN/ES) con Astro},
+        internacionalizaci\'{o}n basada en rutas, navegaci\'{o}n din\'{a}mica
+        por categor\'{i}as y componentes de galer\'{i}a con carga diferida.
+        En l\'{i}nea en \href{https://jrmgraphy.com}{jrmgraphy.com}.
+\end{cvlist}
+
+%% ── EDUCACIÓN ───────────────────────────────────────────────────────────────
+\section{Educaci\'{o}n}
+
+\entry{\textbf{Universidad Panamericana} \quad Ciudad de M\'{e}xico, M\'{e}xico}{}\\
+\textit{Ingenier\'{i}a en Inteligencia de Datos y Ciberseguridad}
+\hfill \textit{Ago 2022 -- Jun 2027}
+
+\medskip
+
+\noindent\textbf{Idiomas:} Espa\~{n}ol (nativo) \textbullet\ Ingl\'{e}s C1 -- TOEFL iBT 607
+
+\end{document}
