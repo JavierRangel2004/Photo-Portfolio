@@ -1,11 +1,9 @@
 ---
 import { Image } from 'astro:assets';
-import { getRandomPhotosByCategory } from '../lib/photos';
+import { getHeroPhoto } from '../lib/photos';
 import { getLangFromUrl, useTranslations, useTranslatedPath } from '../i18n/utils';
 
-// Pick a strong hero image from portraits or city
-const heroPhoto = getRandomPhotosByCategory('portraits', 1)[0] 
-               || getRandomPhotosByCategory('city', 1)[0];
+const heroPhoto = getHeroPhoto();
 
 const lang = getLangFromUrl(Astro.url);
 const t = useTranslations(lang);
@@ -20,6 +18,7 @@ const translatePath = useTranslatedPath(lang);
         alt="JRMGraphy hero"
         width={heroPhoto.width || 1920}
         height={heroPhoto.height || 1280}
+        sizes="100vw"
         loading="eager"
         fetchpriority="high"
         id="hero-img"
@@ -33,22 +32,29 @@ const translatePath = useTranslatedPath(lang);
     <h1 class="hero-title">{t('hero.title')}</h1>
     <p class="hero-subtitle">{t('hero.subtitle')}</p>
 
+    <div class="hero-tags">
+      <span class="hero-tag">{t('hero.tag.one')}</span>
+      <span class="hero-tag">{t('hero.tag.two')}</span>
+      <span class="hero-tag">{t('hero.tag.three')}</span>
+    </div>
+
     <div class="hero-actions">
-      <a href={translatePath('/gallery')} class="btn btn-primary">{t('hero.cta.primary')}</a>
-      <a href={translatePath('/contact')} class="btn btn-ghost">{t('hero.cta.secondary')}</a>
+      <a href={translatePath('/contact')} class="btn btn-primary">{t('hero.cta.primary')}</a>
+      <a href={translatePath('/services')} class="btn btn-ghost">{t('hero.cta.secondary')}</a>
     </div>
   </div>
 
-  <a class="hero-scroll" id="hero-scroll" href="#home-themes" aria-label={t('hero.scroll')}>
+  <a class="hero-scroll" id="hero-scroll" href="#home-services" aria-label={t('hero.scroll')}>
     <span class="hero-scroll-text">{t('hero.scroll')}</span>
     <span class="hero-scroll-icon" aria-hidden="true"></span>
   </a>
 </section>
 
 <script>
-  // Subtle parallax on hero bg
+  // Subtle parallax on hero bg (respects reduced-motion)
   const heroBg = document.getElementById('hero-bg');
-  if (heroBg) {
+  const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (heroBg && !prefersReducedMotion) {
     window.addEventListener('scroll', () => {
       const scrolled = window.scrollY;
       heroBg.style.transform = `translateY(${scrolled * 0.35}px)`;
@@ -76,36 +82,58 @@ const translatePath = useTranslatedPath(lang);
 </script>
 
 <style>
+  .hero-tags {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.35rem;
+    margin-top: 1.5rem;
+    max-width: 48rem;
+    opacity: 0;
+    transform: translateY(14px);
+    animation: reveal 0.7s cubic-bezier(0.16, 1, 0.3, 1) 0.75s forwards;
+  }
+
+  .hero-tag {
+    color: var(--color-text-dim);
+    font-size: var(--text-xs);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+
+  .hero-tag + .hero-tag {
+    padding-left: 0.7rem;
+    border-left: 1px solid rgba(245, 241, 232, 0.18);
+  }
+
+  .hero-tags {
+    justify-content: center;
+    margin-inline: auto;
+  }
+
   .hero-actions {
     display: flex;
     align-items: center;
-    justify-content: center;
     flex-wrap: wrap;
     gap: 1rem;
     margin-top: 2rem;
+    flex-direction: column;
+    width: 100%;
     opacity: 0;
     transform: translateY(16px);
     animation: reveal 0.7s cubic-bezier(0.16, 1, 0.3, 1) 0.8s forwards;
   }
 
   @media (min-width: 769px) {
+    .hero-tags {
+      justify-content: flex-start;
+      margin-inline: unset;
+    }
+
     .hero-actions {
+      flex-direction: row;
+      width: auto;
       margin-bottom: 3rem;
-    }
-  }
-
-  @media (max-width: 768px) {
-    .hero-content {
-      text-align: center;
-    }
-
-    .hero-subtitle {
-      margin-inline: auto;
-    }
-
-    .hero-actions {
-      flex-direction: column;
-      width: 100%;
     }
   }
 </style>

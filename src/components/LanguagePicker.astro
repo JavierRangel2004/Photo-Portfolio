@@ -36,9 +36,15 @@ const pathWithoutLang = pathName.replace(/^\/(es|en)/, '') || '/';
   .lang-link {
     font-size: var(--text-xs);
     font-weight: 500;
-    color: var(--color-text-dim);
+    color: var(--color-text-muted);
     text-decoration: none;
     transition: color var(--dur-base);
+    /* Ensure 44px minimum touch target */
+    min-width: 44px;
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
   }
   
   .lang-link:hover {
@@ -46,8 +52,10 @@ const pathWithoutLang = pathName.replace(/^\/(es|en)/, '') || '/';
   }
   
   .lang-link.active {
-    color: var(--color-text);
+    color: var(--color-accent);
     pointer-events: none;
+    border-bottom: 1px solid var(--color-accent);
+    padding-bottom: 1px;
   }
 </style>
 
