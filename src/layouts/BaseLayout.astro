@@ -452,11 +452,25 @@ const jsonLdGraph = {
       };
 
       try {
-        new PerformanceObserver((entryList) => {
+        let lcpEntry: PerformanceEntry | undefined;
+        let lcpObserver: PerformanceObserver | undefined;
+        let lcpSent = false;
+        const sendFinalLcp = () => {
+          if (lcpSent) return;
+          lcpSent = true;
+          lcpObserver?.disconnect();
+          if (lcpEntry) sendWebVital('LCP', lcpEntry.startTime, `LCP-${lcpEntry.startTime}`);
+        };
+        lcpObserver = new PerformanceObserver((entryList) => {
           const entries = entryList.getEntries();
           const lastEntry = entries[entries.length - 1] as PerformanceEntry | undefined;
-          if (lastEntry) sendWebVital('LCP', lastEntry.startTime, `LCP-${lastEntry.startTime}`);
-        }).observe({ type: 'largest-contentful-paint', buffered: true });
+          if (lastEntry) lcpEntry = lastEntry;
+        });
+        lcpObserver.observe({ type: 'largest-contentful-paint', buffered: true });
+        window.addEventListener('visibilitychange', () => {
+          if (document.visibilityState === 'hidden') sendFinalLcp();
+        });
+        window.addEventListener('pagehide', sendFinalLcp, { once: true });
       } catch {}
 
       try {
@@ -472,11 +486,30 @@ const jsonLdGraph = {
       } catch {}
 
       try {
-        new PerformanceObserver((entryList) => {
-          for (const entry of entryList.getEntries() as Array<PerformanceEntry & { duration: number }>) {
-            sendWebVital('INP', entry.duration, `INP-${entry.startTime}`);
+        let maxInp = 0;
+        let maxInpStart = 0;
+        let inpSent = false;
+        const inpObserver = new PerformanceObserver((entryList) => {
+          for (const entry of entryList.getEntries() as Array<
+            PerformanceEntry & { duration: number; startTime: number }
+          >) {
+            if (entry.duration > maxInp) {
+              maxInp = entry.duration;
+              maxInpStart = entry.startTime;
+            }
           }
-        }).observe({ type: 'event', buffered: true, durationThreshold: 40 });
+        });
+        inpObserver.observe({ type: 'event', buffered: true, durationThreshold: 40 });
+        const flushInp = () => {
+          if (inpSent) return;
+          inpSent = true;
+          inpObserver.disconnect();
+          if (maxInp > 0) sendWebVital('INP', maxInp, `INP-${maxInpStart}`);
+        };
+        window.addEventListener('visibilitychange', () => {
+          if (document.visibilityState === 'hidden') flushInp();
+        });
+        window.addEventListener('pagehide', flushInp, { once: true });
       } catch {}
     })();
   </script>

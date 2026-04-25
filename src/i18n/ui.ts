@@ -250,6 +250,7 @@ export const ui = {
     'case.moment.title': 'Moment',
     'case.moment.body': 'No burst mode — paced breathing. The shutter fires in the half-second between the exhale and the shoulders dropping; that is when the social mask falls and the portrait becomes real.',
     'case.cta': 'See the full portfolio',
+    'case.sectionAria': 'L-C-M case study',
   },
   es: {
     'nav.home': 'Inicio',
@@ -493,5 +494,6 @@ export const ui = {
     'case.moment.title': 'Momento',
     'case.moment.body': 'Nada de ráfaga — respiración. El obturador dispara en el medio segundo entre la exhalación y la caída de hombros; ahí es cuando cae la máscara social y el retrato se vuelve real.',
     'case.cta': 'Ver el portafolio completo',
+    'case.sectionAria': 'Caso de estudio L-C-M',
   },
 };
