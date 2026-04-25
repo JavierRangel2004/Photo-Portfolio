@@ -1,0 +1,32 @@
+# JRMGraphy — robots.txt
+# Default: allow all well-behaved crawlers to index the site.
+
+User-agent: *
+Allow: /
+
+# OpenAI ChatGPT Search — explicitly allowed so the site can appear in
+# ChatGPT search results.
+User-agent: OAI-SearchBot
+Allow: /
+
+# Google-Extended — NOT blocked. Leaving it unblocked keeps the site
+# eligible for grounding in Gemini Apps / Vertex AI features.
+User-agent: Google-Extended
+Allow: /
+
+# Common AI / research crawlers — explicitly allowed so the content is
+# consistently discoverable.
+User-agent: GPTBot
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+
+User-agent: Applebot
+Allow: /
+
+User-agent: Applebot-Extended
+Allow: /
+
+Sitemap: https://jrmgraphy.com/sitemap-index.xml
+Sitemap: https://jrmgraphy.com/sitemap-images.xml

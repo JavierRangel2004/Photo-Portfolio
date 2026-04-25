@@ -1,0 +1,115 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Header from '../../components/Header.astro';
+import Footer from '../../components/Footer.astro';
+import ContactCTA from '../../components/ContactCTA.astro';
+import SeoLandingBody from '../../components/SeoLandingBody.astro';
+import { getCuratedPhotosByGroup } from '../../lib/photos';
+import { useTranslations } from '../../i18n/utils';
+
+const t = useTranslations('es');
+const heroPhoto = getCuratedPhotosByGroup('branding', 1)[0];
+
+const siteUrl = Astro.site ? Astro.site.origin : 'https://jrmgraphy.com';
+const pageUrl = `${siteUrl}/es/retrato-para-fundadores-cdmx/`;
+const title = 'Retrato para fundadores y founders en CDMX';
+const description = 'Retrato editorial para fundadores, founders y emprendedores en Ciudad de México. Imágenes profesionales para LinkedIn, prensa, pitch deck, sitio y campaña, con dirección natural y entrega curada.';
+
+const answerFirst = 'JRMGraphy hace retrato editorial para fundadores y founders en Ciudad de México. Trabajamos con CEOs, founders de startup, líderes de equipos pequeños y profesionales de producto, diseño y tecnología que necesitan imágenes con presencia real — no headshots corporativos genéricos. La sesión combina retrato en estudio o en la oficina real del equipo, capturas de proceso y detalles de contexto. Entrego una selección curada, pensada para rendir en LinkedIn, press kit, notas de prensa, sitio web, pitch deck y material de ronda. Base operativa: CDMX (Roma, Condesa, Polanco, Juárez, Centro, Santa Fe), con disponibilidad para viajar dentro de México.';
+
+const sections = [
+  {
+    title: 'Qué resuelve esta sesión',
+    body: 'Reemplaza fotos improvisadas, headshots viejos o tomas inconsistentes de tu equipo por un set de retrato editorial coherente, listo para cualquier canal donde aparezcas como founder.',
+  },
+  {
+    title: 'Para qué la vas a usar',
+    body: 'LinkedIn, press kit, notas de prensa, about del sitio, pitch deck, decks de ronda, perfiles en medios y entrevistas. Si eres founder pitcheando, tus imágenes necesitan verse al mismo nivel que tu producto.',
+  },
+  {
+    title: 'Cómo se ve la sesión',
+    body: 'Dirijo sin forzar la pose. Prefiero locación real — oficina, espacio de coworking, estudio, lugar emblemático del producto — para que la foto hable de la empresa y no solo del sujeto.',
+  },
+  {
+    title: 'Qué diferencia hace el enfoque editorial',
+    body: 'Composición limpia, luz natural o editorial bien controlada, color consistente y momentos honestos. Las imágenes envejecen bien y siguen siendo utilizables en la siguiente ronda o rebrand.',
+  },
+];
+
+const bullets = [
+  'Retrato editorial de founder en locación real',
+  'Retrato de equipo y detalles de producto/oficina',
+  'Formatos pensados para LinkedIn, press kit y deck',
+  'Retoque editorial natural (sin plástico)',
+  'Entrega curada + alta resolución',
+  'Uso comercial + editorial negociado en el brief',
+];
+
+const faq = [
+  {
+    question: '¿Hacen solo CEO o también cofundadores y equipo?',
+    answer: 'Ambos. Puedo hacer retrato individual del founder principal o cubrir al equipo fundador completo en una sola sesión.',
+  },
+  {
+    question: '¿Puedo usar las fotos para medios y prensa?',
+    answer: 'Sí. El paquete se cotiza contemplando uso editorial y de medios, así que cuando un reportero pida una foto de alta resolución ya la tienes.',
+  },
+  {
+    question: '¿Cuánto se tarda la entrega?',
+    answer: 'Primer preview en pocos días y entrega final curada en dos o tres semanas, dependiendo del alcance. Urgencias se acomodan por proyecto.',
+  },
+];
+
+const serviceSchema = {
+  '@type': 'Service',
+  '@id': `${pageUrl}#service`,
+  name: 'Retrato editorial para fundadores y founders en CDMX',
+  serviceType: 'Editorial founder portrait photography',
+  description,
+  url: pageUrl,
+  provider: { '@id': `${siteUrl}/#organization` },
+  areaServed: { '@type': 'City', name: 'Ciudad de México' },
+  audience: {
+    '@type': 'Audience',
+    audienceType: 'Founders, CEOs, startup teams',
+  },
+};
+
+const faqSchema = {
+  '@type': 'FAQPage',
+  '@id': `${pageUrl}#faq`,
+  mainEntity: faq.map((item) => ({
+    '@type': 'Question',
+    name: item.question,
+    acceptedAnswer: { '@type': 'Answer', text: item.answer },
+  })),
+};
+---
+
+<BaseLayout
+  title={title}
+  description={description}
+  pageType="landing"
+  schema={[serviceSchema, faqSchema]}
+>
+  <Header />
+
+  <SeoLandingBody
+    lang="es"
+    eyebrow="Retrato para founders · CDMX"
+    title={title}
+    subtitle="Imágenes editoriales para LinkedIn, prensa, pitch deck y ronda, con dirección natural y entrega curada."
+    answerFirst={answerFirst}
+    heroPhoto={heroPhoto}
+    sections={sections}
+    bullets={bullets}
+    faq={faq}
+    scarcity={t('contactCta.scarcity')}
+    ctaTitle="Agendemos la sesión del equipo fundador"
+    ctaBody="Comparte en qué etapa están (seed, serie A, rebrand, ronda) y te propongo el alcance correcto."
+    ctaLabel={t('contactCta.primary')}
+  />
+
+  <ContactCTA />
+  <Footer />
+</BaseLayout>

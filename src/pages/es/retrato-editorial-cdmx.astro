@@ -1,0 +1,115 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Header from '../../components/Header.astro';
+import Footer from '../../components/Footer.astro';
+import ContactCTA from '../../components/ContactCTA.astro';
+import SeoLandingBody from '../../components/SeoLandingBody.astro';
+import { getCuratedPhotosByGroup } from '../../lib/photos';
+import { useTranslations } from '../../i18n/utils';
+
+const t = useTranslations('es');
+const heroPhoto = getCuratedPhotosByGroup('branding', 1)[0];
+
+const siteUrl = Astro.site ? Astro.site.origin : 'https://jrmgraphy.com';
+const pageUrl = `${siteUrl}/es/retrato-editorial-cdmx/`;
+const title = 'Fotografía de retrato editorial en CDMX';
+const description = 'Retrato editorial en Ciudad de México para fundadores, artistas y marcas personales. Imágenes naturales, profesionales y listas para redes, web y prensa, con entrega curada.';
+
+const answerFirst = 'JRMGraphy (Javier Rangel) es un fotógrafo con base en Ciudad de México especializado en retrato editorial para fundadores, artistas, chefs y marcas personales. Las sesiones se graban en locación real — estudio, oficina, cocina, venue o espacio de la marca — con dirección natural, iluminación editorial y una edición apretada y coherente. Recibes una selección curada lista para publicar en redes, sitio web, press kit, LinkedIn y notas de prensa. Operamos principalmente en CDMX (Roma, Condesa, Polanco, Juárez, Centro) y con disponibilidad para viajar dentro de México.';
+
+const sections = [
+  {
+    title: 'Para quién está pensado',
+    body: 'Fundadores, artistas, músicos, chefs, cafés, creadores, marcas personales y equipos pequeños que necesitan retratos coherentes con su marca, no un headshot corporativo genérico.',
+  },
+  {
+    title: 'Qué problema resuelve',
+    body: 'Reemplaza fotos improvisadas del celular y headshots antiguos por una librería de imágenes editoriales que funciona en todos los canales — web, redes, prensa, LinkedIn, decks y material de campaña — con la misma identidad visual.',
+  },
+  {
+    title: 'Cómo se trabaja la sesión',
+    body: 'Brief corto para definir uso y tono, locación real, dirección natural durante la toma, iluminación editorial y entrega curada. Sin paquetes rígidos: el alcance se ajusta al proyecto.',
+  },
+  {
+    title: 'Qué hace "editorial" a este retrato',
+    body: 'Encuadre limpio, composición con aire, luz suave y direccional, color consistente, y momentos honestos en vez de poses forzadas. La foto habla de la persona y de la marca al mismo tiempo.',
+  },
+];
+
+const bullets = [
+  'Retratos editoriales en locación real (CDMX)',
+  'Imágenes horizontales y verticales para cada canal',
+  'Detalles de contexto (espacio, manos, proceso)',
+  'Selección curada y lista para publicar',
+  'Uso comercial y editorial incluido según alcance',
+  'Entrega en formato web + alta resolución',
+];
+
+const faq = [
+  {
+    question: '¿Cuánto cuesta una sesión de retrato editorial?',
+    answer: 'Cotización por alcance. Una sesión editorial suele partir de una charla corta para entender uso final, locación y volumen de imágenes; a partir de ahí armamos presupuesto y tiempos.',
+  },
+  {
+    question: '¿En qué zonas de CDMX trabajas?',
+    answer: 'Principalmente Roma, Condesa, Polanco, Juárez, Centro y zona sur, con disponibilidad para otras alcaldías y para viajar dentro de México.',
+  },
+  {
+    question: '¿Puedo usar las fotos para prensa y campaña?',
+    answer: 'Sí. El uso comercial y editorial se define en el brief y queda por escrito — normalmente incluye redes, sitio, prensa, decks, press kit y campañas de marca.',
+  },
+];
+
+const serviceSchema = {
+  '@type': 'Service',
+  '@id': `${pageUrl}#service`,
+  name: 'Retrato editorial en Ciudad de México',
+  serviceType: 'Editorial portrait photography',
+  description,
+  url: pageUrl,
+  provider: { '@id': `${siteUrl}/#organization` },
+  areaServed: { '@type': 'City', name: 'Ciudad de México' },
+  audience: {
+    '@type': 'Audience',
+    audienceType: 'Founders, artists, chefs, personal brands',
+  },
+};
+
+const faqSchema = {
+  '@type': 'FAQPage',
+  '@id': `${pageUrl}#faq`,
+  mainEntity: faq.map((item) => ({
+    '@type': 'Question',
+    name: item.question,
+    acceptedAnswer: { '@type': 'Answer', text: item.answer },
+  })),
+};
+---
+
+<BaseLayout
+  title={title}
+  description={description}
+  pageType="landing"
+  schema={[serviceSchema, faqSchema]}
+>
+  <Header />
+
+  <SeoLandingBody
+    lang="es"
+    eyebrow="Retrato editorial · CDMX"
+    title={title}
+    subtitle="Retrato editorial para fundadores, artistas, chefs y marcas personales en Ciudad de México."
+    answerFirst={answerFirst}
+    heroPhoto={heroPhoto}
+    sections={sections}
+    bullets={bullets}
+    faq={faq}
+    scarcity={t('contactCta.scarcity')}
+    ctaTitle="¿Listos para la sesión?"
+    ctaBody="Cuéntame qué necesitas — uso final, fechas y locación — y armamos juntos la sesión ideal."
+    ctaLabel={t('contactCta.primary')}
+  />
+
+  <ContactCTA />
+  <Footer />
+</BaseLayout>
