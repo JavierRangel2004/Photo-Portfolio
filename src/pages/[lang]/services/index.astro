@@ -1,8 +1,15 @@
 ---
+import { Image } from 'astro:assets';
 import BaseLayout from '../../../layouts/BaseLayout.astro';
 import Header from '../../../components/Header.astro';
 import Footer from '../../../components/Footer.astro';
 import ContactCTA from '../../../components/ContactCTA.astro';
+import {
+  getServiceCoverPhoto,
+  getPhotosByCategory,
+  getRandomPhotosByCategory,
+} from '../../../lib/photos';
+import type { Photo } from '../../../lib/photos';
 import { getLangFromUrl, useTranslations, useTranslatedPath } from '../../../i18n/utils';
 
 export function getStaticPaths() {
@@ -16,6 +23,14 @@ const lang = getLangFromUrl(Astro.url);
 const t = useTranslations(lang);
 const translatePath = useTranslatedPath(lang);
 
+function gastronomyCover(): Photo | undefined {
+  const productPhotos = getPhotosByCategory('product');
+  if (productPhotos.length === 0) {
+    return getServiceCoverPhoto('author-archive');
+  }
+  return getRandomPhotosByCategory('product', 1)[0] ?? productPhotos[0];
+}
+
 const packages = [
   {
     id: 'branding',
@@ -23,8 +38,10 @@ const packages = [
     audience: t('services.package.branding.for'),
     includes: t('services.package.branding.includes'),
     delivery: t('services.package.branding.delivery'),
+    strategic: t('services.package.branding.strategic'),
     price: t('services.package.branding.price'),
     cta: t('services.package.branding.cta'),
+    cover: getServiceCoverPhoto('branding'),
   },
   {
     id: 'gastronomy',
@@ -32,8 +49,10 @@ const packages = [
     audience: t('services.package.gastronomy.for'),
     includes: t('services.package.gastronomy.includes'),
     delivery: t('services.package.gastronomy.delivery'),
+    strategic: t('services.package.gastronomy.strategic'),
     price: t('services.package.gastronomy.price'),
     cta: t('services.package.gastronomy.cta'),
+    cover: gastronomyCover(),
   },
   {
     id: 'events',
@@ -41,8 +60,10 @@ const packages = [
     audience: t('services.package.events.for'),
     includes: t('services.package.events.includes'),
     delivery: t('services.package.events.delivery'),
+    strategic: t('services.package.events.strategic'),
     price: t('services.package.events.price'),
     cta: t('services.package.events.cta'),
+    cover: getServiceCoverPhoto('events'),
   },
 ];
 
@@ -62,9 +83,29 @@ const processSteps = [
 ];
 
 const stripStepPrefix = (value: string) => value.replace(/^\s*\d+\.\s*/, '');
+
+const siteUrl = Astro.site ? Astro.site.origin : 'https://jrmgraphy.com';
+const servicesUrl = `${siteUrl}/${lang}/services`;
+
+const serviceSchemas = packages.map((pkg) => ({
+  '@type': 'Service',
+  '@id': `${servicesUrl}#${pkg.id}`,
+  name: pkg.title,
+  serviceType: pkg.title,
+  description: pkg.includes,
+  provider: { '@id': `${siteUrl}/#organization` },
+  areaServed: { '@type': 'City', name: 'Ciudad de México' },
+  audience: { '@type': 'Audience', audienceType: pkg.audience },
+  url: `${servicesUrl}#${pkg.id}`,
+}));
 ---
 
-<BaseLayout title={t('services.title')} description={t('services.desc')}>
+<BaseLayout
+  title={t('services.title')}
+  description={t('services.desc')}
+  pageType="service"
+  schema={serviceSchemas}
+>
   <Header />
 
   <main class="site-main bg-[#0A0A0A] pb-40">
@@ -96,58 +137,82 @@ const stripStepPrefix = (value: string) => value.replace(/^\s*\d+\.\s*/, '');
     </section>
 
     <section class="bg-[#0A0A0A] pb-24 md:pb-28 lg:pb-32">
-      <div class="mx-auto w-full max-w-7xl px-6">
-        <div class="grid grid-cols-1 gap-12 lg:grid-cols-3 lg:gap-8 lg:divide-x lg:divide-white/10">
-          {packages.map((item) => (
-            <article
-              id={item.id}
-              class="flex h-full flex-col gap-6 px-0 text-left lg:px-8 lg:first:pl-0 lg:last:pr-0"
-            >
-              <div class="flex flex-1 flex-col gap-6">
-                <div class="space-y-4 border-b border-white/10 pb-6">
-                  <p class="font-sans text-xs font-medium uppercase tracking-[0.18em] text-[#D6B36A]">
-                    {t('services.package.eyebrow')}
-                  </p>
-                  <h2 class="!font-heading text-3xl leading-[1.05] tracking-[-0.02em] text-[#FFFFFF] lg:text-[2.35rem]">
-                    {item.title}
-                  </h2>
-                </div>
-                <div class="space-y-3">
-                  <p class="font-sans text-xs font-medium uppercase tracking-[0.18em] text-[#D6B36A]">
-                    {t('services.label.for')}
-                  </p>
-                  <p class="max-w-[30ch] text-base leading-8 text-[#A8A29E]">
-                    {item.audience}
-                  </p>
-                </div>
-                <div class="space-y-3">
-                  <p class="font-sans text-xs font-medium uppercase tracking-[0.18em] text-[#D6B36A]">
-                    {t('services.label.includes')}
-                  </p>
-                  <p class="text-base leading-8 text-[#A8A29E]">
-                    {item.includes}
-                  </p>
-                </div>
-              </div>
-              <div class="mt-auto space-y-6 pt-6">
-                <div class="border-t border-white/10 pt-6">
+      <div class="mx-auto w-full max-w-7xl px-6 space-y-20 lg:space-y-28">
+        {packages.map((item, index) => {
+          const mediaFirst = index % 2 === 0;
+          const mediaOrder = mediaFirst ? 'lg:order-1' : 'lg:order-2';
+          const bodyOrder = mediaFirst ? 'lg:order-2' : 'lg:order-1';
+          return (
+          <article
+            id={item.id}
+            class="grid gap-10 border-t border-white/10 pt-12 lg:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)] lg:gap-14"
+          >
+            <div class:list={["relative overflow-hidden rounded-[28px] border border-white/10 bg-black shadow-[0_30px_60px_rgba(0,0,0,0.55)]", mediaOrder]}>
+              {item.cover && (
+                <Image
+                  src={item.cover.src}
+                  alt={item.title}
+                  width={item.cover.width || 1600}
+                  height={item.cover.height || 1200}
+                  sizes="(min-width: 1024px) 45vw, 92vw"
+                  loading={index === 0 ? 'eager' : 'lazy'}
+                  fetchpriority={index === 0 ? 'high' : 'auto'}
+                  class="h-full w-full object-cover"
+                />
+              )}
+            </div>
+
+            <div class:list={["space-y-6", bodyOrder]}>
+              <header class="space-y-4">
+                <p class="text-eyebrow">
+                  {t('services.package.eyebrow')}
+                </p>
+                <h2 class="text-h2 !font-heading">
+                  {item.title}
+                </h2>
+                <p class="prose-measure-sm text-sm leading-7 text-[#A8A29E]">
+                  {item.audience}
+                </p>
+                <div class="pt-2">
                   <p class="!font-heading text-2xl leading-none text-[#FFFFFF]">{item.price}</p>
-                  <span class="mt-2 block font-sans text-sm uppercase tracking-[0.18em] text-[#A8A29E]">
+                  <span class="mt-2 block text-caption">
                     {item.delivery}
                   </span>
                 </div>
-                <div class="border-t border-white/10 pt-6">
-                  <a
-                    href={`/${lang}/contact?${new URLSearchParams({ type: item.id, package: item.title }).toString()}`}
-                    class="inline-flex min-h-12 w-full items-center justify-center rounded-full border border-white/15 px-6 py-3 font-sans text-sm font-medium uppercase tracking-[0.08em] text-[#FFFFFF] transition-all duration-base hover:-translate-y-px hover:border-[#D6B36A] hover:text-[#D6B36A] lg:w-auto"
-                  >
-                    {item.cta}
-                  </a>
+              </header>
+
+              <div class="grid gap-4 md:grid-cols-2">
+                <div class="space-y-3 rounded-[20px] border border-white/10 bg-white/[0.02] p-5">
+                  <p class="text-eyebrow">
+                    {t('services.package.tactical')}
+                  </p>
+                  <p class="text-body">
+                    {item.includes}
+                  </p>
+                </div>
+                <div class="space-y-3 rounded-[20px] border border-white/10 bg-white/[0.02] p-5">
+                  <p class="text-eyebrow">
+                    {t('services.package.strategic')}
+                  </p>
+                  <p class="text-body">
+                    {item.strategic}
+                  </p>
                 </div>
               </div>
-            </article>
-          ))}
-        </div>
+
+              <div class="pt-2">
+                <a
+                  href={`/${lang}/contact?${new URLSearchParams({ type: item.id, package: item.title }).toString()}`}
+                  class="inline-flex min-h-12 items-center justify-center rounded-full border border-[#D6B36A] bg-[#D6B36A] px-6 py-3 font-sans text-sm font-medium uppercase tracking-[0.08em] text-[#0A0A0A] transition-all duration-base hover:-translate-y-px hover:border-[#FFFFFF] hover:bg-[#FFFFFF]"
+                  data-analytics-label={`services_package_${item.id}`}
+                >
+                  {item.cta}
+                </a>
+              </div>
+            </div>
+          </article>
+          );
+        })}
       </div>
     </section>
 
@@ -190,8 +255,9 @@ const stripStepPrefix = (value: string) => value.replace(/^\s*\d+\.\s*/, '');
           <a
             href={translatePath('/contact')}
             class="inline-flex min-h-12 items-center justify-center rounded-full border border-[#D6B36A] bg-[#D6B36A] px-6 py-3 font-sans text-sm font-medium uppercase tracking-[0.08em] text-[#0A0A0A] transition-all duration-base hover:-translate-y-px hover:border-[#FFFFFF] hover:bg-[#FFFFFF]"
+            data-analytics-label="services_bottom_contact"
           >
-            {t('hero.cta.primary')}
+            {t('contactCta.primary')}
           </a>
         </div>
       </div>

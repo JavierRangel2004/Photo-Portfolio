@@ -1,0 +1,117 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Header from '../../components/Header.astro';
+import Footer from '../../components/Footer.astro';
+import ContactCTA from '../../components/ContactCTA.astro';
+import SeoLandingBody from '../../components/SeoLandingBody.astro';
+import { getRandomPhotosByCategory, getPhotosByCategory } from '../../lib/photos';
+import { useTranslations } from '../../i18n/utils';
+
+const t = useTranslations('es');
+
+const productPhotos = getPhotosByCategory('product');
+const heroPhoto = productPhotos[0] ?? getRandomPhotosByCategory('portraits', 1)[0];
+
+const siteUrl = Astro.site ? Astro.site.origin : 'https://jrmgraphy.com';
+const pageUrl = `${siteUrl}/es/fotografia-menu-cdmx/`;
+const title = 'Fotografía de menú en CDMX';
+const description = 'Fotografía de menú y platillos en Ciudad de México para restaurantes, cafés y proyectos gastronómicos. Imágenes limpias, editoriales y listas para menú impreso, carta digital, apps de delivery y redes.';
+
+const answerFirst = 'JRMGraphy hace fotografía de menú y de platillos en Ciudad de México para restaurantes, cafés, bares y proyectos gastronómicos. Cubro la cocina, el servicio, el platillo emplatado y el ambiente — tomas cenitales limpias para menú y delivery, tomas editoriales con textura para campaña y redes, y retratos de chef o equipo. La entrega se piensa para los formatos reales de la carta, apps de delivery (Rappi, Uber Eats, DiDi Food), sitio, Google Business Profile e Instagram. Operamos en CDMX (Roma, Condesa, Polanco, Juárez, Centro, Coyoacán) y con disponibilidad para viajar dentro de México.';
+
+const sections = [
+  {
+    title: 'Para quién está pensado',
+    body: 'Restaurantes, cafés, bares, pastelerías, cocinas de autor y proyectos gastronómicos que necesitan imágenes consistentes de su menú — no fotos sueltas tomadas con celular.',
+  },
+  {
+    title: 'Qué problema resuelve',
+    body: 'Alinea la carta: mismos platillos, misma paleta de color, mismo estilo en menú impreso, carta digital, Rappi/UberEats, sitio y redes. Menos improvisación cada vez que sale un plato nuevo.',
+  },
+  {
+    title: 'Qué tipo de tomas se cubren',
+    body: 'Cenital limpio para menú, tomas 3/4 para carta digital, tomas editoriales para campaña, detalles de textura, retrato de chef y equipo, tomas de ambiente y de cocina en funcionamiento.',
+  },
+  {
+    title: 'Cómo se piensa la entrega',
+    body: 'Entrega en formatos horizontal, vertical y cuadrado — listos para carta, app de delivery, Instagram, Google Business Profile y campañas. Se nombran los archivos por platillo para que el equipo los encuentre fácil.',
+  },
+];
+
+const bullets = [
+  'Tomas cenitales limpias para menú y delivery',
+  'Tomas editoriales con textura para campaña',
+  'Retrato de chef y cobertura de cocina',
+  'Detalles de platillo, ingredientes y barra',
+  'Formatos horizontal, vertical y cuadrado',
+  'Archivos nombrados por platillo para uso interno',
+];
+
+const faq = [
+  {
+    question: '¿Puedo hacer la sesión en mi restaurante en lugar de estudio?',
+    answer: 'Sí, prefiero locación real. Se levanta una pequeña estación de luz para que el platillo se vea consistente en la misma mesa donde lo van a preparar.',
+  },
+  {
+    question: '¿Incluye tomas para apps de delivery?',
+    answer: 'Sí. Las tomas cenitales se entregan en formato cuadrado y con fondo limpio para cumplir con los requisitos visuales de Rappi, Uber Eats y DiDi Food.',
+  },
+  {
+    question: '¿Cuántos platillos se cubren en una sesión?',
+    answer: 'Depende del ritmo de la cocina. En una jornada típica se cubren entre 8 y 20 platillos editoriales, más tomas de ambiente y detalles.',
+  },
+];
+
+const serviceSchema = {
+  '@type': 'Service',
+  '@id': `${pageUrl}#service`,
+  name: 'Fotografía de menú y platillos en CDMX',
+  serviceType: 'Menu and food photography',
+  description,
+  url: pageUrl,
+  provider: { '@id': `${siteUrl}/#organization` },
+  areaServed: { '@type': 'City', name: 'Ciudad de México' },
+  audience: {
+    '@type': 'Audience',
+    audienceType: 'Restaurants, cafés, bars, gastronomic projects',
+  },
+};
+
+const faqSchema = {
+  '@type': 'FAQPage',
+  '@id': `${pageUrl}#faq`,
+  mainEntity: faq.map((item) => ({
+    '@type': 'Question',
+    name: item.question,
+    acceptedAnswer: { '@type': 'Answer', text: item.answer },
+  })),
+};
+---
+
+<BaseLayout
+  title={title}
+  description={description}
+  pageType="landing"
+  schema={[serviceSchema, faqSchema]}
+>
+  <Header />
+
+  <SeoLandingBody
+    lang="es"
+    eyebrow="Fotografía de menú · CDMX"
+    title={title}
+    subtitle="Imágenes limpias, editoriales y consistentes para menú impreso, carta digital, apps de delivery y redes."
+    answerFirst={answerFirst}
+    heroPhoto={heroPhoto}
+    sections={sections}
+    bullets={bullets}
+    faq={faq}
+    scarcity={t('contactCta.scarcity')}
+    ctaTitle="Cotizar la sesión de menú"
+    ctaBody="Cuéntame cuántos platillos, en qué locación y cuándo quieres actualizar la carta — te propongo el alcance correcto."
+    ctaLabel={t('contactCta.primary')}
+  />
+
+  <ContactCTA />
+  <Footer />
+</BaseLayout>

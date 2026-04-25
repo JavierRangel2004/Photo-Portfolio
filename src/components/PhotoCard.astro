@@ -41,9 +41,29 @@ const t = useTranslations(lang);
 
 const displayCategory = label || t(`category.${photo.category}` as any) || photo.category;
 
-const altText = lang === 'es' 
-  ? `Fotografía ${displayCategory.toLowerCase()} por JRMGraphy` 
-  : `${displayCategory} photography by JRMGraphy`;
+const altByCategoryEs: Record<string, string> = {
+  portraits: 'Retrato editorial por JRMGraphy en Ciudad de México',
+  concert: 'Cobertura de concierto por JRMGraphy en Ciudad de México',
+  product: 'Fotografía de producto por JRMGraphy en Ciudad de México',
+  city: 'Fotografía urbana por JRMGraphy en Ciudad de México',
+  nature: 'Fotografía documental de naturaleza por JRMGraphy',
+  'travel-cityscape': 'Fotografía de viaje y cityscape por JRMGraphy',
+};
+
+const altByCategoryEn: Record<string, string> = {
+  portraits: 'Editorial portrait by JRMGraphy in Mexico City',
+  concert: 'Concert coverage by JRMGraphy in Mexico City',
+  product: 'Product photography by JRMGraphy in Mexico City',
+  city: 'Urban photography by JRMGraphy in Mexico City',
+  nature: 'Documentary nature photography by JRMGraphy',
+  'travel-cityscape': 'Travel and cityscape photography by JRMGraphy',
+};
+
+const altText =
+  (lang === 'es' ? altByCategoryEs[photo.category] : altByCategoryEn[photo.category]) ??
+  (lang === 'es'
+    ? `Fotografía ${displayCategory.toLowerCase()} por JRMGraphy en Ciudad de México`
+    : `${displayCategory} photography by JRMGraphy in Mexico City`);
 ---
 
 <button

@@ -5,9 +5,21 @@ import { getLangFromUrl, getRouteWithoutLang } from '../i18n/utils';
 interface Props {
   title: string;
   description?: string;
+  ogImage?: string;
+  pageType?: 'home' | 'about' | 'service' | 'portfolio' | 'contact' | 'landing';
+  schema?: Record<string, unknown> | Array<Record<string, unknown>>;
+  noindex?: boolean;
 }
 
-const { title, description = "Photography portfolio by Javier Rangel — Mexico City." } = Astro.props;
+const {
+  title,
+  description = "Photography portfolio by Javier Rangel — Mexico City.",
+  ogImage = '/assets/og-default.jpg',
+  pageType = 'portfolio',
+  schema,
+  noindex = false,
+} = Astro.props;
+
 const siteTitle = "JRMGraphy";
 const fullTitle = title === "Home" || title === "Inicio" ? siteTitle : `${title} — ${siteTitle}`;
 const lang = getLangFromUrl(Astro.url);
@@ -15,6 +27,82 @@ const routeWithoutLang = getRouteWithoutLang(Astro.url);
 const siteUrl = Astro.site ? Astro.site.origin : 'https://jrmgraphy.com';
 
 const canonicalURL = new URL(`/${lang}${routeWithoutLang}`, siteUrl);
+const absoluteOgImage = ogImage.startsWith('http') ? ogImage : `${siteUrl}${ogImage}`;
+
+const sameAs = [
+  'https://www.instagram.com/JRM_Graphy',
+  'https://github.com/JavierRangel2004',
+  'https://www.linkedin.com/in/javierramu2004/',
+];
+
+const organization = {
+  '@type': 'LocalBusiness',
+  '@id': `${siteUrl}/#organization`,
+  name: 'JRMGraphy — Javier Rangel',
+  alternateName: 'JRMGraphy',
+  url: siteUrl,
+  image: absoluteOgImage,
+  logo: `${siteUrl}/favicon.svg`,
+  telephone: undefined,
+  email: 'inspecjrm@gmail.com',
+  priceRange: '$$$',
+  description:
+    'Editorial portrait, brand, gastronomy, and event photography in Mexico City (CDMX) for founders, artists, chefs, and personal brands.',
+  address: {
+    '@type': 'PostalAddress',
+    addressLocality: 'Ciudad de México',
+    addressRegion: 'CDMX',
+    addressCountry: 'MX',
+  },
+  areaServed: [
+    { '@type': 'City', name: 'Ciudad de México' },
+    { '@type': 'AdministrativeArea', name: 'México' },
+  ],
+  founder: { '@id': `${siteUrl}/#person` },
+  sameAs,
+};
+
+const person = {
+  '@type': 'Person',
+  '@id': `${siteUrl}/#person`,
+  name: 'Javier Rangel',
+  alternateName: 'JRMGraphy',
+  jobTitle: 'Photographer',
+  url: `${siteUrl}/${lang}/about`,
+  image: absoluteOgImage,
+  email: 'inspecjrm@gmail.com',
+  worksFor: { '@id': `${siteUrl}/#organization` },
+  knowsLanguage: ['es', 'en'],
+  sameAs,
+};
+
+const website = {
+  '@type': 'WebSite',
+  '@id': `${siteUrl}/#website`,
+  url: siteUrl,
+  name: 'JRMGraphy',
+  inLanguage: lang,
+  publisher: { '@id': `${siteUrl}/#organization` },
+};
+
+const baseGraph: Array<Record<string, unknown>> = [organization, website];
+if (pageType === 'about') {
+  baseGraph.push(person, {
+    '@type': 'ProfilePage',
+    '@id': `${canonicalURL.toString()}#profilepage`,
+    url: canonicalURL.toString(),
+    name: fullTitle,
+    description,
+    inLanguage: lang,
+    mainEntity: { '@id': `${siteUrl}/#person` },
+  });
+}
+
+const extraSchemas = schema ? (Array.isArray(schema) ? schema : [schema]) : [];
+const jsonLdGraph = {
+  '@context': 'https://schema.org',
+  '@graph': [...baseGraph, ...extraSchemas],
+};
 ---
 
 <!DOCTYPE html>
@@ -26,6 +114,7 @@ const canonicalURL = new URL(`/${lang}${routeWithoutLang}`, siteUrl);
   <meta name="description" content={description} />
   <meta name="theme-color" content="#0A0A0A" />
   <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  {noindex && <meta name="robots" content="noindex,nofollow" />}
 
   <link rel="canonical" href={canonicalURL} />
   <link rel="alternate" hreflang="es" href={`${siteUrl}/es${routeWithoutLang}`} />
@@ -36,6 +125,17 @@ const canonicalURL = new URL(`/${lang}${routeWithoutLang}`, siteUrl);
   <meta property="og:title" content={fullTitle} />
   <meta property="og:description" content={description} />
   <meta property="og:type" content="website" />
+  <meta property="og:url" content={canonicalURL} />
+  <meta property="og:site_name" content={siteTitle} />
+  <meta property="og:image" content={absoluteOgImage} />
+  <meta property="og:locale" content={lang === 'es' ? 'es_MX' : 'en_US'} />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content={fullTitle} />
+  <meta name="twitter:description" content={description} />
+  <meta name="twitter:image" content={absoluteOgImage} />
+
+  <!-- Structured data (JSON-LD) -->
+  <script type="application/ld+json" set:html={JSON.stringify(jsonLdGraph)} />
 
   <!-- Google Fonts — Playfair Display (serif editorial) + Inter (sans UI) -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -276,11 +376,142 @@ const canonicalURL = new URL(`/${lang}${routeWithoutLang}`, siteUrl);
   <!-- Google Analytics -->
   <script is:inline async src="https://www.googletagmanager.com/gtag/js?id=G-5NLFSHDCBJ"></script>
   <script>
-    const analyticsWindow = window as unknown as Window & { dataLayer: unknown[][] };
+    const analyticsWindow = window as unknown as Window & {
+      dataLayer: unknown[][];
+      gtag?: (...args: unknown[]) => void;
+    };
     analyticsWindow.dataLayer = analyticsWindow.dataLayer || [];
     function gtag(...args: unknown[]) { analyticsWindow.dataLayer.push(args); }
+    analyticsWindow.gtag = gtag;
     gtag('js', new Date());
-    gtag('config', 'G-5NLFSHDCBJ');
+    gtag('config', 'G-5NLFSHDCBJ', {
+      page_path: window.location.pathname,
+      page_title: document.title,
+      page_location: window.location.href,
+    });
+
+    const sendAnalyticsEvent = (name: string, params: Record<string, unknown> = {}) => {
+      analyticsWindow.gtag?.('event', name, {
+        page_path: window.location.pathname,
+        page_location: window.location.href,
+        ...params,
+      });
+    };
+
+    const query = new URLSearchParams(window.location.search);
+    const utmSource = query.get('utm_source');
+    if (utmSource?.toLowerCase() === 'chatgpt.com') {
+      sessionStorage.setItem('jrmgraphy_gaeo_source', 'chatgpt.com');
+      sendAnalyticsEvent('gaeo_referral', {
+        event_category: 'GAEO',
+        traffic_source: 'chatgpt.com',
+        utm_medium: query.get('utm_medium') || undefined,
+        utm_campaign: query.get('utm_campaign') || undefined,
+        non_interaction: true,
+      });
+    }
+
+    document.addEventListener('click', (event) => {
+      const target = (event.target as HTMLElement | null)?.closest<HTMLElement>(
+        'a.btn, button.btn, .nav-link, .nav-drawer-link, [data-analytics-event]'
+      );
+      if (!target) return;
+
+      const link = target instanceof HTMLAnchorElement ? target : target.closest('a');
+      sendAnalyticsEvent(target.dataset.analyticsEvent || 'cta_click', {
+        event_category: target.dataset.analyticsCategory || 'Engagement',
+        event_label: target.dataset.analyticsLabel || target.textContent?.trim() || undefined,
+        link_url: link?.href,
+        link_text: target.textContent?.trim() || undefined,
+      });
+    });
+
+    window.addEventListener('jrmgraphy:lead-submitted', (event) => {
+      const detail = (event as CustomEvent).detail || {};
+      sendAnalyticsEvent('generate_lead', {
+        event_category: 'Lead',
+        method: detail.method || 'netlify_form',
+        inquiry_type: detail.inquiryType,
+        gaeo_source: sessionStorage.getItem('jrmgraphy_gaeo_source') || undefined,
+      });
+    });
+
+    (() => {
+      const reported = new Set<string>();
+      const sendWebVital = (name: string, value: number, id: string) => {
+        if (reported.has(id)) return;
+        reported.add(id);
+        sendAnalyticsEvent('web_vital', {
+          event_category: 'Web Vitals',
+          event_label: name,
+          metric_name: name,
+          metric_value: Math.round(name === 'CLS' ? value * 1000 : value),
+          metric_id: id,
+          non_interaction: true,
+        });
+      };
+
+      try {
+        let lcpEntry: PerformanceEntry | undefined;
+        let lcpObserver: PerformanceObserver | undefined;
+        let lcpSent = false;
+        const sendFinalLcp = () => {
+          if (lcpSent) return;
+          lcpSent = true;
+          lcpObserver?.disconnect();
+          if (lcpEntry) sendWebVital('LCP', lcpEntry.startTime, `LCP-${lcpEntry.startTime}`);
+        };
+        lcpObserver = new PerformanceObserver((entryList) => {
+          const entries = entryList.getEntries();
+          const lastEntry = entries[entries.length - 1] as PerformanceEntry | undefined;
+          if (lastEntry) lcpEntry = lastEntry;
+        });
+        lcpObserver.observe({ type: 'largest-contentful-paint', buffered: true });
+        window.addEventListener('visibilitychange', () => {
+          if (document.visibilityState === 'hidden') sendFinalLcp();
+        });
+        window.addEventListener('pagehide', sendFinalLcp, { once: true });
+      } catch {}
+
+      try {
+        let cls = 0;
+        new PerformanceObserver((entryList) => {
+          for (const entry of entryList.getEntries() as Array<PerformanceEntry & { hadRecentInput?: boolean; value?: number }>) {
+            if (!entry.hadRecentInput) cls += entry.value;
+          }
+        }).observe({ type: 'layout-shift', buffered: true });
+        window.addEventListener('visibilitychange', () => {
+          if (document.visibilityState === 'hidden') sendWebVital('CLS', cls, `CLS-${Date.now()}`);
+        });
+      } catch {}
+
+      try {
+        let maxInp = 0;
+        let maxInpStart = 0;
+        let inpSent = false;
+        const inpObserver = new PerformanceObserver((entryList) => {
+          for (const entry of entryList.getEntries() as Array<
+            PerformanceEntry & { duration: number; startTime: number }
+          >) {
+            if (entry.duration > maxInp) {
+              maxInp = entry.duration;
+              maxInpStart = entry.startTime;
+            }
+          }
+        });
+        inpObserver.observe({ type: 'event', buffered: true, durationThreshold: 40 });
+        const flushInp = () => {
+          if (inpSent) return;
+          inpSent = true;
+          inpObserver.disconnect();
+          if (maxInp > 0) sendWebVital('INP', maxInp, `INP-${maxInpStart}`);
+        };
+        window.addEventListener('visibilitychange', () => {
+          if (document.visibilityState === 'hidden') flushInp();
+        });
+        window.addEventListener('pagehide', flushInp, { once: true });
+      } catch {}
+    })();
   </script>
 </body>
 </html>

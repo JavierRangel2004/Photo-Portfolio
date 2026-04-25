@@ -5,6 +5,7 @@ import Footer from '../../../components/Footer.astro';
 import ContactCTA from '../../../components/ContactCTA.astro';
 import Modal from '../../../components/Modal.astro';
 import PortfolioSection from '../../../components/PortfolioSection.astro';
+import CaseStudy from '../../../components/CaseStudy.astro';
 import { getCuratedPhotosByGroup, getPortfolioGroups, getPortfolioGroupSlug } from '../../../lib/photos';
 import type { PortfolioGroupId } from '../../../lib/photos';
 import { getLangFromUrl, useTranslations, useTranslatedPath } from '../../../i18n/utils';
@@ -24,6 +25,19 @@ const groupKeyMap: Record<PortfolioGroupId, string> = {
   branding: 'branding',
   events: 'events',
   'author-archive': 'archive',
+};
+
+const siteUrl = Astro.site ? Astro.site.origin : 'https://jrmgraphy.com';
+const galleryUrl = `${siteUrl}/${lang}/gallery`;
+
+const gallerySchema = {
+  '@type': 'CollectionPage',
+  '@id': `${galleryUrl}#page`,
+  url: galleryUrl,
+  name: t('gallery.title'),
+  description: t('gallery.desc'),
+  inLanguage: lang,
+  about: { '@id': `${siteUrl}/#organization` },
 };
 
 const sections = getPortfolioGroups().map((group) => {
@@ -53,6 +67,8 @@ const sections = getPortfolioGroups().map((group) => {
 <BaseLayout
   title={t('gallery.title')}
   description={t('gallery.desc')}
+  pageType="portfolio"
+  schema={gallerySchema}
 >
   <Header />
 
@@ -103,6 +119,8 @@ const sections = getPortfolioGroups().map((group) => {
         <p style="text-align:center; color: var(--color-text-muted); padding: 4rem 0;">{t('gallery.empty')}</p>
       )}
     </div>
+
+    <CaseStudy />
   </main>
 
   <ContactCTA />

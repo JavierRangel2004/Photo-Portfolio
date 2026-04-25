@@ -204,3 +204,4 @@ docs/images
 .claude
 .claude-flow
 logs/
+generate_diff.py

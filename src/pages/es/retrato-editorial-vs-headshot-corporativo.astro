@@ -1,0 +1,113 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Header from '../../components/Header.astro';
+import Footer from '../../components/Footer.astro';
+import ContactCTA from '../../components/ContactCTA.astro';
+import SeoLandingBody from '../../components/SeoLandingBody.astro';
+import { getCuratedPhotosByGroup } from '../../lib/photos';
+import { useTranslations } from '../../i18n/utils';
+
+const t = useTranslations('es');
+const heroPhoto = getCuratedPhotosByGroup('branding', 1)[0];
+
+const siteUrl = Astro.site ? Astro.site.origin : 'https://jrmgraphy.com';
+const pageUrl = `${siteUrl}/es/retrato-editorial-vs-headshot-corporativo/`;
+const title = 'Retrato editorial vs headshot corporativo: cuál usar y cuándo';
+const description = 'Diferencias reales entre un retrato editorial y un headshot corporativo: uso, estética, dirección, entrega y cuándo conviene cada uno para founders, equipos y marcas personales en Ciudad de México.';
+
+const answerFirst = 'Un headshot corporativo es una foto limpia, frontal y funcional del rostro, pensada para directorios internos, LinkedIn y páginas de equipo — resuelve el "¿quién es esta persona?" sin narrativa. Un retrato editorial, en cambio, construye una imagen con contexto: locación real, dirección natural, luz editorial y una composición que habla de la persona y de su proyecto. Si solo necesitas identificar caras en un directorio, basta un headshot. Si tu rol exige venderte a prensa, prensa financiera, decks de ronda, about de sitio y campañas — necesitas retrato editorial. JRMGraphy trabaja ambos en CDMX, pero el diferencial está en el editorial.';
+
+const sections = [
+  {
+    title: 'Definición rápida',
+    body: 'Headshot corporativo: foto frontal, fondo neutro o corporativo, encuadre cerrado, luz plana, pensada para uso funcional. Retrato editorial: imagen compuesta con locación, dirección, luz y narrativa, pensada para medios, campaña y posicionamiento.',
+  },
+  {
+    title: 'Cuándo conviene cada uno',
+    body: 'Headshot: directorio interno, badge, ficha de empleado, sitios con plantilla rígida, compliance regulatorio. Retrato editorial: founder pitcheando ronda, artista con release, chef con prensa, director con medio, equipo de producto en campaña de contratación.',
+  },
+  {
+    title: 'Diferencia de dirección',
+    body: 'En el headshot la dirección es mínima — pararse, mirar a cámara, sonreír amable. En el editorial la dirección es conversacional: locación real, movimiento, pausa, interacción con el espacio. El resultado se siente honesto, no actuado.',
+  },
+  {
+    title: 'Diferencia de entrega',
+    body: 'Un paquete de headshots entrega una o dos tomas limpias por persona. Un retrato editorial entrega una selección curada (5–15 frames) con vertical, horizontal y cuadrado, listos para LinkedIn, press kit, sitio, prensa y redes — todo con la misma identidad visual.',
+  },
+];
+
+const bullets = [
+  'Headshot = identificación funcional',
+  'Editorial = posicionamiento y prensa',
+  'Headshot: una toma, fondo neutro',
+  'Editorial: set curado, locación real',
+  'Headshot para directorio interno / badge',
+  'Editorial para founder, artista, chef, director',
+];
+
+const faq = [
+  {
+    question: '¿Puedo usar un retrato editorial como headshot?',
+    answer: 'Sí. Una sesión editorial bien hecha entrega al menos una toma limpia tipo headshot, así cubres ambos usos con la misma sesión.',
+  },
+  {
+    question: '¿Qué uso si mi empresa me pide foto en un formato específico?',
+    answer: 'El retrato editorial se puede recortar a cualquier formato (cuadrado, 3:4, 16:9). Avísame del requisito en el brief y dejamos un encuadre amplio pensado para recortar.',
+  },
+  {
+    question: '¿El retrato editorial se ve poco profesional para finanzas o legal?',
+    answer: 'No si se dirige bien. Un editorial con traje, locación sobria y luz controlada se ve más profesional que un headshot plano — porque transmite presencia real, no solo identificación.',
+  },
+];
+
+const articleSchema = {
+  '@type': 'Article',
+  '@id': `${pageUrl}#article`,
+  headline: title,
+  description,
+  inLanguage: 'es',
+  datePublished: '2026-04-24',
+  dateModified: '2026-04-24',
+  author: { '@id': `${siteUrl}/#person` },
+  publisher: { '@id': `${siteUrl}/#organization` },
+  mainEntityOfPage: pageUrl,
+};
+
+const faqSchema = {
+  '@type': 'FAQPage',
+  '@id': `${pageUrl}#faq`,
+  mainEntity: faq.map((item) => ({
+    '@type': 'Question',
+    name: item.question,
+    acceptedAnswer: { '@type': 'Answer', text: item.answer },
+  })),
+};
+---
+
+<BaseLayout
+  title={title}
+  description={description}
+  pageType="landing"
+  schema={[articleSchema, faqSchema]}
+>
+  <Header />
+
+  <SeoLandingBody
+    lang="es"
+    eyebrow="Guía comparativa · Retrato vs headshot"
+    title={title}
+    subtitle="Cuándo basta un headshot corporativo y cuándo necesitas un retrato editorial — sin jerga, con ejemplos reales."
+    answerFirst={answerFirst}
+    heroPhoto={heroPhoto}
+    sections={sections}
+    bullets={bullets}
+    faq={faq}
+    scarcity={t('contactCta.scarcity')}
+    ctaTitle="¿Cuál encaja con tu rol?"
+    ctaBody="Cuéntame el uso final (LinkedIn, prensa, pitch, directorio interno) y te propongo el formato correcto."
+    ctaLabel={t('contactCta.primary')}
+  />
+
+  <ContactCTA />
+  <Footer />
+</BaseLayout>

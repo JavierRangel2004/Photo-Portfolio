@@ -39,8 +39,8 @@ const translatePath = useTranslatedPath(lang);
     </div>
 
     <div class="hero-actions">
-      <a href={translatePath('/contact')} class="btn btn-primary">{t('hero.cta.primary')}</a>
-      <a href={translatePath('/services')} class="btn btn-ghost">{t('hero.cta.secondary')}</a>
+      <a href={translatePath('/contact')} class="btn btn-primary" data-analytics-label="hero_primary_quote">{t('hero.cta.primary')}</a>
+      <a href={translatePath('/gallery')} class="btn btn-ghost" data-analytics-label="hero_secondary_portfolio">{t('hero.cta.secondary')}</a>
     </div>
   </div>
 

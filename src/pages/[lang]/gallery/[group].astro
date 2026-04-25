@@ -65,9 +65,27 @@ const navGroups = getPortfolioGroups().map((group) => {
     active: group.id === groupId,
   };
 });
+
+const siteUrl = Astro.site ? Astro.site.origin : 'https://jrmgraphy.com';
+const groupUrl = `${siteUrl}/${lang}/gallery/${groupSlug}`;
+
+const groupSchema = {
+  '@type': 'CollectionPage',
+  '@id': `${groupUrl}#page`,
+  url: groupUrl,
+  name: title,
+  description,
+  inLanguage: lang,
+  about: { '@id': `${siteUrl}/#organization` },
+};
 ---
 
-<BaseLayout title={title} description={description}>
+<BaseLayout
+  title={title}
+  description={description}
+  pageType="portfolio"
+  schema={groupSchema}
+>
   <Header />
 
   <main class="site-main gallery-page gallery-page--group bg-background">

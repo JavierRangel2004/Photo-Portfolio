@@ -13,9 +13,27 @@ export function getStaticPaths() {
 
 const lang = getLangFromUrl(Astro.url);
 const t = useTranslations(lang);
+
+const siteUrl = Astro.site ? Astro.site.origin : 'https://jrmgraphy.com';
+const contactUrl = `${siteUrl}/${lang}/contact`;
+
+const contactSchema = {
+  '@type': 'ContactPage',
+  '@id': `${contactUrl}#page`,
+  url: contactUrl,
+  name: t('contact.title'),
+  description: t('contact.desc'),
+  inLanguage: lang,
+  about: { '@id': `${siteUrl}/#organization` },
+};
 ---
 
-<BaseLayout title={t('contact.title')} description={t('contact.desc')}>
+<BaseLayout
+  title={t('contact.title')}
+  description={t('contact.desc')}
+  pageType="contact"
+  schema={contactSchema}
+>
   <Header />
 
   <main class="site-main bg-background pb-40">
@@ -46,6 +64,13 @@ const t = useTranslations(lang);
             <p class="mt-4 max-w-[34rem] text-base leading-8 text-text-muted">
               {t('contact.info.desc')}
             </p>
+
+            <ul class="mt-6 space-y-3 text-base leading-7 text-text-muted">
+              <li class="flex gap-3"><span class="mt-2 inline-block h-1 w-1 shrink-0 rounded-full bg-[#D6B36A]" aria-hidden="true"></span>{t('contact.info.q1')}</li>
+              <li class="flex gap-3"><span class="mt-2 inline-block h-1 w-1 shrink-0 rounded-full bg-[#D6B36A]" aria-hidden="true"></span>{t('contact.info.q2')}</li>
+              <li class="flex gap-3"><span class="mt-2 inline-block h-1 w-1 shrink-0 rounded-full bg-[#D6B36A]" aria-hidden="true"></span>{t('contact.info.q3')}</li>
+              <li class="flex gap-3"><span class="mt-2 inline-block h-1 w-1 shrink-0 rounded-full bg-[#D6B36A]" aria-hidden="true"></span>{t('contact.info.q4')}</li>
+            </ul>
 
             <div class="mt-8 space-y-4 rounded-[24px] border border-white/10 bg-white/[0.04] p-6">
               <p class="text-xs font-medium uppercase tracking-[0.3em] text-[#D6B36A]">
@@ -226,6 +251,12 @@ const t = useTranslations(lang);
           body: params.toString(),
         });
         if (res.ok) {
+          window.dispatchEvent(new CustomEvent('jrmgraphy:lead-submitted', {
+            detail: {
+              method: 'netlify_form',
+              inquiryType: (typeSelect?.value || 'unspecified'),
+            },
+          }));
           form.reset();
           confirmation?.classList.add('show');
         } else {

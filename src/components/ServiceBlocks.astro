@@ -1,18 +1,42 @@
 ---
 import { Image } from 'astro:assets';
-import { getPortfolioGroups, getServiceCoverPhoto } from '../lib/photos';
-import type { PortfolioGroupId } from '../lib/photos';
+import {
+  getCuratedPhotosByGroup,
+  getRandomPhotosByCategory,
+  getPhotosByCategory,
+} from '../lib/photos';
+import type { Photo } from '../lib/photos';
 import { getLangFromUrl, useTranslations, useTranslatedPath } from '../i18n/utils';
 
 const lang = getLangFromUrl(Astro.url);
 const t = useTranslations(lang);
 const translatePath = useTranslatedPath(lang);
 
-const copyByGroup: Record<
-  PortfolioGroupId,
-  { title: string; description: string; points: string[]; cta: string }
-> = {
-  branding: {
+type ServiceLineId = 'branding' | 'events' | 'gastronomy';
+
+interface ServiceLine {
+  id: ServiceLineId;
+  anchor: string;
+  title: string;
+  description: string;
+  cta: string;
+  points: string[];
+  cover?: Photo;
+}
+
+function productCover(): Photo | undefined {
+  const productPhotos = getPhotosByCategory('product');
+  if (productPhotos.length === 0) {
+    return getCuratedPhotosByGroup('branding', 1)[0];
+  }
+  const curated = getRandomPhotosByCategory('product', 1);
+  return curated[0] ?? productPhotos[0];
+}
+
+const lines: ServiceLine[] = [
+  {
+    id: 'branding',
+    anchor: 'branding',
     title: t('service.branding.title'),
     description: t('service.branding.desc'),
     cta: t('service.branding.cta'),
@@ -21,8 +45,11 @@ const copyByGroup: Record<
       t('service.branding.point.two'),
       t('service.branding.point.three'),
     ],
+    cover: getCuratedPhotosByGroup('branding', 1)[0],
   },
-  events: {
+  {
+    id: 'events',
+    anchor: 'events',
     title: t('service.events.title'),
     description: t('service.events.desc'),
     cta: t('service.events.cta'),
@@ -31,8 +58,11 @@ const copyByGroup: Record<
       t('service.events.point.two'),
       t('service.events.point.three'),
     ],
+    cover: getCuratedPhotosByGroup('events', 1)[0],
   },
-  'author-archive': {
+  {
+    id: 'gastronomy',
+    anchor: 'gastronomy',
     title: t('service.archive.title'),
     description: t('service.archive.desc'),
     cta: t('service.archive.cta'),
@@ -41,14 +71,9 @@ const copyByGroup: Record<
       t('service.archive.point.two'),
       t('service.archive.point.three'),
     ],
+    cover: productCover(),
   },
-};
-
-const serviceGroups = getPortfolioGroups().map((group) => ({
-  ...group,
-  cover: getServiceCoverPhoto(group.id),
-  copy: copyByGroup[group.id],
-}));
+];
 ---
 
 <section class="services-overview" id="home-services" aria-label={t('servicesBlocks.title')}>
@@ -61,30 +86,30 @@ const serviceGroups = getPortfolioGroups().map((group) => ({
   </div>
 
   <div class="services-overview-grid">
-    {serviceGroups.map((group, index) => (
+    {lines.map((line, index) => (
       <a
-        href={`${translatePath('/services')}#${group.id}`}
+        href={`${translatePath('/services')}#${line.anchor}`}
         class={`service-overview-card reveal ${index === 0 ? 'service-overview-card--featured' : ''}`}
         style={`transition-delay: ${index * 0.08}s`}
       >
         <div class="service-overview-media">
-          {group.cover && (
+          {line.cover && (
             <Image
-              src={group.cover.src}
-              alt={group.copy.title}
-              width={group.cover.width || 1600}
-              height={group.cover.height || 1200}
+              src={line.cover.src}
+              alt={line.title}
+              width={line.cover.width || 1600}
+              height={line.cover.height || 1200}
               sizes="(min-width: 1024px) 33vw, (min-width: 768px) 50vw, 100vw"
               loading="lazy"
             />
           )}
         </div>
         <div class="service-overview-body">
-          <p class="service-overview-kicker">{group.copy.cta} &rarr;</p>
-          <h3>{group.copy.title}</h3>
-          <p>{group.copy.description}</p>
+          <p class="service-overview-kicker">{line.cta} &rarr;</p>
+          <h3>{line.title}</h3>
+          <p>{line.description}</p>
           <ul class="service-overview-points">
-            {group.copy.points.map((point) => (
+            {line.points.map((point) => (
               <li>{point}</li>
             ))}
           </ul>
