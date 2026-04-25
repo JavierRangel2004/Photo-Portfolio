@@ -1,3 +1,108 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/*
+ * JRMGraphy — Typography & measure tokens
+ * ----------------------------------------------------------------
+ * Central place for reusable text/container utilities used across
+ * home, services, about, gallery intros and SEO landings.
+ *
+ *   .prose-measure     Long-form body copy (~65ch) so paragraphs
+ *                      stay readable on large screens.
+ *   .prose-measure-sm  Narrower measure (~56ch) for meta/lists.
+ *   .prose-measure-lg  Wider measure (~75ch) for intro paragraphs.
+ *   .content-narrow    Article/shell container for dense text blocks.
+ *   .text-eyebrow      Uppercase meta label above a heading.
+ *   .text-display      Hero-scale heading (home/landing H1).
+ *   .text-h1 / .h2 / .h3  Consistent heading scale by role.
+ *   .text-body         Default body size + leading for paragraphs.
+ *   .text-caption      Small meta/caption text.
+ *
+ * Rules:
+ *  - Don't hand-tune sizes inline when a role already exists here.
+ *  - Add a token *before* inventing a one-off utility class.
+ */
+@layer components {
+  /* Measure (line length) tokens — long-form readability target 60-75ch */
+  .prose-measure {
+    max-width: 65ch;
+  }
+
+  .prose-measure-sm {
+    max-width: 56ch;
+  }
+
+  .prose-measure-lg {
+    max-width: 75ch;
+  }
+
+  /* Content shell for dense text-only pages/sections */
+  .content-narrow {
+    margin-inline: auto;
+    max-width: 72ch;
+    padding-inline: 1.5rem;
+  }
+
+  /* Typography roles */
+  .text-eyebrow {
+    font-family: theme('fontFamily.sans');
+    font-size: 0.75rem;
+    font-weight: 500;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: #D6B36A;
+  }
+
+  .text-display {
+    font-family: theme('fontFamily.heading');
+    font-size: clamp(2.5rem, 4vw + 1rem, 4.5rem);
+    line-height: 1.02;
+    letter-spacing: -0.03em;
+    color: #FFFFFF;
+  }
+
+  .text-h1 {
+    font-family: theme('fontFamily.heading');
+    font-size: clamp(2.25rem, 3vw + 1rem, 3.5rem);
+    line-height: 1.05;
+    letter-spacing: -0.02em;
+    color: #FFFFFF;
+  }
+
+  .text-h2 {
+    font-family: theme('fontFamily.heading');
+    font-size: clamp(1.75rem, 2vw + 0.75rem, 2.5rem);
+    line-height: 1.08;
+    letter-spacing: -0.02em;
+    color: #FFFFFF;
+  }
+
+  .text-h3 {
+    font-family: theme('fontFamily.heading');
+    font-size: clamp(1.25rem, 1vw + 0.75rem, 1.75rem);
+    line-height: 1.15;
+    letter-spacing: -0.01em;
+    color: #FFFFFF;
+  }
+
+  .text-body {
+    font-size: 1rem;
+    line-height: 1.75;
+    color: #A8A29E;
+  }
+
+  .text-body-lg {
+    font-size: 1.125rem;
+    line-height: 1.8;
+    color: #A8A29E;
+  }
+
+  .text-caption {
+    font-family: theme('fontFamily.sans');
+    font-size: 0.75rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: #A8A29E;
+  }
+}
