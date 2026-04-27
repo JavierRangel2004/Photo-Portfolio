@@ -1,0 +1,823 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Javier Rangel — Fotografía CDMX</title>
+  <meta name="description" content="Fotografía editorial, branding y eventos en Ciudad de México. Retratos para artistas, chefs y marcas personales.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500&display=swap" rel="stylesheet">
+  <script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+  <style>
+/* ─── TOKENS ──────────────────────────────────── */
+:root {
+  --bg:       #070707;
+  --bg2:      #0e0e0e;
+  --bg3:      #171717;
+  --cr:       #f0ebe0;
+  --cr-dim:   rgba(240,235,224,.52);
+  --cr-faint: rgba(240,235,224,.08);
+  --accent:   #c8a96e;
+  --txt:      #8a8680;
+  --head:     'Cormorant Garamond', Georgia, serif;
+  --body:     'DM Sans', system-ui, sans-serif;
+  --nav-h:    72px;
+  --ease:     cubic-bezier(.16,1,.3,1);
+  --max:      1340px;
+}
+[data-accent="gold"]   { --accent: #c8a96e; }
+[data-accent="red"]    { --accent: #e04455; }
+[data-accent="silver"] { --accent: #90a0b4; }
+
+*,*::before,*::after { box-sizing:border-box; margin:0; padding:0; }
+html { scroll-behavior:smooth; }
+body { background:var(--bg); color:var(--txt); font-family:var(--body); -webkit-font-smoothing:antialiased; overflow-x:hidden; }
+img { display:block; max-width:100%; }
+a { color:inherit; text-decoration:none; }
+button { font-family:var(--body); cursor:pointer; }
+
+/* ─── TYPE ────────────────────────────────────── */
+h1,h2,h3 { font-family:var(--head); color:var(--cr); font-weight:300; line-height:1.08; }
+h1 { font-size:clamp(3.2rem,8vw,7.5rem); }
+h2 { font-size:clamp(2.2rem,5vw,4.2rem); }
+h3 { font-size:clamp(1.3rem,2.5vw,1.9rem); }
+.eyebrow { font-family:var(--body); font-size:.68rem; font-weight:500; letter-spacing:.22em; text-transform:uppercase; color:var(--accent); }
+.lead { color:var(--cr-dim); font-size:.95rem; line-height:1.8; max-width:48ch; text-wrap:pretty; }
+
+/* ─── NAV ─────────────────────────────────────── */
+nav {
+  position:fixed; top:0; left:0; right:0; z-index:900;
+  height:var(--nav-h);
+  display:flex; align-items:center; justify-content:space-between;
+  padding:0 clamp(1.5rem,4vw,3.5rem);
+  transition:background .5s, box-shadow .5s;
+}
+nav.scrolled {
+  background:rgba(7,7,7,.9);
+  backdrop-filter:blur(22px);
+  box-shadow:0 1px 0 var(--cr-faint);
+}
+.nav-brand { font-family:var(--head); font-size:1.45rem; color:var(--cr); letter-spacing:.01em; }
+.nav-brand em { font-style:normal; color:var(--accent); }
+.nav-links { display:flex; gap:2.2rem; }
+.nav-links a { font-size:.72rem; font-weight:500; letter-spacing:.14em; text-transform:uppercase; color:var(--cr-dim); transition:color .2s; }
+.nav-links a:hover { color:var(--cr); }
+.nav-cta {
+  font-size:.72rem; font-weight:500; letter-spacing:.14em; text-transform:uppercase;
+  padding:.55rem 1.5rem; border:1px solid var(--accent); color:var(--accent);
+  transition:all .25s;
+}
+.nav-cta:hover { background:var(--accent); color:var(--bg); }
+.nav-ham { display:none; flex-direction:column; gap:5px; background:none; border:none; padding:4px; color:var(--cr); }
+.nav-ham span { display:block; width:22px; height:1px; background:currentColor; transition:all .3s; }
+
+/* mobile menu */
+.mob-menu {
+  display:none; position:fixed; inset:0; z-index:800;
+  background:rgba(7,7,7,.98); flex-direction:column;
+  align-items:center; justify-content:center; gap:2.5rem;
+  padding-top:var(--nav-h);
+}
+.mob-menu.open { display:flex; }
+.mob-menu a { font-family:var(--head); font-size:2.2rem; font-weight:300; color:var(--cr); transition:color .2s; }
+.mob-menu a:hover { color:var(--accent); }
+
+@media(max-width:820px) {
+  .nav-links,.nav-cta { display:none; }
+  .nav-ham { display:flex; }
+}
+
+/* ─── HERO ────────────────────────────────────── */
+.hero { position:relative; height:100svh; min-height:580px; overflow:hidden; }
+.hero-bg { position:absolute; inset:0; }
+.hero-bg img { width:100%; height:100%; object-fit:cover; object-position:50% 20%; transform-origin:center; transition:transform 12s var(--ease); }
+.hero-bg img.loaded { transform:scale(1.04); }
+.hero-overlay { position:absolute; inset:0; background:linear-gradient(to bottom, rgba(7,7,7,.15) 0%, rgba(7,7,7,.5) 55%, rgba(7,7,7,.95) 100%); }
+
+/* split variant: right side photo */
+body[data-hero="split"] .hero {
+  display:grid; grid-template-columns:1fr 1fr; height:100svh;
+}
+body[data-hero="split"] .hero-bg {
+  position:relative; height:100%;
+  grid-column:2; grid-row:1;
+}
+body[data-hero="split"] .hero-bg img { height:100%; }
+body[data-hero="split"] .hero-overlay { background:linear-gradient(to right, var(--bg) 0%, transparent 50%); grid-column:1/3; grid-row:1; z-index:1; }
+body[data-hero="split"] .hero-content { grid-column:1; grid-row:1; z-index:2; justify-content:center; padding-bottom:2rem; }
+
+/* editorial variant: type-dominant */
+body[data-hero="editorial"] .hero-bg { opacity:.25; filter:grayscale(40%); }
+body[data-hero="editorial"] .hero-overlay { background:rgba(7,7,7,.55); }
+body[data-hero="editorial"] .hero-content h1 { font-size:clamp(4rem,11vw,10rem); }
+
+.hero-content {
+  position:relative; z-index:3;
+  height:100%;
+  display:flex; flex-direction:column; justify-content:flex-end;
+  padding:0 clamp(1.5rem,5vw,5rem) clamp(4rem,9vh,7rem);
+  max-width:var(--max); margin:0 auto; width:100%;
+}
+.hero-content .eyebrow { margin-bottom:1.75rem; }
+.hero-content h1 { max-width:13ch; margin-bottom:1.25rem; }
+.hero-content h1 em { font-style:italic; color:var(--accent); }
+.hero-sub { max-width:44ch; color:var(--cr-dim); font-size:.95rem; margin-bottom:2.75rem; line-height:1.75; }
+.hero-actions { display:flex; gap:1rem; flex-wrap:wrap; }
+.hero-tags { display:flex; gap:1.5rem; margin-top:3rem; flex-wrap:wrap; }
+.hero-tag { font-size:.65rem; letter-spacing:.18em; text-transform:uppercase; color:var(--txt); }
+.hero-tag + .hero-tag { border-left:1px solid var(--cr-faint); padding-left:1.5rem; }
+
+/* ─── BUTTONS ─────────────────────────────────── */
+.btn { display:inline-block; font-size:.75rem; font-weight:500; letter-spacing:.14em; text-transform:uppercase; padding:.75rem 2rem; transition:all .25s; }
+.btn-solid { background:var(--accent); color:var(--bg); }
+.btn-solid:hover { filter:brightness(1.12); transform:translateY(-2px); }
+.btn-outline { border:1px solid var(--cr-faint); color:var(--cr-dim); }
+.btn-outline:hover { border-color:var(--cr-dim); color:var(--cr); }
+.btn-accent-outline { border:1px solid var(--accent); color:var(--accent); }
+.btn-accent-outline:hover { background:var(--accent); color:var(--bg); }
+
+/* ─── SECTION SHELL ───────────────────────────── */
+.sec { padding:clamp(5rem,10vh,9rem) clamp(1.5rem,5vw,5rem); }
+.sec-inner { max-width:var(--max); margin:0 auto; }
+.sec-header { margin-bottom:clamp(3rem,6vh,5rem); }
+.sec-header h2 { margin-top:.75rem; }
+.sec-header .lead { margin-top:1rem; }
+
+/* ─── SERVICES ────────────────────────────────── */
+#services { background:var(--bg2); }
+.srv-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:1px; background:var(--cr-faint); }
+@media(max-width:900px){ .srv-grid { grid-template-columns:1fr; } }
+.srv-card { background:var(--bg2); padding:2.75rem; display:flex; flex-direction:column; transition:background .3s; }
+.srv-card:hover { background:var(--bg3); }
+.srv-num { font-family:var(--head); font-size:4rem; font-weight:300; color:var(--cr-faint); line-height:1; margin-bottom:1.75rem; }
+.srv-card h3 { margin-bottom:.75rem; }
+.srv-card .lead { margin-bottom:1.5rem; }
+.srv-points { list-style:none; margin-bottom:2.25rem; flex:1; }
+.srv-points li { font-size:.82rem; color:var(--cr-dim); padding:.5rem 0; border-bottom:1px solid var(--cr-faint); display:flex; gap:.6rem; }
+.srv-points li::before { content:'—'; color:var(--accent); flex-shrink:0; }
+.srv-cta { font-size:.7rem; letter-spacing:.18em; text-transform:uppercase; color:var(--accent); padding-bottom:2px; border-bottom:1px solid currentColor; transition:color .2s; align-self:flex-start; }
+.srv-cta:hover { color:var(--cr); }
+
+/* ─── GALLERY ─────────────────────────────────── */
+#portfolio { background:var(--bg); }
+.gal-filters { display:flex; gap:.75rem; flex-wrap:wrap; margin-bottom:2.5rem; }
+.gal-btn { font-size:.7rem; letter-spacing:.16em; text-transform:uppercase; padding:.45rem 1.2rem; border:1px solid var(--cr-faint); color:var(--txt); background:none; transition:all .2s; }
+.gal-btn:hover, .gal-btn.active { border-color:var(--accent); color:var(--accent); }
+.gal-grid { columns:3 260px; gap:6px; }
+.gal-item { break-inside:avoid; margin-bottom:6px; overflow:hidden; cursor:pointer; }
+.gal-item img { width:100%; display:block; transition:transform .6s var(--ease), filter .3s; filter:brightness(.88) saturate(.85); }
+.gal-item:hover img { transform:scale(1.05); filter:brightness(1) saturate(1); }
+.gal-item { display:none; }
+.gal-item.vis { display:block; }
+
+/* ─── STATEMENT ───────────────────────────────── */
+.statement { border-top:1px solid var(--cr-faint); border-bottom:1px solid var(--cr-faint); padding:clamp(5rem,10vh,8rem) clamp(1.5rem,5vw,5rem); text-align:center; background:var(--bg); }
+.statement blockquote { font-family:var(--head); font-size:clamp(1.6rem,4vw,3.2rem); font-weight:300; font-style:italic; color:var(--cr); max-width:24ch; margin:0 auto 1.5rem; line-height:1.25; }
+.statement cite { font-size:.7rem; letter-spacing:.2em; text-transform:uppercase; color:var(--accent); font-style:normal; }
+
+/* ─── ABOUT ───────────────────────────────────── */
+#about { background:var(--bg2); }
+.about-layout { display:grid; grid-template-columns:1fr 1.15fr; gap:5rem; align-items:center; }
+@media(max-width:900px){ .about-layout { grid-template-columns:1fr; gap:3rem; } }
+.about-img-wrap { position:relative; }
+.about-img-wrap img { width:100%; aspect-ratio:4/5; object-fit:cover; object-position:center top; }
+.about-img-label { position:absolute; bottom:1.5rem; left:1.5rem; font-size:.62rem; letter-spacing:.18em; text-transform:uppercase; color:var(--cr); background:rgba(7,7,7,.8); padding:.35rem .8rem; }
+.about-text .eyebrow { margin-bottom:1.25rem; }
+.about-text h2 { max-width:14ch; margin-bottom:1.5rem; }
+.about-text .lead { margin-bottom:1.25rem; }
+.about-pillars { margin-top:2.5rem; border-top:1px solid var(--cr-faint); }
+.pillar { padding:1.2rem 0; border-bottom:1px solid var(--cr-faint); }
+.pillar-label { font-size:.65rem; letter-spacing:.2em; text-transform:uppercase; color:var(--accent); margin-bottom:.4rem; }
+.pillar p { font-size:.83rem; color:var(--cr-dim); line-height:1.7; }
+.about-meta { margin-top:2rem; display:flex; flex-wrap:wrap; gap:.5rem 1.5rem; }
+.about-meta span { font-size:.75rem; color:var(--txt); letter-spacing:.06em; }
+
+/* ─── PRICING ─────────────────────────────────── */
+#pricing { background:var(--bg); }
+.price-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:1px; background:var(--cr-faint); margin-top:3rem; }
+@media(max-width:900px){ .price-grid { grid-template-columns:1fr; } }
+.price-card { background:var(--bg); padding:2.75rem; }
+.price-card.featured { background:var(--bg2); }
+.price-eyebrow { font-size:.62rem; letter-spacing:.2em; text-transform:uppercase; color:var(--accent); margin-bottom:1.5rem; display:block; }
+.price-card h3 { margin-bottom:.6rem; }
+.price-for { font-family:var(--head); font-style:italic; font-size:1rem; color:var(--cr-dim); margin-bottom:1.75rem; }
+.price-list { list-style:none; margin-bottom:2rem; }
+.price-list li { font-size:.83rem; color:var(--cr-dim); padding:.5rem 0; border-bottom:1px solid var(--cr-faint); display:flex; gap:.5rem; align-items:baseline; }
+.price-list li::before { content:'✓'; color:var(--accent); font-size:.7rem; flex-shrink:0; }
+.price-delivery { font-size:.75rem; color:var(--txt); font-style:italic; margin-bottom:1.75rem; padding:.75rem; border-left:2px solid var(--accent); background:var(--cr-faint); }
+.price-note { font-size:.72rem; color:var(--txt); margin-bottom:1.5rem; }
+
+/* ─── TRUST SIGNALS ───────────────────────────── */
+.trust { background:var(--bg2); padding:clamp(4rem,8vh,6rem) clamp(1.5rem,5vw,5rem); }
+.trust-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:1px; background:var(--cr-faint); max-width:var(--max); margin:2.5rem auto 0; }
+@media(max-width:700px){ .trust-grid { grid-template-columns:repeat(2,1fr); } }
+.trust-item { background:var(--bg2); padding:2rem; }
+.trust-item h4 { font-family:var(--head); font-size:1.1rem; color:var(--cr); font-weight:400; margin-bottom:.5rem; }
+.trust-item p { font-size:.82rem; color:var(--cr-dim); line-height:1.65; }
+
+/* ─── CONTACT ─────────────────────────────────── */
+#contact { background:var(--bg2); }
+.contact-layout { display:grid; grid-template-columns:1fr 1.3fr; gap:5rem; }
+@media(max-width:900px){ .contact-layout { grid-template-columns:1fr; gap:3rem; } }
+.contact-info .eyebrow { margin-bottom:1.25rem; }
+.contact-info h2 { margin-bottom:1.25rem; }
+.contact-info .lead { margin-bottom:2rem; }
+.contact-hints { list-style:none; }
+.contact-hints li { padding:.85rem 0; border-bottom:1px solid var(--cr-faint); }
+.contact-hints li strong { display:block; font-size:.62rem; letter-spacing:.18em; text-transform:uppercase; color:var(--accent); font-weight:500; margin-bottom:.25rem; }
+.contact-hints li span { font-size:.85rem; color:var(--cr-dim); }
+.contact-form { display:flex; flex-direction:column; gap:1.1rem; }
+.cf-field { display:flex; flex-direction:column; gap:.4rem; }
+.cf-field label { font-size:.68rem; letter-spacing:.16em; text-transform:uppercase; color:var(--txt); }
+.cf-field input,.cf-field select,.cf-field textarea {
+  background:var(--bg3); border:1px solid var(--cr-faint); border-radius:0;
+  color:var(--cr); padding:.85rem 1rem; font-family:var(--body); font-size:.9rem; outline:none;
+  transition:border-color .2s;
+}
+.cf-field input:focus,.cf-field select:focus,.cf-field textarea:focus { border-color:var(--accent); }
+.cf-field select option { background:var(--bg3); }
+.cf-field textarea { min-height:130px; resize:vertical; }
+.cf-row { display:grid; grid-template-columns:1fr 1fr; gap:1rem; }
+@media(max-width:500px){ .cf-row { grid-template-columns:1fr; } }
+.form-success { display:none; padding:1.25rem; background:rgba(200,169,110,.08); border-left:2px solid var(--accent); color:var(--cr); font-size:.9rem; }
+
+/* ─── FOOTER ──────────────────────────────────── */
+footer { background:var(--bg); border-top:1px solid var(--cr-faint); padding:2.5rem clamp(1.5rem,5vw,5rem); }
+.footer-inner { max-width:var(--max); margin:0 auto; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:1.5rem; }
+.footer-brand { font-family:var(--head); font-size:1.3rem; color:var(--cr); }
+.footer-brand em { font-style:normal; color:var(--accent); }
+.footer-nav { display:flex; gap:1.75rem; }
+.footer-nav a { font-size:.68rem; letter-spacing:.14em; text-transform:uppercase; color:var(--txt); transition:color .2s; }
+.footer-nav a:hover { color:var(--cr); }
+.footer-copy { font-size:.7rem; color:var(--txt); }
+
+/* ─── LIGHTBOX ────────────────────────────────── */
+.lb { position:fixed; inset:0; z-index:9999; background:rgba(7,7,7,.97); display:none; align-items:center; justify-content:center; }
+.lb.open { display:flex; }
+.lb img { max-width:92vw; max-height:92vh; object-fit:contain; }
+.lb-close { position:absolute; top:1.5rem; right:1.5rem; background:none; border:none; color:var(--cr); font-size:2rem; line-height:1; opacity:.5; transition:opacity .2s; }
+.lb-close:hover { opacity:1; }
+.lb-prev,.lb-next { position:absolute; top:50%; transform:translateY(-50%); background:none; border:none; color:var(--cr); font-size:1.8rem; opacity:.4; transition:opacity .2s; padding:1rem; }
+.lb-prev { left:.5rem; } .lb-next { right:.5rem; }
+.lb-prev:hover,.lb-next:hover { opacity:1; }
+
+/* ─── REVEAL ──────────────────────────────────── */
+.rev { opacity:0; transform:translateY(26px); transition:opacity .85s var(--ease), transform .85s var(--ease); }
+.rev.in { opacity:1; transform:none; }
+.rev-d1 { transition-delay:.1s; } .rev-d2 { transition-delay:.2s; } .rev-d3 { transition-delay:.3s; }
+  </style>
+</head>
+<body data-accent="gold" data-hero="fullbleed">
+
+<!-- ══ NAV ══════════════════════════════════════ -->
+<nav id="nav">
+  <a href="#" class="nav-brand">Javier <em>Rangel</em></a>
+  <div class="nav-links">
+    <a href="#services">Servicios</a>
+    <a href="#portfolio">Portafolio</a>
+    <a href="#about">Sobre mí</a>
+    <a href="#pricing">Paquetes</a>
+    <a href="#contact">Contacto</a>
+  </div>
+  <a href="#contact" class="nav-cta btn">Cotizar</a>
+  <button class="nav-ham" id="hamBtn" aria-label="Abrir menú">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+
+<div class="mob-menu" id="mobMenu">
+  <a href="#services" class="mob-link">Servicios</a>
+  <a href="#portfolio" class="mob-link">Portafolio</a>
+  <a href="#about" class="mob-link">Sobre mí</a>
+  <a href="#pricing" class="mob-link">Paquetes</a>
+  <a href="#contact" class="mob-link">Contacto</a>
+</div>
+
+<!-- ══ HERO ══════════════════════════════════════ -->
+<section class="hero" id="hero">
+  <div class="hero-bg">
+    <img src="public/photos/portraits/portraits%20(15).webp" alt="Fotografía editorial CDMX" id="heroImg">
+  </div>
+  <div class="hero-overlay"></div>
+  <div class="hero-content">
+    <p class="eyebrow">Fotografía — Ciudad de México</p>
+    <h1>Imágenes que <em>representan</em> tu proyecto.</h1>
+    <p class="hero-sub">Retratos editoriales, branding visual y cobertura de eventos para artistas, chefs y marcas personales en CDMX.</p>
+    <div class="hero-actions">
+      <a href="#contact" class="btn btn-solid">Cotizar proyecto</a>
+      <a href="#portfolio" class="btn btn-outline">Ver portafolio</a>
+    </div>
+    <div class="hero-tags">
+      <span class="hero-tag">Artistas &amp; músicos</span>
+      <span class="hero-tag">Chefs &amp; cafés</span>
+      <span class="hero-tag">Marcas personales</span>
+    </div>
+  </div>
+</section>
+
+<!-- ══ SERVICES ══════════════════════════════════ -->
+<section class="sec" id="services">
+  <div class="sec-inner">
+    <div class="sec-header rev">
+      <p class="eyebrow">Servicios</p>
+      <h2>Tres formas claras de trabajar juntos</h2>
+      <p class="lead">Cada línea resuelve un problema de comunicación específico — elige la que encaja con tu proyecto o mezclamos.</p>
+    </div>
+    <div class="srv-grid">
+      <div class="srv-card rev rev-d1">
+        <div class="srv-num">01</div>
+        <h3>Branding<br>&amp; Retrato</h3>
+        <p class="lead">Artistas, fundadores y marcas personales — fotos para redes, sitio y prensa.</p>
+        <ul class="srv-points">
+          <li>Retratos editoriales con contexto real</li>
+          <li>Espacio de trabajo, proceso y detalles</li>
+          <li>Set coherente para cada canal</li>
+          <li>Entrega curada lista para publicar</li>
+        </ul>
+        <a href="#contact" class="srv-cta">Cotizar branding →</a>
+      </div>
+      <div class="srv-card rev rev-d2">
+        <div class="srv-num">02</div>
+        <h3>Eventos<br>&amp; Música</h3>
+        <p class="lead">Conciertos, showcases y lanzamientos — fotografía lista para promoción y recap.</p>
+        <ul class="srv-points">
+          <li>Escenario, público y venue</li>
+          <li>Entrega ágil con enfoque editorial</li>
+          <li>Imágenes hero para prensa y recap</li>
+          <li>Programa recurrente disponible</li>
+        </ul>
+        <a href="#contact" class="srv-cta">Cotizar evento →</a>
+      </div>
+      <div class="srv-card rev rev-d3">
+        <div class="srv-num">03</div>
+        <h3>Gastronomía<br>&amp; Producto</h3>
+        <p class="lead">Platillos, espacios y chefs — imágenes para menú, campaña y eCommerce.</p>
+        <ul class="srv-points">
+          <li>Cocina, servicio y detalle de platillo</li>
+          <li>Menús, lanzamientos y sets para redes</li>
+          <li>Tomas de producto para eCommerce</li>
+          <li>Librería de activos reutilizable</li>
+        </ul>
+        <a href="#contact" class="srv-cta">Cotizar gastronomía →</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ PORTFOLIO ══════════════════════════════════ -->
+<section class="sec" id="portfolio">
+  <div class="sec-inner">
+    <div class="sec-header rev">
+      <p class="eyebrow">Portafolio</p>
+      <h2>Una edición precisa del trabajo</h2>
+      <p class="lead">Retratos, branding, momentos en vivo y gastronomía. Menos fotos, mejor señal.</p>
+    </div>
+    <div class="gal-filters rev">
+      <button class="gal-btn active" data-filter="all">Todo</button>
+      <button class="gal-btn" data-filter="retrato">Retrato &amp; Branding</button>
+      <button class="gal-btn" data-filter="concierto">Eventos &amp; Música</button>
+      <button class="gal-btn" data-filter="producto">Gastronomía</button>
+    </div>
+    <div class="gal-grid" id="galGrid">
+      <!-- Portraits -->
+      <div class="gal-item vis" data-cat="retrato"><img src="public/photos/portraits/portraits%20(15).webp" alt="Retrato editorial" loading="lazy"></div>
+      <div class="gal-item vis" data-cat="retrato"><img src="public/photos/portraits/portraits%20(31).webp" alt="Retrato branding" loading="lazy"></div>
+      <div class="gal-item vis" data-cat="retrato"><img src="public/photos/portraits/portraits%20(13).webp" alt="Retrato editorial CDMX" loading="lazy"></div>
+      <div class="gal-item vis" data-cat="retrato"><img src="public/photos/portraits/portraits%20(11).webp" alt="Retrato personal" loading="lazy"></div>
+      <div class="gal-item vis" data-cat="retrato"><img src="public/photos/portraits/portraits%20(32).webp" alt="Sesión de branding" loading="lazy"></div>
+      <div class="gal-item vis" data-cat="retrato"><img src="public/photos/portraits/portraits%20(35).webp" alt="Retrato artista" loading="lazy"></div>
+      <div class="gal-item vis" data-cat="retrato"><img src="public/photos/portraits/portraits%20(33).webp" alt="Retrato fundador" loading="lazy"></div>
+      <div class="gal-item vis" data-cat="retrato"><img src="public/photos/portraits/portraits%20(1).webp" alt="Retrato editorial" loading="lazy"></div>
+      <div class="gal-item vis" data-cat="retrato"><img src="public/photos/portraits/portraits%20(2).webp" alt="Retrato natural" loading="lazy"></div>
+      <!-- Concerts -->
+      <div class="gal-item vis" data-cat="concierto"><img src="public/photos/concert/concert%20(42).webp" alt="Concierto CDMX" loading="lazy"></div>
+      <div class="gal-item vis" data-cat="concierto"><img src="public/photos/concert/concert%20(11).webp" alt="Evento musical" loading="lazy"></div>
+      <div class="gal-item vis" data-cat="concierto"><img src="public/photos/concert/concert%20(17).webp" alt="Cobertura de concierto" loading="lazy"></div>
+      <div class="gal-item vis" data-cat="concierto"><img src="public/photos/concert/concert%20(28).webp" alt="Música en vivo" loading="lazy"></div>
+      <div class="gal-item vis" data-cat="concierto"><img src="public/photos/concert/concert%20(1).webp" alt="Fotografía de concierto" loading="lazy"></div>
+      <div class="gal-item vis" data-cat="concierto"><img src="public/photos/concert/concert%20(4).webp" alt="Show en vivo" loading="lazy"></div>
+      <div class="gal-item vis" data-cat="concierto"><img src="public/photos/concert/concert%20(24).webp" alt="Evento cultural" loading="lazy"></div>
+      <!-- Product / Gastronomy -->
+      <div class="gal-item vis" data-cat="producto"><img src="public/photos/product/product%20(28).webp" alt="Fotografía gastronómica" loading="lazy"></div>
+      <div class="gal-item vis" data-cat="producto"><img src="public/photos/product/product%20(40).webp" alt="Producto editorial" loading="lazy"></div>
+      <div class="gal-item vis" data-cat="producto"><img src="public/photos/product/product%20(22).webp" alt="Chef fotografía" loading="lazy"></div>
+      <div class="gal-item vis" data-cat="producto"><img src="public/photos/product/product%20(37).webp" alt="Gastronomía CDMX" loading="lazy"></div>
+      <div class="gal-item vis" data-cat="producto"><img src="public/photos/product/product%20(39).webp" alt="Platillo editorial" loading="lazy"></div>
+      <div class="gal-item vis" data-cat="producto"><img src="public/photos/product/product%20(15).webp" alt="Fotografía de menú" loading="lazy"></div>
+      <div class="gal-item vis" data-cat="producto"><img src="public/photos/product/product%20(21).webp" alt="Café CDMX" loading="lazy"></div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ STATEMENT ══════════════════════════════════ -->
+<div class="statement rev">
+  <blockquote>"Hago fotografías que ayudan a personas, marcas y proyectos creativos a verse auténticos, profesionales y memorables."</blockquote>
+  <cite>Javier Rangel &nbsp;·&nbsp; CDMX</cite>
+</div>
+
+<!-- ══ TRUST ══════════════════════════════════════ -->
+<div class="trust">
+  <div class="sec-inner">
+    <div class="sec-header rev" style="margin-bottom:0">
+      <p class="eyebrow">Por qué el trabajo viaja</p>
+    </div>
+    <div class="trust-grid">
+      <div class="trust-item rev rev-d1">
+        <h4>Dirección natural</h4>
+        <p>Dirijo sin forzar la pose — la gente se ve como es, con presencia y confianza.</p>
+      </div>
+      <div class="trust-item rev rev-d2">
+        <h4>Útil en todos los canales</h4>
+        <p>Cada foto se encuadra y edita para funcionar en redes, web y prensa.</p>
+      </div>
+      <div class="trust-item rev rev-d3">
+        <h4>Entrega curada</h4>
+        <p>Recibes una edición apretada, no un volcado de archivos — lista para publicar.</p>
+      </div>
+      <div class="trust-item rev">
+        <h4>Sesiones adaptadas</h4>
+        <p>Brief, locación y entrega se ajustan al propósito real de las imágenes.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ ABOUT ══════════════════════════════════════ -->
+<section class="sec" id="about">
+  <div class="sec-inner">
+    <div class="about-layout">
+      <div class="about-img-wrap rev">
+        <img src="public/photos/portraits/portraits%20(13).webp" alt="Javier Rangel fotógrafo">
+        <div class="about-img-label">Javier Rangel · CDMX</div>
+      </div>
+      <div class="about-text rev rev-d1">
+        <p class="eyebrow">Sobre mí</p>
+        <h2>Retrato editorial y fotografía de marca en CDMX</h2>
+        <p class="lead">Fotografío para artistas, fundadores, chefs y proyectos creativos que necesitan imágenes que cuenten algo real.</p>
+        <p class="lead">Mi background en ingeniería no es decoración — se nota en cómo planeo cada sesión, en la coherencia visual entre canales y en entregas que siguen siendo usables meses después.</p>
+        <div class="about-pillars">
+          <div class="pillar">
+            <div class="pillar-label">La fundación invisible</div>
+            <p>Física de la luz, geometría de la composición, ciencia del color. Trato cada sesión como un sistema.</p>
+          </div>
+          <div class="pillar">
+            <div class="pillar-label">Balanceo de carga en el set</div>
+            <p>Protejo al sujeto del caos logístico y mantengo limpia la composición para que la edición sirva en todos los canales.</p>
+          </div>
+          <div class="pillar">
+            <div class="pillar-label">Seijaku — la quietud que aparece</div>
+            <p>Cuando el sistema funciona, la sesión se queda en silencio y la imagen simplemente aparece.</p>
+          </div>
+        </div>
+        <div class="about-meta">
+          <span>📍 Ciudad de México</span>
+          <span>Artistas · Chefs · Fundadores · Marcas</span>
+          <span>Disponible para viajes en México</span>
+        </div>
+        <div style="margin-top:2rem">
+          <a href="#contact" class="btn btn-accent-outline">Hablemos de tu proyecto</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ PRICING ═════════════════════════════════════ -->
+<section class="sec" id="pricing">
+  <div class="sec-inner">
+    <div class="sec-header rev">
+      <p class="eyebrow">Paquetes</p>
+      <h2>Estructura de servicio para proyectos reales</h2>
+      <p class="lead">Clara para entender qué incluye, flexible para adaptarse a cada brief. Sin precios fijos — cada proyecto se cotiza según alcance real.</p>
+    </div>
+    <div class="price-grid">
+      <div class="price-card rev rev-d1">
+        <span class="price-eyebrow">Línea 01</span>
+        <h3>Branding<br>&amp; Retrato</h3>
+        <p class="price-for">Fundadores, artistas, marcas personales y equipos pequeños.</p>
+        <ul class="price-list">
+          <li>Retratos editoriales con contexto real</li>
+          <li>Espacio de trabajo y detalles de proceso</li>
+          <li>Tomas de producto de apoyo</li>
+          <li>Edición curada para web y redes</li>
+          <li>Identidad visual consistente entre canales</li>
+        </ul>
+        <div class="price-delivery">Biblioteca compacta y coherente de imágenes. Para web, press kit, LinkedIn y redes.</div>
+        <p class="price-note">Cotización según alcance de sesión y número de sets.</p>
+        <a href="#contact" class="btn btn-accent-outline" style="font-size:.72rem;padding:.65rem 1.5rem;">Cotizar branding →</a>
+      </div>
+      <div class="price-card featured rev rev-d2">
+        <span class="price-eyebrow">Línea 02 · Más solicitada</span>
+        <h3>Gastronomía<br>&amp; Producto</h3>
+        <p class="price-for">Chefs, cafés, restaurantes y marcas de comida o producto.</p>
+        <ul class="price-list">
+          <li>Cobertura de cocina o barra</li>
+          <li>Retratos del equipo</li>
+          <li>Detalles de platillo e ingredientes</li>
+          <li>Tomas de ambiente</li>
+          <li>Producto limpio para eCommerce</li>
+          <li>Librería de activos reutilizable</li>
+        </ul>
+        <div class="price-delivery">Para menú, campaña de lanzamiento, apps de delivery y eCommerce.</div>
+        <p class="price-note">Cotización según complejidad y número de platos / productos.</p>
+        <a href="#contact" class="btn btn-solid" style="font-size:.72rem;padding:.65rem 1.5rem;">Cotizar gastronomía →</a>
+      </div>
+      <div class="price-card rev rev-d3">
+        <span class="price-eyebrow">Línea 03</span>
+        <h3>Eventos<br>&amp; Música</h3>
+        <p class="price-for">Conciertos, showcases, lanzamientos y programación cultural.</p>
+        <ul class="price-list">
+          <li>Cobertura de escenario, público y venue</li>
+          <li>Imágenes de atmósfera y detalle</li>
+          <li>Retratos de artistas en contexto</li>
+          <li>Frames hero para prensa</li>
+          <li>Entrega ágil para recap</li>
+        </ul>
+        <div class="price-delivery">Para prensa, posts de recap, rollouts de artista y promoción de siguiente edición.</div>
+        <p class="price-note">Fecha puntual o programa recurrente con tarifa preferencial.</p>
+        <a href="#contact" class="btn btn-accent-outline" style="font-size:.72rem;padding:.65rem 1.5rem;">Cotizar evento →</a>
+      </div>
+    </div>
+    <p class="rev" style="text-align:center; margin-top:2.5rem; font-size:.82rem; color:var(--txt); max-width:52ch; margin-inline:auto;">
+      La capacidad mensual está intencionalmente limitada para garantizar profundidad en cada proyecto. Si tienes fechas en mente, contáctame pronto.
+    </p>
+  </div>
+</section>
+
+<!-- ══ CONTACT ═════════════════════════════════════ -->
+<section class="sec" id="contact">
+  <div class="sec-inner">
+    <div class="contact-layout">
+      <div class="contact-info rev">
+        <p class="eyebrow">Hablemos</p>
+        <h2>Cuéntame qué necesitas y armamos la sesión ideal</h2>
+        <p class="lead">Comparte el proyecto y te propongo el alcance correcto — sin compromisos en el primer mensaje.</p>
+        <ul class="contact-hints">
+          <li><strong>Tipo de proyecto</strong><span>Retrato, branding, gastronomía, evento…</span></li>
+          <li><strong>Ubicación</strong><span>Colonia, venue, estudio, exterior…</span></li>
+          <li><strong>Ventana de tiempo</strong><span>Fecha o período aproximado</span></li>
+          <li><strong>Uso de las fotos</strong><span>Redes, web, prensa, menú, eCommerce…</span></li>
+        </ul>
+        <p style="font-size:.75rem; color:var(--txt); margin-top:1.5rem; font-style:italic;">
+          Normalmente respondo en menos de 24 horas en días hábiles.
+        </p>
+      </div>
+      <div class="rev rev-d1">
+        <!-- Netlify form -->
+        <form name="contact" method="POST" data-netlify="true" class="contact-form" id="contactForm" netlify-honeypot="bot-field">
+          <input type="hidden" name="form-name" value="contact">
+          <p style="display:none"><label>No llenar: <input name="bot-field"></label></p>
+          <div class="cf-row">
+            <div class="cf-field">
+              <label for="cf-name">Nombre *</label>
+              <input type="text" id="cf-name" name="name" placeholder="Tu nombre" required>
+            </div>
+            <div class="cf-field">
+              <label for="cf-email">Correo *</label>
+              <input type="email" id="cf-email" name="email" placeholder="tu@correo.com" required>
+            </div>
+          </div>
+          <div class="cf-field">
+            <label for="cf-type">Tipo de consulta *</label>
+            <select id="cf-type" name="type" required>
+              <option value="" disabled selected>Selecciona una opción…</option>
+              <option value="branding">Sesión de branding</option>
+              <option value="gastronomy">Proyecto gastronómico</option>
+              <option value="events">Evento o concierto</option>
+              <option value="portraits">Sesión de retrato</option>
+              <option value="general">Consulta general</option>
+            </select>
+          </div>
+          <div class="cf-field">
+            <label for="cf-msg">Mensaje *</label>
+            <textarea id="cf-msg" name="message" placeholder="Cuéntame del proyecto, venue, fechas y dónde se van a usar las imágenes." required></textarea>
+          </div>
+          <div>
+            <button type="submit" class="btn btn-solid" id="formSubmit" style="width:100%;justify-content:center;">Enviar mensaje</button>
+          </div>
+          <div class="form-success" id="formSuccess">
+            Gracias. Te responderé en cuanto pueda — normalmente en menos de 24 horas.
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ FOOTER ══════════════════════════════════════ -->
+<footer>
+  <div class="footer-inner">
+    <div class="footer-brand">Javier <em>Rangel</em></div>
+    <nav class="footer-nav">
+      <a href="#services">Servicios</a>
+      <a href="#portfolio">Portafolio</a>
+      <a href="#about">Sobre mí</a>
+      <a href="#contact">Contacto</a>
+    </nav>
+    <p class="footer-copy">© 2025 Javier Rangel · Ciudad de México</p>
+  </div>
+</footer>
+
+<!-- LIGHTBOX -->
+<div class="lb" id="lb" role="dialog" aria-modal="true">
+  <button class="lb-close" id="lbClose" aria-label="Cerrar">×</button>
+  <button class="lb-prev" id="lbPrev" aria-label="Anterior">‹</button>
+  <img alt="" id="lbImg">
+  <button class="lb-next" id="lbNext" aria-label="Siguiente">›</button>
+</div>
+
+<!-- TWEAKS ROOT -->
+<div id="tweaks-root"></div>
+<script type="text/babel" src="tweaks-panel.jsx"></script>
+
+<!-- ══ TWEAKS ══════════════════════════════════════ -->
+<script type="text/babel">
+const TWEAK_DEFAULTS = /*EDITMODE-BEGIN*/{
+  "heroStyle": "fullbleed",
+  "accentColor": "gold",
+  "lang": "es"
+}/*EDITMODE-END*/;
+
+function PortfolioTweaks() {
+  const { TweaksPanel, TweakSection, TweakRadio, useTweaks } = window;
+  const [tweaks, setTweak] = useTweaks(TWEAK_DEFAULTS);
+
+  React.useEffect(() => {
+    document.body.setAttribute('data-hero', tweaks.heroStyle);
+    document.body.setAttribute('data-accent', tweaks.accentColor);
+    // Language swap
+    const es = document.querySelectorAll('[data-es]');
+    const en = document.querySelectorAll('[data-en]');
+    if (tweaks.lang === 'en') {
+      es.forEach(el => { el.style.display = 'none'; });
+      en.forEach(el => { el.style.display = ''; });
+    } else {
+      es.forEach(el => { el.style.display = ''; });
+      en.forEach(el => { el.style.display = 'none'; });
+    }
+  }, [tweaks]);
+
+  return React.createElement(TweaksPanel, null,
+    React.createElement(TweakSection, { title: 'Hero' },
+      React.createElement(TweakRadio, {
+        label: 'Variante',
+        value: tweaks.heroStyle,
+        options: [
+          { value: 'fullbleed', label: 'Fullbleed' },
+          { value: 'split', label: 'Split' },
+          { value: 'editorial', label: 'Editorial' }
+        ],
+        onChange: v => setTweak('heroStyle', v)
+      })
+    ),
+    React.createElement(TweakSection, { title: 'Acento' },
+      React.createElement(TweakRadio, {
+        label: 'Color',
+        value: tweaks.accentColor,
+        options: [
+          { value: 'gold', label: 'Dorado' },
+          { value: 'red', label: 'Rojo' },
+          { value: 'silver', label: 'Plata' }
+        ],
+        onChange: v => setTweak('accentColor', v)
+      })
+    ),
+    React.createElement(TweakSection, { title: 'Idioma' },
+      React.createElement(TweakRadio, {
+        label: '',
+        value: tweaks.lang,
+        options: [
+          { value: 'es', label: 'Español' },
+          { value: 'en', label: 'English' }
+        ],
+        onChange: v => setTweak('lang', v)
+      })
+    )
+  );
+}
+
+const tweaksRoot = document.getElementById('tweaks-root');
+if (tweaksRoot) {
+  ReactDOM.createRoot(tweaksRoot).render(React.createElement(PortfolioTweaks));
+}
+</script>
+
+<!-- ══ JS ══════════════════════════════════════════ -->
+<script>
+/* ─── Nav scroll ─── */
+const nav = document.getElementById('nav');
+window.addEventListener('scroll', () => {
+  nav.classList.toggle('scrolled', window.scrollY > 40);
+}, { passive:true });
+
+/* ─── Mobile menu ─── */
+const hamBtn = document.getElementById('hamBtn');
+const mobMenu = document.getElementById('mobMenu');
+hamBtn.addEventListener('click', () => {
+  const open = mobMenu.classList.toggle('open');
+  document.body.style.overflow = open ? 'hidden' : '';
+});
+document.querySelectorAll('.mob-link').forEach(a => {
+  a.addEventListener('click', () => {
+    mobMenu.classList.remove('open');
+    document.body.style.overflow = '';
+  });
+});
+
+/* ─── Hero zoom ─── */
+const heroImg = document.getElementById('heroImg');
+if (heroImg) {
+  const activate = () => heroImg.classList.add('loaded');
+  heroImg.complete ? activate() : heroImg.addEventListener('load', activate);
+}
+
+/* ─── Gallery filter ─── */
+const galBtns = document.querySelectorAll('.gal-btn');
+const galItems = document.querySelectorAll('.gal-item');
+galBtns.forEach(btn => {
+  btn.addEventListener('click', () => {
+    galBtns.forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    const filter = btn.dataset.filter;
+    galItems.forEach(item => {
+      const show = filter === 'all' || item.dataset.cat === filter;
+      item.classList.toggle('vis', show);
+    });
+  });
+});
+
+/* ─── Lightbox ─── */
+const lb = document.getElementById('lb');
+const lbImg = document.getElementById('lbImg');
+const lbClose = document.getElementById('lbClose');
+const lbPrev = document.getElementById('lbPrev');
+const lbNext = document.getElementById('lbNext');
+let lbImages = [];
+let lbIndex = 0;
+
+function openLb(imgs, idx) {
+  lbImages = imgs;
+  lbIndex = idx;
+  lbImg.src = imgs[idx];
+  lb.classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+function closeLb() {
+  lb.classList.remove('open');
+  document.body.style.overflow = '';
+  lbImg.src = '';
+}
+function navLb(dir) {
+  lbIndex = (lbIndex + dir + lbImages.length) % lbImages.length;
+  lbImg.src = lbImages[lbIndex];
+}
+
+document.querySelectorAll('.gal-item').forEach((item) => {
+  item.addEventListener('click', () => {
+    const visItems = [...document.querySelectorAll('.gal-item.vis')];
+    const imgs = visItems.map(i => i.querySelector('img').src);
+    const idx = visItems.indexOf(item);
+    openLb(imgs, idx);
+  });
+});
+lbClose.addEventListener('click', closeLb);
+lbPrev.addEventListener('click', () => navLb(-1));
+lbNext.addEventListener('click', () => navLb(1));
+lb.addEventListener('click', e => { if (e.target === lb) closeLb(); });
+document.addEventListener('keydown', e => {
+  if (!lb.classList.contains('open')) return;
+  if (e.key === 'Escape') closeLb();
+  if (e.key === 'ArrowLeft') navLb(-1);
+  if (e.key === 'ArrowRight') navLb(1);
+});
+
+/* ─── Reveal on scroll ─── */
+const revEls = document.querySelectorAll('.rev');
+const io = new IntersectionObserver((entries) => {
+  entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } });
+}, { threshold:.12 });
+revEls.forEach(el => io.observe(el));
+
+/* ─── Contact form (fallback for non-Netlify preview) ─── */
+const contactForm = document.getElementById('contactForm');
+const formSuccess = document.getElementById('formSuccess');
+const formSubmit = document.getElementById('formSubmit');
+if (contactForm) {
+  contactForm.addEventListener('submit', async (e) => {
+    // Only intercept if not Netlify (preview mode)
+    if (window.location.hostname.includes('netlify') || window.location.hostname.includes('jrmgraphy')) return;
+    e.preventDefault();
+    formSubmit.textContent = 'Enviando…';
+    formSubmit.disabled = true;
+    await new Promise(r => setTimeout(r, 1200));
+    formSubmit.style.display = 'none';
+    formSuccess.style.display = 'block';
+    contactForm.reset();
+  });
+}
+</script>
+</body>
+</html>
