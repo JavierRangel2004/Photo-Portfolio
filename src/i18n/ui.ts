@@ -19,7 +19,7 @@ export const ui = {
     'header.close': 'Close navigation',
 
     'hero.eyebrow': 'Photography in Mexico City',
-    'hero.title': 'Photography for artists, personal brands, and creative projects in Mexico City.',
+    'hero.title': 'Documentary photography and portraiture for creative projects in Mexico City.',
     'hero.subtitle': 'Portraits, branding, and event coverage with natural, professional images ready to use in press, social, and the web.',
     'hero.cta.primary': 'Request a quote',
     'hero.cta.secondary': 'View portfolio',
@@ -263,7 +263,7 @@ export const ui = {
     'header.close': 'Cerrar menú',
 
     'hero.eyebrow': 'Fotografía en Ciudad de México',
-    'hero.title': 'Fotografía para artistas, marcas personales y proyectos creativos en CDMX.',
+    'hero.title': 'Fotografía y retrato documental para proyectos creativos en CDMX.',
     'hero.subtitle': 'Retratos, branding y cobertura de eventos con imágenes naturales, profesionales y listas para promoción.',
     'hero.cta.primary': 'Cotizar proyecto',
     'hero.cta.secondary': 'Ver portafolio',
