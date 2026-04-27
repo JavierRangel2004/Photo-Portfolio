@@ -190,6 +190,54 @@ export function getPhotoGroup(photo: Photo): PortfolioGroupId {
   return group?.id ?? 'author-archive';
 }
 
+export interface HeroBackgroundCandidate {
+  src: string;
+  width: number;
+  height: number;
+}
+
+function toHeroBackgroundCandidate(photo: Photo): HeroBackgroundCandidate {
+  return {
+    src: photo.src,
+    width: photo.width && photo.width > 0 ? photo.width : 1920,
+    height: photo.height && photo.height > 0 ? photo.height : 1280,
+  };
+}
+
+/**
+ * Pools for the home hero: desktop uses landscape (+ square) assets; mobile uses portrait.
+ * Falls back within the branding set, then all photos, so a pool is rarely empty.
+ */
+export function getHeroBackgroundPools(): {
+  landscape: HeroBackgroundCandidate[];
+  portrait: HeroBackgroundCandidate[];
+} {
+  const fromBranding = getPhotosByGroup('branding');
+  const base = fromBranding.length > 0 ? fromBranding : getAllPhotos();
+
+  const isLandscape = (p: Photo) => getPhotoOrientation(p) === 'landscape';
+  const isSquare = (p: Photo) => getPhotoOrientation(p) === 'square';
+  const isPortrait = (p: Photo) => getPhotoOrientation(p) === 'portrait';
+
+  const landscape = base
+    .filter((p) => isLandscape(p) || isSquare(p))
+    .map(toHeroBackgroundCandidate);
+  const portrait = base
+    .filter((p) => isPortrait(p))
+    .map(toHeroBackgroundCandidate);
+
+  const withFallbacks = (primary: HeroBackgroundCandidate[], fallbacks: HeroBackgroundCandidate[]) => {
+    if (primary.length) return primary;
+    if (fallbacks.length) return fallbacks;
+    return base.length ? base.map(toHeroBackgroundCandidate) : [];
+  };
+
+  return {
+    landscape: withFallbacks(landscape, portrait),
+    portrait: withFallbacks(portrait, landscape),
+  };
+}
+
 export function getHeroPhoto(): Photo | undefined {
   return getCuratedPhotosByGroup('branding', 1)[0] ?? getAllPhotos()[0];
 }
