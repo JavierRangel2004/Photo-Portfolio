@@ -508,12 +508,12 @@ ol {
 .smoke-transition {
   position: absolute;
   inset-inline: 0;
-  bottom: -34vh;
+  bottom: -10vh;
   z-index: 2;
-  height: 62vh;
+  height: 80vh;
   pointer-events: none;
-  -webkit-mask-image: linear-gradient(to bottom, transparent 0%, rgba(0, 0, 0, 0.18) 28%, #000 66%);
-  mask-image: linear-gradient(to bottom, transparent 0%, rgba(0, 0, 0, 0.18) 28%, #000 66%);
+  -webkit-mask-image: linear-gradient(to bottom, transparent 0%, rgba(0, 0, 0, 0.5) 25%, rgba(0,0,0,0.88) 55%, #000 75%);
+  mask-image: linear-gradient(to bottom, transparent 0%, rgba(0, 0, 0, 0.5) 25%, rgba(0,0,0,0.88) 55%, #000 75%);
 }
 
 .smoke-transition::after {
@@ -522,10 +522,10 @@ ol {
   left: 0;
   right: 0;
   bottom: -1px;
-  height: max(100px, 15vh);
+  height: max(120px, 18vh);
   z-index: 4;
   pointer-events: none;
-  background: linear-gradient(to bottom, transparent, #000000 72%, #000000);
+  background: linear-gradient(to bottom, transparent, #000000 55%, #000000);
 }
 
 .smoke-layer {
@@ -536,24 +536,25 @@ ol {
   user-select: none;
   transform-origin: center bottom;
   will-change: transform, opacity;
+  mix-blend-mode: screen;
 }
 
 .smoke-layer--back {
   left: 50%;
-  bottom: -10vh;
-  width: min(190vw, 1900px);
-  opacity: 0.46;
+  bottom: -4vh;
+  width: min(220vw, 2400px);
+  opacity: 0.72;
   transform: translateX(-50%) scale(1);
-  filter: brightness(0.36) contrast(1.12) saturate(0.2);
+  filter: invert(1) brightness(0.55) contrast(1.05) saturate(0.1);
 }
 
 .smoke-layer--front {
   left: 50%;
-  bottom: -14vh;
-  width: clamp(18rem, 34vw, 30rem);
-  opacity: 0.5;
+  bottom: -6vh;
+  width: clamp(38rem, 68vw, 90rem);
+  opacity: 0.82;
   transform: translateX(-50%) scale(1);
-  filter: brightness(0.32) contrast(1.2) saturate(0);
+  filter: invert(1) brightness(0.6) contrast(1.1) saturate(0);
 }
 
 .hero-content {
@@ -1997,17 +1998,19 @@ ol {
   }
 
   .smoke-transition {
-    bottom: -14vh;
-    height: 54vh;
+    bottom: -6vh;
+    height: 72vh;
   }
 
   .smoke-layer--back {
-    width: 225vw;
+    width: 280vw;
+    opacity: 0.68;
   }
 
   .smoke-layer--front {
     bottom: -4vh;
-    width: clamp(15rem, 72vw, 22rem);
+    width: clamp(28rem, 90vw, 52rem);
+    opacity: 0.75;
   }
 
   .hero-scroll {

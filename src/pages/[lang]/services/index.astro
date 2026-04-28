@@ -111,19 +111,19 @@ const serviceSchemas = packages.map((pkg) => ({
   <main class="site-main bg-[#0A0A0A] pb-40">
     <section class="bg-[#0A0A0A] pt-16 pb-20 md:pt-20 md:pb-24 lg:pt-24 lg:pb-28">
       <div class="mx-auto w-full max-w-7xl px-6">
-        <p class="mb-4 font-sans text-xs font-medium uppercase tracking-[0.2em] text-[#D6B36A]">
+        <p class="svc-eyebrow mb-4 font-sans text-xs font-medium uppercase tracking-[0.2em] text-[#D6B36A]">
           {t('services.hero.eyebrow')}
         </p>
-        <h1 class="max-w-5xl !font-heading text-5xl leading-[0.98] tracking-[-0.03em] text-[#FFFFFF] lg:text-7xl">
+        <h1 class="svc-h1 max-w-5xl !font-heading text-5xl leading-[0.98] tracking-[-0.03em] text-[#FFFFFF] lg:text-7xl">
           {t('services.hero.title')}
         </h1>
-        <p class="mt-6 max-w-3xl text-base leading-8 text-[#A8A29E] lg:text-lg">
+        <p class="svc-sub mt-6 max-w-3xl text-base leading-8 text-[#A8A29E] lg:text-lg">
           {t('services.hero.sub')}
         </p>
       </div>
     </section>
 
-    <section class="bg-[#0A0A0A] pb-16 md:pb-20">
+    <section class="svc-intro-section bg-[#0A0A0A] pb-16 md:pb-20">
       <div class="mx-auto w-full max-w-7xl px-6">
         <div class="max-w-3xl">
           <h2 class="!font-heading text-4xl leading-[1.02] tracking-[-0.02em] text-[#FFFFFF] lg:text-5xl">
@@ -162,7 +162,7 @@ const serviceSchemas = packages.map((pkg) => ({
               )}
             </div>
 
-            <div class:list={["space-y-6", bodyOrder]}>
+            <div class:list={["svc-pkg-body space-y-6", bodyOrder]}>
               <header class="space-y-4">
                 <p class="text-eyebrow">
                   {t('services.package.eyebrow')}
@@ -182,7 +182,7 @@ const serviceSchemas = packages.map((pkg) => ({
               </header>
 
               <div class="grid gap-4 md:grid-cols-2">
-                <div class="space-y-3 rounded-[20px] border border-white/10 bg-white/[0.02] p-5">
+                <div class="svc-pkg-detail space-y-3 rounded-[20px] border border-white/10 bg-white/[0.02] p-5">
                   <p class="text-eyebrow">
                     {t('services.package.tactical')}
                   </p>
@@ -190,7 +190,7 @@ const serviceSchemas = packages.map((pkg) => ({
                     {item.includes}
                   </p>
                 </div>
-                <div class="space-y-3 rounded-[20px] border border-white/10 bg-white/[0.02] p-5">
+                <div class="svc-pkg-detail space-y-3 rounded-[20px] border border-white/10 bg-white/[0.02] p-5">
                   <p class="text-eyebrow">
                     {t('services.package.strategic')}
                   </p>
@@ -216,7 +216,7 @@ const serviceSchemas = packages.map((pkg) => ({
       </div>
     </section>
 
-    <section class="bg-[#0A0A0A] py-32 pb-40 md:py-36 md:pb-48 lg:py-48 lg:pb-56">
+    <section class="svc-process-section bg-[#0A0A0A] py-32 pb-40 md:py-36 md:pb-48 lg:py-48 lg:pb-56">
       <div class="mx-auto w-full max-w-7xl px-6">
         <div class="max-w-3xl">
           <h2 class="!font-heading text-4xl leading-[1.02] tracking-[-0.02em] text-[#FFFFFF] lg:text-6xl">
@@ -241,7 +241,7 @@ const serviceSchemas = packages.map((pkg) => ({
       </div>
     </section>
 
-    <section class="bg-[#0A0A0A] pb-40">
+    <section class="svc-inline-cta bg-[#0A0A0A] pb-40">
       <div class="mx-auto w-full max-w-7xl px-6">
         <div class="grid gap-6 border-l-2 border-[#D6B36A] py-12 pl-6 lg:grid-cols-[minmax(0,1fr)_auto] lg:items-center lg:gap-10">
           <div>
@@ -270,3 +270,161 @@ const serviceSchemas = packages.map((pkg) => ({
 
   <Footer />
 </BaseLayout>
+
+<script>
+  import { gsap } from 'gsap';
+  import { ScrollTrigger } from 'gsap/ScrollTrigger';
+
+  gsap.registerPlugin(ScrollTrigger);
+
+  const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (!prefersReducedMotion) {
+    const ctx = gsap.context(() => {
+
+      /* ── Hero intro ─────────────────────────────────────── */
+      const heroEyebrow = document.querySelector('.svc-eyebrow');
+      const heroH1 = document.querySelector('.svc-h1');
+      const heroSub = document.querySelector('.svc-sub');
+
+      if (heroEyebrow && heroH1 && heroSub) {
+        gsap.set([heroEyebrow, heroH1, heroSub], { opacity: 0, y: 36 });
+        gsap.to(heroEyebrow, { opacity: 1, y: 0, duration: 0.7, ease: 'power3.out', delay: 0.1 });
+        gsap.to(heroH1, { opacity: 1, y: 0, duration: 0.9, ease: 'power3.out', delay: 0.25 });
+        gsap.to(heroSub, { opacity: 1, y: 0, duration: 0.8, ease: 'power3.out', delay: 0.42 });
+      }
+
+      /* ── Intro section ─────────────────────────────────── */
+      const introSection = document.querySelector('.svc-intro-section');
+      if (introSection) {
+        gsap.set(introSection.querySelectorAll('h2, p'), { opacity: 0, y: 32 });
+        ScrollTrigger.create({
+          trigger: introSection,
+          start: 'top 82%',
+          onEnter: () => {
+            gsap.to(introSection.querySelectorAll('h2'), { opacity: 1, y: 0, duration: 0.75, ease: 'power3.out' });
+            gsap.to(introSection.querySelectorAll('p'), { opacity: 1, y: 0, duration: 0.7, ease: 'power3.out', delay: 0.15 });
+          },
+        });
+      }
+
+      /* ── Service package articles ──────────────────────── */
+      document.querySelectorAll('article[id]').forEach((articleEl) => {
+        const article = articleEl as HTMLElement;
+        const imgWrapper = article.querySelector('div.relative') as HTMLElement | null;
+        const img = article.querySelector('img') as HTMLElement | null;
+        const body = article.querySelector('.svc-pkg-body') as HTMLElement | null;
+        const header = body?.querySelector('header') as HTMLElement | null;
+        const details = Array.from(body?.querySelectorAll('.svc-pkg-detail') ?? []) as HTMLElement[];
+        const cta = body?.querySelector('a[data-analytics-label]') as HTMLElement | null;
+
+        // Image: clip-path wipe reveal
+        if (imgWrapper && img) {
+          gsap.set(imgWrapper, { clipPath: 'inset(0 100% 0 0)', opacity: 0 });
+          ScrollTrigger.create({
+            trigger: article,
+            start: 'top 76%',
+            onEnter: () => {
+              gsap.to(imgWrapper, {
+                clipPath: 'inset(0 0% 0 0)',
+                opacity: 1,
+                duration: 1.1,
+                ease: 'power3.inOut',
+              });
+              gsap.from(img, { scale: 1.1, duration: 1.5, ease: 'power3.out' });
+            },
+          });
+        }
+
+        // Body content: stagger from bottom
+        const bodyEls = [header, ...details, cta].filter((el): el is HTMLElement => el !== null);
+        if (bodyEls.length > 0) {
+          gsap.set(bodyEls, { opacity: 0, y: 40 });
+          ScrollTrigger.create({
+            trigger: article,
+            start: 'top 78%',
+            onEnter: () => {
+              gsap.to(bodyEls, {
+                opacity: 1,
+                y: 0,
+                duration: 0.72,
+                ease: 'power3.out',
+                stagger: 0.12,
+              });
+            },
+          });
+        }
+      });
+
+      /* ── Process steps ─────────────────────────────────── */
+      const processSection = document.querySelector('.svc-process-section') as HTMLElement | null;
+      if (processSection) {
+        const processH2 = processSection.querySelector('h2') as HTMLElement | null;
+        const stepArticles = Array.from(processSection.querySelectorAll('article')) as HTMLElement[];
+
+        if (processH2) {
+          gsap.set(processH2, { opacity: 0, y: 30 });
+          ScrollTrigger.create({
+            trigger: processSection,
+            start: 'top 80%',
+            onEnter: () => gsap.to(processH2, { opacity: 1, y: 0, duration: 0.8, ease: 'power3.out' }),
+          });
+        }
+
+        stepArticles.forEach((step, i) => {
+          const num = step.querySelector('span') as HTMLElement | null;
+          const h3 = step.querySelector('h3') as HTMLElement | null;
+          const p = step.querySelector('p') as HTMLElement | null;
+
+          const els = [num, h3, p].filter((el): el is HTMLElement => el !== null);
+          gsap.set(els, { opacity: 0, y: 28 });
+
+          ScrollTrigger.create({
+            trigger: step,
+            start: 'top 80%',
+            onEnter: () => {
+              gsap.to(els, {
+                opacity: 1,
+                y: 0,
+                duration: 0.65,
+                ease: 'power3.out',
+                stagger: 0.1,
+                delay: i * 0.14,
+              });
+              // Animate number counter
+              if (num) {
+                const finalText = num.textContent || '';
+                const finalNum = parseInt(finalText);
+                if (!isNaN(finalNum)) {
+                  const obj = { val: 0 };
+                  gsap.to(obj, {
+                    val: finalNum,
+                    duration: 1.1,
+                    delay: i * 0.14,
+                    ease: 'power2.out',
+                    onUpdate: () => {
+                      if (num) num.textContent = `${Math.round(obj.val)}.`;
+                    },
+                  });
+                }
+              }
+            },
+          });
+        });
+      }
+
+      /* ── Inline CTA ────────────────────────────────────── */
+      const ctaSection = document.querySelector('.svc-inline-cta') as HTMLElement | null;
+      if (ctaSection) {
+        gsap.set(ctaSection, { opacity: 0, y: 40 });
+        ScrollTrigger.create({
+          trigger: ctaSection,
+          start: 'top 84%',
+          onEnter: () => gsap.to(ctaSection, { opacity: 1, y: 0, duration: 0.85, ease: 'power3.out' }),
+        });
+      }
+
+    });
+
+    window.addEventListener('pagehide', () => ctx.revert(), { once: true });
+  }
+</script>

@@ -143,7 +143,7 @@ const translatePath = useTranslatedPath(lang);
         scrollTrigger: {
           trigger: heroScene,
           start: 'top top',
-          end: '+=165%',
+          end: '+=70%',
           scrub: 0.85,
           pin: true,
           anticipatePin: 1,
@@ -152,12 +152,12 @@ const translatePath = useTranslatedPath(lang);
       });
 
       timeline
-        .to('.hero-content', { y: -50, opacity: 0, duration: 0.42 }, 0)
-        .to(heroImg, { scale: 1.05, duration: 1 }, 0)
-        .to('.smoke-transition', { y: '-18vh', duration: 1 }, 0)
-        .to('.smoke-layer--back', { y: '-42vh', scale: 1.3, opacity: 0.92, duration: 1 }, 0.05)
-        .to('.smoke-layer--front', { y: '-64vh', scale: 3.65, opacity: 0.96, duration: 0.86 }, 0.14)
-        .to(heroScene, { '--hero-blackout-opacity': 1, duration: 0.24 }, 0.76);
+        .to('.hero-content', { y: -80, opacity: 0, duration: 0.3 }, 0)
+        .to(heroImg, { scale: 1.07, duration: 1 }, 0)
+        .to('.smoke-transition', { y: '-5vh', duration: 1 }, 0)
+        .to('.smoke-layer--back', { y: '-16vh', scale: 1.1, opacity: 0.74, duration: 0.75 }, 0.02)
+        .to('.smoke-layer--front', { y: '-32vh', scale: 2.0, opacity: 0.82, duration: 0.72 }, 0.06)
+        .to(heroScene, { '--hero-blackout-opacity': 1, duration: 0.22 }, 0.78);
 
       ScrollTrigger.refresh();
     }, heroScene);
