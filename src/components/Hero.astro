@@ -136,7 +136,9 @@ const translatePath = useTranslatedPath(lang);
   const heroScene = document.querySelector<HTMLElement>('#home-hero-scene');
   const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-  if (heroScene && heroImg && !prefersReducedMotion) {
+  const isDesktop = window.matchMedia('(min-width: 769px)').matches;
+
+  if (heroScene && heroImg && !prefersReducedMotion && isDesktop) {
     const ctx = gsap.context(() => {
       const timeline = gsap.timeline({
         defaults: { ease: 'none' },
@@ -267,22 +269,42 @@ const translatePath = useTranslatedPath(lang);
       font-size: clamp(2.2rem, 10vw, 3rem);
       max-width: 10.5ch;
       margin-bottom: 1rem;
+      /* No transform animation on mobile — prevents subpixel blur */
+      opacity: 1;
+      transform: none;
+      animation: none;
+      -webkit-font-smoothing: antialiased;
     }
 
     .hero-subtitle {
       font-size: 1rem;
       line-height: 1.55;
       margin-bottom: 1.25rem;
+      opacity: 1;
+      transform: none;
+      animation: none;
     }
 
     .hero-tags {
       margin-top: 1rem;
       row-gap: 0.25rem;
+      opacity: 1;
+      transform: none;
+      animation: none;
     }
 
     .hero-actions {
       gap: 0.75rem;
       margin-top: 1.35rem;
+      opacity: 1;
+      transform: none;
+      animation: none;
+    }
+
+    .hero-eyebrow {
+      opacity: 1;
+      transform: none;
+      animation: none;
     }
   }
 </style>

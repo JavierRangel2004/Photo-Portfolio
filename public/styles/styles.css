@@ -501,7 +501,7 @@ ol {
   inset: 0;
   z-index: 1;
   background:
-    linear-gradient(to top, rgba(0, 0, 0, 0.96) 0%, rgba(0, 0, 0, 0.56) 42%, rgba(0, 0, 0, 0.18) 72%, rgba(0, 0, 0, 0.5) 100%),
+    linear-gradient(to top, rgba(0, 0, 0, 0.97) 0%, rgba(0, 0, 0, 0.62) 38%, rgba(0, 0, 0, 0.28) 65%, rgba(0, 0, 0, 0.55) 100%),
     linear-gradient(110deg, rgba(214, 179, 106, 0.12), transparent 30%);
 }
 
@@ -566,6 +566,8 @@ ol {
   margin-inline: auto;
   width: 100%;
   will-change: transform, opacity;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 .hero-eyebrow,
@@ -1133,6 +1135,7 @@ ol {
 .portfolio-section {
   border-top: 1px solid var(--color-border);
   scroll-margin-top: calc(var(--nav-height) + var(--sp-8));
+  background: var(--color-bg);
 }
 
 .portfolio-section-head {
@@ -1997,20 +2000,22 @@ ol {
     padding-bottom: var(--sp-10);
   }
 
+  /* Disable smoke on mobile — pins/parallax cause blur + layout shift */
   .smoke-transition {
-    bottom: -6vh;
-    height: 72vh;
+    display: none;
   }
 
-  .smoke-layer--back {
-    width: 280vw;
-    opacity: 0.68;
+  /* Fix hero text rendering on mobile (avoid GPU compositing blur) */
+  .hero-content {
+    will-change: auto;
+    transform: none !important;
   }
 
-  .smoke-layer--front {
-    bottom: -4vh;
-    width: clamp(28rem, 90vw, 52rem);
-    opacity: 0.75;
+  /* Stronger overlay on mobile for text legibility */
+  .hero-overlay {
+    background:
+      linear-gradient(to top, rgba(0, 0, 0, 0.98) 0%, rgba(0, 0, 0, 0.72) 35%, rgba(0, 0, 0, 0.38) 62%, rgba(0, 0, 0, 0.62) 100%),
+      linear-gradient(110deg, rgba(214, 179, 106, 0.1), transparent 30%);
   }
 
   .hero-scroll {
@@ -2021,8 +2026,41 @@ ol {
     align-items: flex-start;
   }
 
+  /* Disable hero entry animations on mobile — prevents subpixel blur during GPU compositing */
+  .hero-eyebrow,
+  .hero-title,
+  .hero-subtitle,
+  .hero-tags,
+  .hero-actions {
+    opacity: 1 !important;
+    transform: none !important;
+    animation: none !important;
+  }
+
   .portfolio-jump {
     width: 100%;
+  }
+
+  /* Full-bleed portfolio sections on mobile — break out of parent .container */
+  .portfolio-section {
+    background: var(--color-bg);
+    margin-inline: calc(-1 * var(--gutter));
+  }
+
+  .portfolio-section-header {
+    padding-inline: var(--gutter) !important;
+    max-width: 100% !important;
+    padding-top: var(--sp-8);
+  }
+
+  .portfolio-gallery-grid {
+    padding-inline: var(--gutter) !important;
+    max-width: 100%;
+  }
+
+  .portfolio-section-actions {
+    padding-inline: var(--gutter) !important;
+    max-width: 100%;
   }
 }
 
