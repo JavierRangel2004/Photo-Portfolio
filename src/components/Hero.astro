@@ -136,7 +136,9 @@ const translatePath = useTranslatedPath(lang);
   const heroScene = document.querySelector<HTMLElement>('#home-hero-scene');
   const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-  if (heroScene && heroImg && !prefersReducedMotion) {
+  const isDesktop = window.matchMedia('(min-width: 769px)').matches;
+
+  if (heroScene && heroImg && !prefersReducedMotion && isDesktop) {
     const ctx = gsap.context(() => {
       const timeline = gsap.timeline({
         defaults: { ease: 'none' },
@@ -192,12 +194,13 @@ const translatePath = useTranslatedPath(lang);
     opacity: 0;
     transform: translateY(14px);
     animation: reveal 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.6s forwards;
+    text-shadow: 0 4px 32px rgba(0, 0, 0, 0.9), 0 2px 8px rgba(0, 0, 0, 0.8); /* Strong shadow */
   }
 
   .hero-subtitle {
     font-size: clamp(1.1rem, 2vw, 1.25rem);
-    font-weight: 400;
-    color: var(--color-text-muted);
+    font-weight: 500; /* Bolder font weight */
+    color: var(--color-primary); /* Use bright white instead of muted */
     max-width: 50ch;
     margin-inline: auto;
     margin-bottom: 2rem;
@@ -205,6 +208,7 @@ const translatePath = useTranslatedPath(lang);
     opacity: 0;
     transform: translateY(14px);
     animation: reveal 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.7s forwards;
+    text-shadow: 0 2px 16px rgba(0, 0, 0, 0.9), 0 2px 4px rgba(0, 0, 0, 0.7); /* Stronger shadow */
   }
 
   .hero-tags {
@@ -249,6 +253,32 @@ const translatePath = useTranslatedPath(lang);
     animation: reveal 0.7s cubic-bezier(0.16, 1, 0.3, 1) 0.8s forwards;
   }
 
+  /* Force hero buttons to be highly visible */
+  .hero-actions .btn-primary {
+    background: #ffffff;
+    color: #000000;
+    border-color: #ffffff;
+    font-weight: 600;
+  }
+
+  .hero-actions .btn-primary:hover {
+    background: var(--color-accent);
+    border-color: var(--color-accent);
+    color: #000000;
+  }
+
+  .hero-actions .btn-ghost {
+    color: #ffffff;
+    border-color: rgba(255, 255, 255, 0.5);
+    background: rgba(0, 0, 0, 0.3); /* Slight background for contrast */
+    backdrop-filter: blur(4px);
+  }
+
+  .hero-actions .btn-ghost:hover {
+    border-color: #ffffff;
+    background: rgba(0, 0, 0, 0.5);
+  }
+
   @media (min-width: 769px) {
     .hero-tags {
       justify-content: flex-start;
@@ -267,22 +297,42 @@ const translatePath = useTranslatedPath(lang);
       font-size: clamp(2.2rem, 10vw, 3rem);
       max-width: 10.5ch;
       margin-bottom: 1rem;
+      /* No transform animation on mobile — prevents subpixel blur */
+      opacity: 1;
+      transform: none;
+      animation: none;
+      -webkit-font-smoothing: antialiased;
     }
 
     .hero-subtitle {
       font-size: 1rem;
       line-height: 1.55;
       margin-bottom: 1.25rem;
+      opacity: 1;
+      transform: none;
+      animation: none;
     }
 
     .hero-tags {
       margin-top: 1rem;
       row-gap: 0.25rem;
+      opacity: 1;
+      transform: none;
+      animation: none;
     }
 
     .hero-actions {
       gap: 0.75rem;
       margin-top: 1.35rem;
+      opacity: 1;
+      transform: none;
+      animation: none;
+    }
+
+    .hero-eyebrow {
+      opacity: 1;
+      transform: none;
+      animation: none;
     }
   }
 </style>
