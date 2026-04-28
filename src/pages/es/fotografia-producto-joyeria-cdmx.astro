@@ -1,0 +1,117 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Header from '../../components/Header.astro';
+import Footer from '../../components/Footer.astro';
+import ContactCTA from '../../components/ContactCTA.astro';
+import SeoLandingBody from '../../components/SeoLandingBody.astro';
+import { getPhotosByCategory, getCuratedPhotosByGroup } from '../../lib/photos';
+import { useTranslations } from '../../i18n/utils';
+
+const t = useTranslations('es');
+
+const productPhotos = getPhotosByCategory('product');
+const heroPhoto = productPhotos[0] ?? getCuratedPhotosByGroup('branding', 1)[0];
+
+const siteUrl = Astro.site ? Astro.site.origin : 'https://jrmgraphy.com';
+const pageUrl = `${siteUrl}/es/fotografia-producto-joyeria-cdmx/`;
+const title = 'Fotografía de producto y joyería en CDMX';
+const description = 'Fotografía de producto y joyería en Ciudad de México: tomas limpias, macro de detalle, control de reflejos y materiales, listas para eCommerce, campaña, catálogo y redes.';
+
+const answerFirst = 'JRMGraphy hace fotografía de producto y joyería en Ciudad de México para marcas, diseñadores y eCommerce que necesitan imágenes con control real de materiales, reflejos y textura. Cubro tomas limpias sobre fondo neutro para tienda en línea (Shopify, Mercado Libre, Amazon), macros de detalle para joyería, relojería y accesorios, tomas editoriales para campaña y lanzamiento, y bodegones con dirección de arte para redes. La entrega se piensa por SKU — con nombres consistentes, formatos horizontal/vertical/cuadrado, color calibrado y fondo aislado cuando se necesita. Base operativa en CDMX (Roma, Condesa, Polanco, Juárez, Centro) y disponibilidad para viajar dentro de México.';
+
+const sections = [
+  {
+    title: 'Para quién está pensado',
+    body: 'Marcas de joyería, relojería, accesorios, cosmética, cuidado personal, home goods, diseño de autor y eCommerce que necesitan una librería de imágenes consistente — no tomas sueltas que rompen la identidad de la tienda.',
+  },
+  {
+    title: 'Por qué importa el control de materiales',
+    body: 'Metal, oro, plata, piedra, vidrio y piel se iluminan distinto. Mal manejados, pierden forma o brillan plano. La sesión resuelve reflejos, profundidad de campo y color real — así el producto se ve como en físico.',
+  },
+  {
+    title: 'Qué tipo de tomas se cubren',
+    body: 'Toma limpia sobre fondo blanco o neutro para eCommerce, macro de detalle (textura, engaste, acabado), bodegón editorial con dirección de arte, toma lifestyle con modelo o mano, y tomas 360° o multiángulo por SKU si se requiere.',
+  },
+  {
+    title: 'Cómo se prepara la entrega',
+    body: 'Archivos nombrados por SKU, formatos horizontal/vertical/cuadrado, versión con fondo aislado (PNG o path), color calibrado y resolución alta + versión web optimizada. Listo para Shopify, Mercado Libre, Amazon, catálogo impreso y campañas.',
+  },
+];
+
+const bullets = [
+  'Tomas limpias para tienda en línea y catálogo',
+  'Macro de detalle para joyería y relojería',
+  'Bodegón editorial y lifestyle de producto',
+  'Fondo aislado (PNG/path) por SKU',
+  'Archivos nombrados y organizados por SKU',
+  'Uso comercial, eCommerce y campaña contemplado',
+];
+
+const faq = [
+  {
+    question: '¿Puedo mandar las piezas por mensajería?',
+    answer: 'Sí. Recibimos piezas de joyería y producto pequeño por mensajería asegurada, las trabajamos en estudio y las regresamos con seguimiento. Para piezas de alto valor se coordina recolección o sesión en tu locación.',
+  },
+  {
+    question: '¿Cuántos productos se cubren por sesión?',
+    answer: 'Depende del tipo de toma. Para eCommerce limpio se pueden cubrir 20 a 40 SKUs al día; para macro editorial con dirección de arte, el ritmo baja a 8 a 15 piezas para cuidar cada detalle.',
+  },
+  {
+    question: '¿Incluye retoque y fondo aislado?',
+    answer: 'Sí. El retoque básico (limpieza de polvo, corrección de color, ajuste de exposición) está incluido. El fondo aislado se entrega como PNG con canal alfa o con path vectorial según el uso final.',
+  },
+];
+
+const serviceSchema = {
+  '@type': 'Service',
+  '@id': `${pageUrl}#service`,
+  name: 'Fotografía de producto y joyería en CDMX',
+  serviceType: 'Product and jewelry photography',
+  description,
+  url: pageUrl,
+  provider: { '@id': `${siteUrl}/#organization` },
+  areaServed: { '@type': 'City', name: 'Ciudad de México' },
+  audience: {
+    '@type': 'Audience',
+    audienceType: 'Jewelry brands, eCommerce, product designers',
+  },
+};
+
+const faqSchema = {
+  '@type': 'FAQPage',
+  '@id': `${pageUrl}#faq`,
+  mainEntity: faq.map((item) => ({
+    '@type': 'Question',
+    name: item.question,
+    acceptedAnswer: { '@type': 'Answer', text: item.answer },
+  })),
+};
+---
+
+<BaseLayout
+  title={title}
+  description={description}
+  pageType="landing"
+  schema={[serviceSchema, faqSchema]}
+>
+  <Header />
+
+  <SeoLandingBody
+    lang="es"
+    eyebrow="Fotografía de producto · CDMX"
+    title={title}
+    subtitle="Tomas limpias, macro de detalle y bodegón editorial para joyería, accesorios y eCommerce — con control real de materiales y reflejos."
+    answerFirst={answerFirst}
+    heroPhoto={heroPhoto}
+    sections={sections}
+    bullets={bullets}
+    faq={faq}
+    scarcity={t('contactCta.scarcity')}
+    ctaTitle="Cotizar la sesión de producto"
+    ctaBody="Cuéntame qué piezas quieres fotografiar, cuántos SKUs y para qué canal — te propongo el alcance correcto."
+    ctaLabel={t('contactCta.primary')}
+  />
+
+  <ContactCTA />
+  <Footer />
+</BaseLayout>

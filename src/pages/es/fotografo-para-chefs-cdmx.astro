@@ -1,0 +1,115 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Header from '../../components/Header.astro';
+import Footer from '../../components/Footer.astro';
+import ContactCTA from '../../components/ContactCTA.astro';
+import SeoLandingBody from '../../components/SeoLandingBody.astro';
+import { getCuratedPhotosByGroup, getPhotosByCategory } from '../../lib/photos';
+import { useTranslations } from '../../i18n/utils';
+
+const t = useTranslations('es');
+const heroPhoto = getPhotosByCategory('portraits')[0] ?? getCuratedPhotosByGroup('branding', 1)[0];
+
+const siteUrl = Astro.site ? Astro.site.origin : 'https://jrmgraphy.com';
+const pageUrl = `${siteUrl}/es/fotografo-para-chefs-cdmx/`;
+const title = 'Fotógrafo para chefs en Ciudad de México';
+const description = 'Fotógrafo para chefs en CDMX: retrato editorial, branding documental gastronómico y cobertura de cocina. Imágenes para press kit, prensa, redes, lanzamiento y colaboraciones.';
+
+const answerFirst = 'JRMGraphy (Javier Rangel) es fotógrafo con base en Ciudad de México especializado en retrato editorial y branding documental gastronómico para chefs, cocineros, reposteros y equipos de cocina. Trabajamos la sesión en la cocina real o en el restaurante, capturando retrato del chef, detalles de preparación, manos, ingredientes, barra, platillo emplatado y ambiente del espacio. La entrega está pensada para press kit, notas de prensa, about del sitio, redes del chef o del restaurante, lanzamientos de menú y colaboraciones con marcas. Base operativa en CDMX y disponibilidad para viajar dentro de México.';
+
+const sections = [
+  {
+    title: 'Qué necesita un chef hoy en imágenes',
+    body: 'Retratos honestos — no poses acartonadas — listos para prensa, premios, colaboraciones y redes, más material documental de la cocina que soporte cada lanzamiento de menú y cada campaña.',
+  },
+  {
+    title: 'Cómo se cubre la sesión',
+    body: 'Se cubren tres capas: retrato editorial del chef, proceso documental en la cocina (manos, fuego, ingredientes, emplatado) y ambiente del espacio. Dirigo solo lo necesario para que el chef no tenga que actuar.',
+  },
+  {
+    title: 'Para qué se usa la entrega',
+    body: 'Press kit, prensa y guías gastronómicas, perfil del chef en redes, about del restaurante, colaboraciones con marcas, lanzamientos de menú, libros y material editorial.',
+  },
+  {
+    title: 'Diferencia con fotografía de menú',
+    body: 'Aquí el protagonista es el chef y el proceso, no solo el plato. Si además necesitas las tomas limpias de cada platillo para carta o delivery, se coordina en la misma sesión o como paquete complementario.',
+  },
+];
+
+const bullets = [
+  'Retrato editorial del chef en cocina real',
+  'Documentación de proceso, manos y fuego',
+  'Detalle de ingredientes, emplatado y barra',
+  'Ambiente del restaurante y equipo',
+  'Formatos listos para prensa, press kit y redes',
+  'Uso editorial + colaboraciones incluido en cotización',
+];
+
+const faq = [
+  {
+    question: '¿Trabajan también con pasteleros y reposteros?',
+    answer: 'Sí. La sesión se ajusta al tipo de cocina — pastelería, panadería, cocina de autor, bar de autor, etc. — y se prioriza retrato editorial + detalles del oficio.',
+  },
+  {
+    question: '¿Pueden hacer la sesión durante servicio?',
+    answer: 'Sí, y muchas veces es lo ideal. Trabajo discretamente durante el servicio real para captar atmósfera y movimiento honesto, y dejamos tomas dirigidas para momentos de calma.',
+  },
+  {
+    question: '¿Puedo usar las fotos para premios y guías gastronómicas?',
+    answer: 'Sí. El uso editorial y de prensa se contempla en el brief — así cuando una guía o medio pida foto oficial del chef la tienes lista.',
+  },
+];
+
+const serviceSchema = {
+  '@type': 'Service',
+  '@id': `${pageUrl}#service`,
+  name: 'Fotógrafo para chefs en CDMX',
+  serviceType: 'Chef portrait and gastronomic documentary photography',
+  description,
+  url: pageUrl,
+  provider: { '@id': `${siteUrl}/#organization` },
+  areaServed: { '@type': 'City', name: 'Ciudad de México' },
+  audience: {
+    '@type': 'Audience',
+    audienceType: 'Chefs, restaurants, bakeries, bars',
+  },
+};
+
+const faqSchema = {
+  '@type': 'FAQPage',
+  '@id': `${pageUrl}#faq`,
+  mainEntity: faq.map((item) => ({
+    '@type': 'Question',
+    name: item.question,
+    acceptedAnswer: { '@type': 'Answer', text: item.answer },
+  })),
+};
+---
+
+<BaseLayout
+  title={title}
+  description={description}
+  pageType="landing"
+  schema={[serviceSchema, faqSchema]}
+>
+  <Header />
+
+  <SeoLandingBody
+    lang="es"
+    eyebrow="Fotógrafo para chefs · CDMX"
+    title={title}
+    subtitle="Retrato editorial del chef y documental de cocina para prensa, press kit, colaboraciones y lanzamientos."
+    answerFirst={answerFirst}
+    heroPhoto={heroPhoto}
+    sections={sections}
+    bullets={bullets}
+    faq={faq}
+    scarcity={t('contactCta.scarcity')}
+    ctaTitle="Armemos la sesión para tu cocina"
+    ctaBody="Cuéntame del proyecto — restaurante, cocina, tipo de menú y uso — y te propongo el alcance correcto."
+    ctaLabel={t('contactCta.primary')}
+  />
+
+  <ContactCTA />
+  <Footer />
+</BaseLayout>

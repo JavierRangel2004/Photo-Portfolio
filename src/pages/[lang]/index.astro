@@ -20,11 +20,16 @@ export function getStaticPaths() {
 
 const lang = getLangFromUrl(Astro.url);
 const t = useTranslations(lang);
+
+const homeDesc = lang === 'es'
+  ? 'Javier Rangel (JRMGraphy) — fotografía para artistas, marcas personales y proyectos creativos en CDMX. Retratos, branding, gastronomía y cobertura de eventos con imágenes naturales, profesionales y listas para promoción.'
+  : 'Javier Rangel (JRMGraphy) — photography for artists, personal brands, and creative projects in Mexico City. Portraits, branding, gastronomy, and event coverage built for press, social, and the web.';
 ---
 
 <BaseLayout
   title={t('nav.home')}
-  description={t('gallery.desc')}
+  description={homeDesc}
+  pageType="home"
 >
   <Header />
 

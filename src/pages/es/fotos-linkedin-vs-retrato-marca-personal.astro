@@ -1,0 +1,113 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Header from '../../components/Header.astro';
+import Footer from '../../components/Footer.astro';
+import ContactCTA from '../../components/ContactCTA.astro';
+import SeoLandingBody from '../../components/SeoLandingBody.astro';
+import { getCuratedPhotosByGroup } from '../../lib/photos';
+import { useTranslations } from '../../i18n/utils';
+
+const t = useTranslations('es');
+const heroPhoto = getCuratedPhotosByGroup('branding', 1)[0];
+
+const siteUrl = Astro.site ? Astro.site.origin : 'https://jrmgraphy.com';
+const pageUrl = `${siteUrl}/es/fotos-linkedin-vs-retrato-marca-personal/`;
+const title = 'Fotos para LinkedIn vs retrato de marca personal: qué necesitas tú';
+const description = 'Qué separa unas fotos pensadas solo para LinkedIn de un retrato de marca personal completo: enfoque, entrega, formatos, usos y cómo decidir si vale la pena invertir en marca personal.';
+
+const answerFirst = 'Las fotos para LinkedIn resuelven un punto: que tu perfil profesional se vea claro, confiable y actual. Son una o dos tomas limpias, con buen encuadre y luz, listas para avatar y encabezado. Un retrato de marca personal es un proyecto mucho más grande: tu imagen como activo visual — con foto de perfil, tomas para prensa, press kit, sitio personal, about, hablar en eventos, posts de contenido, ronda y medios. Si solo te faltan avatar + banner, te resuelve una sesión rápida. Si tu nombre vende, enseña, atrae inversión o clientes — necesitas retrato de marca personal. JRMGraphy (Javier Rangel) hace ambos en Ciudad de México, pero la apuesta real está en construir la marca personal completa.';
+
+const sections = [
+  {
+    title: 'Cuánto alcance resuelve cada uno',
+    body: 'Fotos para LinkedIn: perfil + banner + quizás una nota en el feed. Retrato de marca personal: LinkedIn completo + sitio + press kit + prensa + decks + hablar en eventos + contenido en redes + colaboraciones con otras marcas.',
+  },
+  {
+    title: 'Qué cambia en la dirección',
+    body: 'Para LinkedIn la dirección se enfoca en mirada, sonrisa creíble y compostura. Para marca personal trabajamos mirada + gesto + contexto + detalles del oficio — tomas que muestran cómo trabajas, no solo cómo te ves.',
+  },
+  {
+    title: 'Diferencia de entrega',
+    body: 'Sesión para LinkedIn: 3–8 tomas limpias, principalmente cuadradas y horizontales. Retrato de marca personal: selección curada 20–40+ frames, en formatos verticales, horizontales, cuadrados, con tomas de detalle y de espacio para tener siempre material para publicar.',
+  },
+  {
+    title: 'Cuándo escalar de LinkedIn a marca personal',
+    body: 'Cuando empiezas a recibir prensa, cuando lanzas producto a tu nombre, cuando vas a pitchear ronda, cuando hablas en eventos, cuando tu audiencia te sigue a ti y no solo a tu empresa, o cuando tu contenido personal se vuelve parte del embudo comercial.',
+  },
+];
+
+const bullets = [
+  'LinkedIn: perfil + banner',
+  'Marca personal: LinkedIn + sitio + prensa + decks + contenido',
+  'LinkedIn: 3–8 tomas',
+  'Marca personal: 20–40+ frames curados',
+  'LinkedIn: una locación',
+  'Marca personal: oficina, espacio del oficio, detalles',
+];
+
+const faq = [
+  {
+    question: '¿Puedo empezar con fotos para LinkedIn y escalar después?',
+    answer: 'Sí y es una ruta común. Haces una sesión corta para LinkedIn y, cuando tu perfil empieza a traer oportunidades que piden más foto, escalas a una sesión de marca personal completa.',
+  },
+  {
+    question: '¿El retrato de marca personal sirve si no tengo empresa todavía?',
+    answer: 'Sí — especialmente si estás construyendo audiencia, preparando levantamiento, o entrando a una industria donde tu reputación vale más que tu producto.',
+  },
+  {
+    question: '¿Tengo que publicar todo de golpe?',
+    answer: 'No. El paquete se entrega en batch, pero tú decides el rollout: cambiar avatar, sacar un post al mes, publicar detalles en stories — el set aguanta meses de contenido sin verse repetido.',
+  },
+];
+
+const articleSchema = {
+  '@type': 'Article',
+  '@id': `${pageUrl}#article`,
+  headline: title,
+  description,
+  inLanguage: 'es',
+  datePublished: '2026-04-24',
+  dateModified: '2026-04-24',
+  author: { '@id': `${siteUrl}/#person` },
+  publisher: { '@id': `${siteUrl}/#organization` },
+  mainEntityOfPage: pageUrl,
+};
+
+const faqSchema = {
+  '@type': 'FAQPage',
+  '@id': `${pageUrl}#faq`,
+  mainEntity: faq.map((item) => ({
+    '@type': 'Question',
+    name: item.question,
+    acceptedAnswer: { '@type': 'Answer', text: item.answer },
+  })),
+};
+---
+
+<BaseLayout
+  title={title}
+  description={description}
+  pageType="landing"
+  schema={[articleSchema, faqSchema]}
+>
+  <Header />
+
+  <SeoLandingBody
+    lang="es"
+    eyebrow="Guía comparativa · LinkedIn vs marca personal"
+    title={title}
+    subtitle="Cuándo una sesión express de LinkedIn es suficiente y cuándo vale la pena invertir en retrato de marca personal completo."
+    answerFirst={answerFirst}
+    heroPhoto={heroPhoto}
+    sections={sections}
+    bullets={bullets}
+    faq={faq}
+    scarcity={t('contactCta.scarcity')}
+    ctaTitle="¿En qué etapa estás?"
+    ctaBody="Cuéntame si buscas solo perfil de LinkedIn o un retrato de marca personal completo y te propongo el alcance correcto."
+    ctaLabel={t('contactCta.primary')}
+  />
+
+  <ContactCTA />
+  <Footer />
+</BaseLayout>

@@ -1,8 +1,15 @@
 ---
+import { Image } from 'astro:assets';
 import BaseLayout from '../../../layouts/BaseLayout.astro';
 import Header from '../../../components/Header.astro';
 import Footer from '../../../components/Footer.astro';
 import ContactCTA from '../../../components/ContactCTA.astro';
+import {
+  getServiceCoverPhoto,
+  getPhotosByCategory,
+  getRandomPhotosByCategory,
+} from '../../../lib/photos';
+import type { Photo } from '../../../lib/photos';
 import { getLangFromUrl, useTranslations, useTranslatedPath } from '../../../i18n/utils';
 
 export function getStaticPaths() {
@@ -16,6 +23,14 @@ const lang = getLangFromUrl(Astro.url);
 const t = useTranslations(lang);
 const translatePath = useTranslatedPath(lang);
 
+function gastronomyCover(): Photo | undefined {
+  const productPhotos = getPhotosByCategory('product');
+  if (productPhotos.length === 0) {
+    return getServiceCoverPhoto('author-archive');
+  }
+  return getRandomPhotosByCategory('product', 1)[0] ?? productPhotos[0];
+}
+
 const packages = [
   {
     id: 'branding',
@@ -23,8 +38,10 @@ const packages = [
     audience: t('services.package.branding.for'),
     includes: t('services.package.branding.includes'),
     delivery: t('services.package.branding.delivery'),
+    strategic: t('services.package.branding.strategic'),
     price: t('services.package.branding.price'),
     cta: t('services.package.branding.cta'),
+    cover: getServiceCoverPhoto('branding'),
   },
   {
     id: 'gastronomy',
@@ -32,8 +49,10 @@ const packages = [
     audience: t('services.package.gastronomy.for'),
     includes: t('services.package.gastronomy.includes'),
     delivery: t('services.package.gastronomy.delivery'),
+    strategic: t('services.package.gastronomy.strategic'),
     price: t('services.package.gastronomy.price'),
     cta: t('services.package.gastronomy.cta'),
+    cover: gastronomyCover(),
   },
   {
     id: 'events',
@@ -41,8 +60,10 @@ const packages = [
     audience: t('services.package.events.for'),
     includes: t('services.package.events.includes'),
     delivery: t('services.package.events.delivery'),
+    strategic: t('services.package.events.strategic'),
     price: t('services.package.events.price'),
     cta: t('services.package.events.cta'),
+    cover: getServiceCoverPhoto('events'),
   },
 ];
 
@@ -62,27 +83,47 @@ const processSteps = [
 ];
 
 const stripStepPrefix = (value: string) => value.replace(/^\s*\d+\.\s*/, '');
+
+const siteUrl = Astro.site ? Astro.site.origin : 'https://jrmgraphy.com';
+const servicesUrl = `${siteUrl}/${lang}/services`;
+
+const serviceSchemas = packages.map((pkg) => ({
+  '@type': 'Service',
+  '@id': `${servicesUrl}#${pkg.id}`,
+  name: pkg.title,
+  serviceType: pkg.title,
+  description: pkg.includes,
+  provider: { '@id': `${siteUrl}/#organization` },
+  areaServed: { '@type': 'City', name: 'Ciudad de México' },
+  audience: { '@type': 'Audience', audienceType: pkg.audience },
+  url: `${servicesUrl}#${pkg.id}`,
+}));
 ---
 
-<BaseLayout title={t('services.title')} description={t('services.desc')}>
+<BaseLayout
+  title={t('services.title')}
+  description={t('services.desc')}
+  pageType="service"
+  schema={serviceSchemas}
+>
   <Header />
 
   <main class="site-main bg-[#0A0A0A] pb-40">
     <section class="bg-[#0A0A0A] pt-16 pb-20 md:pt-20 md:pb-24 lg:pt-24 lg:pb-28">
       <div class="mx-auto w-full max-w-7xl px-6">
-        <p class="mb-4 font-sans text-xs font-medium uppercase tracking-[0.2em] text-[#D6B36A]">
+        <p class="svc-eyebrow mb-4 font-sans text-xs font-medium uppercase tracking-[0.2em] text-[#D6B36A]">
           {t('services.hero.eyebrow')}
         </p>
-        <h1 class="max-w-5xl !font-heading text-5xl leading-[0.98] tracking-[-0.03em] text-[#FFFFFF] lg:text-7xl">
+        <h1 class="svc-h1 max-w-5xl !font-heading text-5xl leading-[0.98] tracking-[-0.03em] text-[#FFFFFF] lg:text-7xl">
           {t('services.hero.title')}
         </h1>
-        <p class="mt-6 max-w-3xl text-base leading-8 text-[#A8A29E] lg:text-lg">
+        <p class="svc-sub mt-6 max-w-3xl text-base leading-8 text-[#A8A29E] lg:text-lg">
           {t('services.hero.sub')}
         </p>
       </div>
     </section>
 
-    <section class="bg-[#0A0A0A] pb-16 md:pb-20">
+    <section class="svc-intro-section bg-[#0A0A0A] pb-16 md:pb-20">
       <div class="mx-auto w-full max-w-7xl px-6">
         <div class="max-w-3xl">
           <h2 class="!font-heading text-4xl leading-[1.02] tracking-[-0.02em] text-[#FFFFFF] lg:text-5xl">
@@ -96,62 +137,86 @@ const stripStepPrefix = (value: string) => value.replace(/^\s*\d+\.\s*/, '');
     </section>
 
     <section class="bg-[#0A0A0A] pb-24 md:pb-28 lg:pb-32">
-      <div class="mx-auto w-full max-w-7xl px-6">
-        <div class="grid grid-cols-1 gap-12 lg:grid-cols-3 lg:gap-8 lg:divide-x lg:divide-white/10">
-          {packages.map((item) => (
-            <article
-              id={item.id}
-              class="flex h-full flex-col gap-6 px-0 text-left lg:px-8 lg:first:pl-0 lg:last:pr-0"
-            >
-              <div class="flex flex-1 flex-col gap-6">
-                <div class="space-y-4 border-b border-white/10 pb-6">
-                  <p class="font-sans text-xs font-medium uppercase tracking-[0.18em] text-[#D6B36A]">
-                    {t('services.package.eyebrow')}
-                  </p>
-                  <h2 class="!font-heading text-3xl leading-[1.05] tracking-[-0.02em] text-[#FFFFFF] lg:text-[2.35rem]">
-                    {item.title}
-                  </h2>
-                </div>
-                <div class="space-y-3">
-                  <p class="font-sans text-xs font-medium uppercase tracking-[0.18em] text-[#D6B36A]">
-                    {t('services.label.for')}
-                  </p>
-                  <p class="max-w-[30ch] text-base leading-8 text-[#A8A29E]">
-                    {item.audience}
-                  </p>
-                </div>
-                <div class="space-y-3">
-                  <p class="font-sans text-xs font-medium uppercase tracking-[0.18em] text-[#D6B36A]">
-                    {t('services.label.includes')}
-                  </p>
-                  <p class="text-base leading-8 text-[#A8A29E]">
-                    {item.includes}
-                  </p>
-                </div>
-              </div>
-              <div class="mt-auto space-y-6 pt-6">
-                <div class="border-t border-white/10 pt-6">
+      <div class="mx-auto w-full max-w-7xl px-6 space-y-20 lg:space-y-28">
+        {packages.map((item, index) => {
+          const mediaFirst = index % 2 === 0;
+          const mediaOrder = mediaFirst ? 'lg:order-1' : 'lg:order-2';
+          const bodyOrder = mediaFirst ? 'lg:order-2' : 'lg:order-1';
+          return (
+          <article
+            id={item.id}
+            class="grid gap-10 border-t border-white/10 pt-12 lg:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)] lg:gap-14"
+          >
+            <div class:list={["relative overflow-hidden rounded-[28px] border border-white/10 bg-black shadow-[0_30px_60px_rgba(0,0,0,0.55)]", mediaOrder]}>
+              {item.cover && (
+                <Image
+                  src={item.cover.src}
+                  alt={item.title}
+                  width={item.cover.width || 1600}
+                  height={item.cover.height || 1200}
+                  sizes="(min-width: 1024px) 45vw, 92vw"
+                  loading={index === 0 ? 'eager' : 'lazy'}
+                  fetchpriority={index === 0 ? 'high' : 'auto'}
+                  class="h-full w-full object-cover"
+                />
+              )}
+            </div>
+
+            <div class:list={["svc-pkg-body space-y-6", bodyOrder]}>
+              <header class="space-y-4">
+                <p class="text-eyebrow">
+                  {t('services.package.eyebrow')}
+                </p>
+                <h2 class="text-h2 !font-heading">
+                  {item.title}
+                </h2>
+                <p class="prose-measure-sm text-sm leading-7 text-[#A8A29E]">
+                  {item.audience}
+                </p>
+                <div class="pt-2">
                   <p class="!font-heading text-2xl leading-none text-[#FFFFFF]">{item.price}</p>
-                  <span class="mt-2 block font-sans text-sm uppercase tracking-[0.18em] text-[#A8A29E]">
+                  <span class="mt-2 block text-caption">
                     {item.delivery}
                   </span>
                 </div>
-                <div class="border-t border-white/10 pt-6">
-                  <a
-                    href={`/${lang}/contact?${new URLSearchParams({ type: item.id, package: item.title }).toString()}`}
-                    class="inline-flex min-h-12 w-full items-center justify-center rounded-full border border-white/15 px-6 py-3 font-sans text-sm font-medium uppercase tracking-[0.08em] text-[#FFFFFF] transition-all duration-base hover:-translate-y-px hover:border-[#D6B36A] hover:text-[#D6B36A] lg:w-auto"
-                  >
-                    {item.cta}
-                  </a>
+              </header>
+
+              <div class="grid gap-4 md:grid-cols-2">
+                <div class="svc-pkg-detail space-y-3 rounded-[20px] border border-white/10 bg-white/[0.02] p-5">
+                  <p class="text-eyebrow">
+                    {t('services.package.tactical')}
+                  </p>
+                  <p class="text-body">
+                    {item.includes}
+                  </p>
+                </div>
+                <div class="svc-pkg-detail space-y-3 rounded-[20px] border border-white/10 bg-white/[0.02] p-5">
+                  <p class="text-eyebrow">
+                    {t('services.package.strategic')}
+                  </p>
+                  <p class="text-body">
+                    {item.strategic}
+                  </p>
                 </div>
               </div>
-            </article>
-          ))}
-        </div>
+
+              <div class="pt-2">
+                <a
+                  href={`/${lang}/contact?${new URLSearchParams({ type: item.id, package: item.title }).toString()}`}
+                  class="inline-flex min-h-12 items-center justify-center rounded-full border border-[#D6B36A] bg-[#D6B36A] px-6 py-3 font-sans text-sm font-medium uppercase tracking-[0.08em] text-[#0A0A0A] transition-all duration-base hover:-translate-y-px hover:border-[#FFFFFF] hover:bg-[#FFFFFF]"
+                  data-analytics-label={`services_package_${item.id}`}
+                >
+                  {item.cta}
+                </a>
+              </div>
+            </div>
+          </article>
+          );
+        })}
       </div>
     </section>
 
-    <section class="bg-[#0A0A0A] py-32 pb-40 md:py-36 md:pb-48 lg:py-48 lg:pb-56">
+    <section class="svc-process-section bg-[#0A0A0A] py-32 pb-40 md:py-36 md:pb-48 lg:py-48 lg:pb-56">
       <div class="mx-auto w-full max-w-7xl px-6">
         <div class="max-w-3xl">
           <h2 class="!font-heading text-4xl leading-[1.02] tracking-[-0.02em] text-[#FFFFFF] lg:text-6xl">
@@ -176,7 +241,7 @@ const stripStepPrefix = (value: string) => value.replace(/^\s*\d+\.\s*/, '');
       </div>
     </section>
 
-    <section class="bg-[#0A0A0A] pb-40">
+    <section class="svc-inline-cta bg-[#0A0A0A] pb-40">
       <div class="mx-auto w-full max-w-7xl px-6">
         <div class="grid gap-6 border-l-2 border-[#D6B36A] py-12 pl-6 lg:grid-cols-[minmax(0,1fr)_auto] lg:items-center lg:gap-10">
           <div>
@@ -190,8 +255,9 @@ const stripStepPrefix = (value: string) => value.replace(/^\s*\d+\.\s*/, '');
           <a
             href={translatePath('/contact')}
             class="inline-flex min-h-12 items-center justify-center rounded-full border border-[#D6B36A] bg-[#D6B36A] px-6 py-3 font-sans text-sm font-medium uppercase tracking-[0.08em] text-[#0A0A0A] transition-all duration-base hover:-translate-y-px hover:border-[#FFFFFF] hover:bg-[#FFFFFF]"
+            data-analytics-label="services_bottom_contact"
           >
-            {t('hero.cta.primary')}
+            {t('contactCta.primary')}
           </a>
         </div>
       </div>
@@ -204,3 +270,161 @@ const stripStepPrefix = (value: string) => value.replace(/^\s*\d+\.\s*/, '');
 
   <Footer />
 </BaseLayout>
+
+<script>
+  import { gsap } from 'gsap';
+  import { ScrollTrigger } from 'gsap/ScrollTrigger';
+
+  gsap.registerPlugin(ScrollTrigger);
+
+  const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (!prefersReducedMotion) {
+    const ctx = gsap.context(() => {
+
+      /* ── Hero intro ─────────────────────────────────────── */
+      const heroEyebrow = document.querySelector('.svc-eyebrow');
+      const heroH1 = document.querySelector('.svc-h1');
+      const heroSub = document.querySelector('.svc-sub');
+
+      if (heroEyebrow && heroH1 && heroSub) {
+        gsap.set([heroEyebrow, heroH1, heroSub], { opacity: 0, y: 36 });
+        gsap.to(heroEyebrow, { opacity: 1, y: 0, duration: 0.7, ease: 'power3.out', delay: 0.1 });
+        gsap.to(heroH1, { opacity: 1, y: 0, duration: 0.9, ease: 'power3.out', delay: 0.25 });
+        gsap.to(heroSub, { opacity: 1, y: 0, duration: 0.8, ease: 'power3.out', delay: 0.42 });
+      }
+
+      /* ── Intro section ─────────────────────────────────── */
+      const introSection = document.querySelector('.svc-intro-section');
+      if (introSection) {
+        gsap.set(introSection.querySelectorAll('h2, p'), { opacity: 0, y: 32 });
+        ScrollTrigger.create({
+          trigger: introSection,
+          start: 'top 82%',
+          onEnter: () => {
+            gsap.to(introSection.querySelectorAll('h2'), { opacity: 1, y: 0, duration: 0.75, ease: 'power3.out' });
+            gsap.to(introSection.querySelectorAll('p'), { opacity: 1, y: 0, duration: 0.7, ease: 'power3.out', delay: 0.15 });
+          },
+        });
+      }
+
+      /* ── Service package articles ──────────────────────── */
+      document.querySelectorAll('article[id]').forEach((articleEl) => {
+        const article = articleEl as HTMLElement;
+        const imgWrapper = article.querySelector('div.relative') as HTMLElement | null;
+        const img = article.querySelector('img') as HTMLElement | null;
+        const body = article.querySelector('.svc-pkg-body') as HTMLElement | null;
+        const header = body?.querySelector('header') as HTMLElement | null;
+        const details = Array.from(body?.querySelectorAll('.svc-pkg-detail') ?? []) as HTMLElement[];
+        const cta = body?.querySelector('a[data-analytics-label]') as HTMLElement | null;
+
+        // Image: clip-path wipe reveal
+        if (imgWrapper && img) {
+          gsap.set(imgWrapper, { clipPath: 'inset(0 100% 0 0)', opacity: 0 });
+          ScrollTrigger.create({
+            trigger: article,
+            start: 'top 76%',
+            onEnter: () => {
+              gsap.to(imgWrapper, {
+                clipPath: 'inset(0 0% 0 0)',
+                opacity: 1,
+                duration: 1.1,
+                ease: 'power3.inOut',
+              });
+              gsap.from(img, { scale: 1.1, duration: 1.5, ease: 'power3.out' });
+            },
+          });
+        }
+
+        // Body content: stagger from bottom
+        const bodyEls = [header, ...details, cta].filter((el): el is HTMLElement => el !== null);
+        if (bodyEls.length > 0) {
+          gsap.set(bodyEls, { opacity: 0, y: 40 });
+          ScrollTrigger.create({
+            trigger: article,
+            start: 'top 78%',
+            onEnter: () => {
+              gsap.to(bodyEls, {
+                opacity: 1,
+                y: 0,
+                duration: 0.72,
+                ease: 'power3.out',
+                stagger: 0.12,
+              });
+            },
+          });
+        }
+      });
+
+      /* ── Process steps ─────────────────────────────────── */
+      const processSection = document.querySelector('.svc-process-section') as HTMLElement | null;
+      if (processSection) {
+        const processH2 = processSection.querySelector('h2') as HTMLElement | null;
+        const stepArticles = Array.from(processSection.querySelectorAll('article')) as HTMLElement[];
+
+        if (processH2) {
+          gsap.set(processH2, { opacity: 0, y: 30 });
+          ScrollTrigger.create({
+            trigger: processSection,
+            start: 'top 80%',
+            onEnter: () => gsap.to(processH2, { opacity: 1, y: 0, duration: 0.8, ease: 'power3.out' }),
+          });
+        }
+
+        stepArticles.forEach((step, i) => {
+          const num = step.querySelector('span') as HTMLElement | null;
+          const h3 = step.querySelector('h3') as HTMLElement | null;
+          const p = step.querySelector('p') as HTMLElement | null;
+
+          const els = [num, h3, p].filter((el): el is HTMLElement => el !== null);
+          gsap.set(els, { opacity: 0, y: 28 });
+
+          ScrollTrigger.create({
+            trigger: step,
+            start: 'top 80%',
+            onEnter: () => {
+              gsap.to(els, {
+                opacity: 1,
+                y: 0,
+                duration: 0.65,
+                ease: 'power3.out',
+                stagger: 0.1,
+                delay: i * 0.14,
+              });
+              // Animate number counter
+              if (num) {
+                const finalText = num.textContent || '';
+                const finalNum = parseInt(finalText);
+                if (!isNaN(finalNum)) {
+                  const obj = { val: 0 };
+                  gsap.to(obj, {
+                    val: finalNum,
+                    duration: 1.1,
+                    delay: i * 0.14,
+                    ease: 'power2.out',
+                    onUpdate: () => {
+                      if (num) num.textContent = `${Math.round(obj.val)}.`;
+                    },
+                  });
+                }
+              }
+            },
+          });
+        });
+      }
+
+      /* ── Inline CTA ────────────────────────────────────── */
+      const ctaSection = document.querySelector('.svc-inline-cta') as HTMLElement | null;
+      if (ctaSection) {
+        gsap.set(ctaSection, { opacity: 0, y: 40 });
+        ScrollTrigger.create({
+          trigger: ctaSection,
+          start: 'top 84%',
+          onEnter: () => gsap.to(ctaSection, { opacity: 1, y: 0, duration: 0.85, ease: 'power3.out' }),
+        });
+      }
+
+    });
+
+    window.addEventListener('pagehide', () => ctx.revert(), { once: true });
+  }
+</script>
