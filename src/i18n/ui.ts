@@ -75,7 +75,6 @@ export const ui = {
     'contactCta.title': 'Have a project and need images that actually represent it?',
     'contactCta.subtitle': "Tell me what you are building or documenting and we will shape the right session.",
     'contactCta.primary': "Let's talk about your project",
-    'contactCta.scarcity': 'Monthly capacity is intentionally limited so every project gets real depth.',
 
     'footer.rights': 'All rights reserved.',
     'footer.location': 'Based in Mexico City',
@@ -319,7 +318,6 @@ export const ui = {
     'contactCta.title': '¿Tienes un proyecto y necesitas fotos que sí lo representen?',
     'contactCta.subtitle': 'Cuéntame qué estás construyendo o documentando y armamos juntos la sesión correcta.',
     'contactCta.primary': 'Hablemos de tu proyecto',
-    'contactCta.scarcity': 'Mi capacidad mensual está intencionalmente limitada para garantizar profundidad en cada proyecto.',
 
     'footer.rights': 'Todos los derechos reservados.',
     'footer.location': 'Con base en Ciudad de México',

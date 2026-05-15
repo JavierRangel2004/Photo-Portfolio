@@ -17,7 +17,6 @@ interface Props {
   sections: Array<{ title: string; body: string }>;
   bullets?: string[];
   faq?: FaqItem[];
-  scarcity: string;
   ctaTitle: string;
   ctaBody: string;
   ctaLabel: string;
@@ -33,7 +32,6 @@ const {
   sections,
   bullets = [],
   faq = [],
-  scarcity,
   ctaTitle,
   ctaBody,
   ctaLabel,
@@ -165,9 +163,6 @@ const translatePath = useTranslatedPath(lang);
             {ctaLabel}
           </a>
         </div>
-        <p class="reveal stagger-3 mx-auto mt-6 max-w-xl text-xs uppercase tracking-[0.18em] text-text-dim">
-          {scarcity}
-        </p>
       </div>
     </div>
   </section>

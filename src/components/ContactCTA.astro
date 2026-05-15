@@ -16,31 +16,5 @@ const translatePath = useTranslatedPath(lang);
       <a href={translatePath('/gallery')} class="btn btn-ghost" data-analytics-label="final_cta_portfolio">{t('featured.viewAll')}</a>
       <a href={translatePath('/contact')} class="btn btn-primary" data-analytics-label="final_cta_contact">{t('contactCta.primary')}</a>
     </div>
-    <p class="cta-scarcity reveal stagger-3">{t('contactCta.scarcity')}</p>
   </div>
 </section>
-
-<style>
-  .cta-scarcity {
-    max-width: 44rem;
-    margin: 1.75rem auto 0;
-    padding: 0.85rem 1.25rem;
-    border: 1px solid rgba(245, 241, 232, 0.12);
-    border-radius: 999px;
-    background: rgba(255, 255, 255, 0.03);
-    backdrop-filter: blur(16px);
-    -webkit-backdrop-filter: blur(16px);
-    color: var(--color-text-dim, #A8A29E);
-    font-size: 0.78rem;
-    line-height: 1.55;
-    letter-spacing: 0.04em;
-    text-align: center;
-  }
-
-  @media (max-width: 640px) {
-    .cta-scarcity {
-      font-size: 0.72rem;
-      padding: 0.7rem 1rem;
-    }
-  }
-</style>
