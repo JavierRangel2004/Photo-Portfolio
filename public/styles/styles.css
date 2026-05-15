@@ -1998,7 +1998,11 @@ ol {
   }
 
   .hero {
-    padding-top: calc(var(--nav-height) + var(--sp-10));
+    /* Top-align the hero copy so it always clears the fixed nav.
+       With align-items: center, tall stacked content overflows
+       symmetrically and the eyebrow slides up under the wordmark. */
+    align-items: flex-start;
+    padding-top: calc(var(--nav-height) + var(--sp-12));
     padding-bottom: var(--sp-10);
   }
 
