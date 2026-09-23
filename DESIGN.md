@@ -161,7 +161,7 @@ Photographs are the system’s card equivalent: clean rectangular images, a capt
 
 The home specialty selector uses small text buttons with an underlined pressed state. Selection enlarges the corresponding frame and updates supporting copy and contact destination; GSAP Flip preserves spatial continuity over 0.85s. Controls are exposed only when JavaScript initializes; the underlying gallery links remain useful without it.
 
-Entrance motion combines brief vertical text reveals and clipped photographic reveals. Story details drift only on desktop widths of at least 900px. Image hover scales are subtle (1.025 or 1.035). Reduced-motion users receive immediate state changes without these entrance, scroll, or hover movements. The extension sidecar records exact motion values and representative components.
+Entrance motion combines brief vertical text reveals and clipped photographic reveals. Story details drift only on desktop widths of at least 900px. Image hover scales are subtle (1.025–1.045). Reduced-motion users receive immediate state changes without these entrance, scroll, or hover movements. Work and galleries settle photographs in visually ordered batches of at most six with a capped stagger. Interior headings, service chapters, about copy and the contact form have restrained entrance sequences. Native document transitions preserve navigation where supported; ordinary links remain the fallback. The viewer expands from the selected photograph, decodes the next image before fading, and exits faster than it enters. One animation owns each element’s transform. The extension sidecar records motion values and representative components.
 
 ## Do's and Don'ts
 

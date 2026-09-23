@@ -123,6 +123,21 @@
         "name": "reduced-motion",
         "value": "prefers-reduced-motion: reduce",
         "purpose": "Immediate selection; no GSAP entrance or scroll motion; disable CSS transitions and image-hover transforms."
+      },
+      {
+        "name": "gallery-batch",
+        "value": "850ms power3.out; 65ms stagger; maximum 6 per batch",
+        "purpose": "Settle the photographic edit in visual order without rectangular wipes."
+      },
+      {
+        "name": "document-continuity",
+        "value": "180ms out / 360ms in",
+        "purpose": "Native document dissolve, stable masthead; normal links as fallback."
+      },
+      {
+        "name": "photo-viewer",
+        "value": "620ms open / 160ms out + 380ms in / 200ms close",
+        "purpose": "Expand selected photo, decode before changing, preserve current photo on interrupted loads."
       }
     ],
     "breakpoints": [

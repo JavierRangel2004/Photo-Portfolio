@@ -30,116 +30,139 @@ media.add("(prefers-reduced-motion: no-preference)", () => {
       clearProps: "clipPath",
     });
   }
+  // Interior headings and photographs share the same editorial pacing.
+  const intro = document.querySelector(".page-intro, .contact-intro");
+  if (intro) {
+    gsap.from(intro.querySelectorAll("h1, :scope > p, :scope > div"), {
+      y: 24,
+      opacity: 0,
+      duration: 0.85,
+      stagger: 0.09,
+      ease: "power3.out",
+      clearProps: "transform,opacity",
+    });
+    gsap.from(".gallery-nav, .service-index", {
+      opacity: 0,
+      y: 10,
+      duration: 0.6,
+      delay: 0.16,
+      ease: "power3.out",
+      clearProps: "transform,opacity",
+    });
+  }
+  const cells = gsap.utils.toArray<HTMLElement>(".gallery-cell");
+  if (cells.length) {
+    gsap.set(cells, { opacity: 0, y: 28 });
+    ScrollTrigger.batch(cells, {
+      start: "top 98%",
+      once: true,
+      interval: 0.08,
+      batchMax: 6,
+      onEnter: (batch) => {
+        // Sort by visual position: masonry DOM order runs down columns.
+        batch.sort((a, b) => {
+          const ar = a.getBoundingClientRect(),
+            br = b.getBoundingClientRect();
+          return Math.abs(ar.top - br.top) < 80
+            ? ar.left - br.left
+            : ar.top - br.top;
+        });
+        gsap.to(batch, {
+          opacity: 1,
+          y: 0,
+          duration: 0.85,
+          stagger: 0.065,
+          ease: "power3.out",
+          clearProps: "transform,opacity",
+        });
+      },
+    });
+    // Inner settle belongs only to the opening selection, not every archive image.
+    cells
+      .filter((el) => el.getBoundingClientRect().top < innerHeight)
+      .slice(0, 6)
+      .forEach((el) => {
+        const photo = el.querySelector("img");
+        if (!photo) return;
+        gsap.set(photo, { transition: "none" });
+        gsap.from(photo, {
+          scale: 1.06,
+          duration: 1.1,
+          ease: "power3.out",
+          clearProps: "transform,transition",
+        });
+      });
+    cells.forEach((el) =>
+      el.addEventListener("focusin", () => {
+        gsap.killTweensOf(el);
+        gsap.set(el, { clearProps: "transform,opacity" });
+      }),
+    );
+  }
+  document
+    .querySelectorAll<HTMLElement>(
+      ".service-chapter, .about-story, .seo-overview",
+    )
+    .forEach((section) => {
+      const children = [...section.children];
+      gsap.from(children, {
+        opacity: 0,
+        y: 26,
+        duration: 0.8,
+        stagger: 0.12,
+        ease: "power3.out",
+        clearProps: "transform,opacity",
+        scrollTrigger: { trigger: section, start: "top 92%", once: true },
+      });
+    });
+  gsap.from(".inquiry-form", {
+    opacity: 0,
+    duration: 0.5,
+    delay: 0.12,
+    clearProps: "opacity",
+  });
   document
     .querySelectorAll<HTMLElement>("[data-reveal-image]")
     .forEach((el) => {
+      if (el.closest(".about-story, .service-chapter, .seo-overview")) return;
       gsap.from(el, {
-        clipPath: "inset(12% 0 12% 0)",
+        y: 18,
+        opacity: 0,
         duration: 1.25,
         ease: "power3.out",
         scrollTrigger: { trigger: el, start: "top 88%", once: true },
-        clearProps: "clipPath",
+        clearProps: "transform,opacity",
       });
     });
   const desktop = window.matchMedia("(min-width: 900px)").matches;
   if (desktop) {
-    document
-      .querySelectorAll<HTMLElement>(".story-detail")
-      .forEach((el) =>
-        gsap.fromTo(
-          el,
-          { y: 45 },
-          {
-            y: -45,
-            ease: "none",
-            scrollTrigger: {
-              trigger: el.closest(".work-story"),
-              start: "top bottom",
-              end: "bottom top",
-              scrub: 1,
-            },
+    document.querySelectorAll<HTMLElement>(".story-detail").forEach((el) =>
+      gsap.fromTo(
+        el,
+        { y: 45 },
+        {
+          y: -45,
+          ease: "none",
+          scrollTrigger: {
+            trigger: el.closest(".work-story"),
+            start: "top bottom",
+            end: "bottom top",
+            scrub: 1,
           },
-        ),
-      );
-  }
-  document
-    .querySelectorAll<HTMLElement>(".process-list li")
-    .forEach((el) =>
-      gsap.from(el, {
-        y: 22,
-        opacity: 0,
-        duration: 0.7,
-        ease: "power3.out",
-        scrollTrigger: { trigger: el, start: "top 94%", once: true },
-        clearProps: "all",
-      }),
+        },
+      ),
     );
+  }
+  document.querySelectorAll<HTMLElement>(".process-list li").forEach((el) =>
+    gsap.from(el, {
+      y: 22,
+      opacity: 0,
+      duration: 0.7,
+      ease: "power3.out",
+      scrollTrigger: { trigger: el, start: "top 94%", once: true },
+      clearProps: "all",
+    }),
+  );
   return () => ScrollTrigger.getAll().forEach((trigger) => trigger.kill());
 });
-window.addEventListener("pagehide", () => media.revert(), { once: true });
-const dialog = document.querySelector<HTMLDialogElement>("#photo-dialog");
-const img = dialog?.querySelector<HTMLImageElement>("img");
-const caption = dialog?.querySelector<HTMLElement>(".photo-dialog-caption");
-let source: HTMLElement | null = null;
-let current = 0;
-const links = Array.from(
-  document.querySelectorAll<HTMLAnchorElement>("[data-photo]"),
-);
-function showPhoto(index: number) {
-  if (!img || !caption) return;
-  current = (index + links.length) % links.length;
-  const link = links[current];
-  img.src = link.dataset.photo!;
-  img.alt = link.querySelector("img")?.alt || "";
-  caption.textContent = `${link.dataset.caption || ""} — ${current + 1} / ${links.length}`;
-}
-links.forEach((link, index) =>
-  link.addEventListener("click", (event) => {
-    if (!dialog || !img) return;
-    event.preventDefault();
-    source = link;
-    showPhoto(index);
-    dialog.showModal();
-    document.body.classList.add("dialog-open");
-    if (!window.matchMedia("(prefers-reduced-motion: reduce)").matches)
-      gsap.fromTo(
-        img,
-        { scale: 0.94, opacity: 0 },
-        { scale: 1, opacity: 1, duration: 0.5, ease: "power3.out" },
-      );
-  }),
-);
-dialog
-  ?.querySelector("button")
-  ?.addEventListener("click", () => dialog.close());
-dialog?.addEventListener("click", (e) => {
-  if (e.target === dialog) dialog.close();
-});
-dialog?.addEventListener("close", () => {
-  document.body.classList.remove("dialog-open");
-  source?.focus();
-});
-dialog?.addEventListener("keydown", (e) => {
-  if (e.key === "ArrowRight") {
-    e.preventDefault();
-    showPhoto(current + 1);
-  }
-  if (e.key === "ArrowLeft") {
-    e.preventDefault();
-    showPhoto(current - 1);
-  }
-});
-if (dialog && links.length > 1) {
-  const es = document.documentElement.lang === "es";
-  for (const [label, step] of [
-    [es ? "Anterior" : "Previous", -1],
-    [es ? "Siguiente" : "Next", 1],
-  ] as const) {
-    const b = document.createElement("button");
-    b.type = "button";
-    b.className = step === -1 ? "photo-prev" : "photo-next";
-    b.textContent = label;
-    b.addEventListener("click", () => showPhoto(current + step));
-    dialog.append(b);
-  }
-}
+import "./photo-viewer";
