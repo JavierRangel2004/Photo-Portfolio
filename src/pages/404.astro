@@ -1,0 +1,23 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import Header from "../components/Header.astro";
+import Footer from "../components/Footer.astro";
+---
+
+<BaseLayout title="Página no encontrada" noindex>
+  <Header />
+  <main id="main" class="page-intro">
+    <div>
+      <h1>
+        Fuera de
+        <br />
+        <em>cuadro.</em>
+      </h1>
+      <p>Esta página no está aquí. Volvamos a las imágenes.</p>
+      <a class="solid-link" href="/es/gallery/">
+        Explorar el trabajo ↗
+      </a>
+    </div>
+  </main>
+  <Footer />
+</BaseLayout>

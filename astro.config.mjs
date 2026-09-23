@@ -1,23 +1,21 @@
-import { defineConfig } from 'astro/config';
-import sitemap from '@astrojs/sitemap';
-import tailwind from '@astrojs/tailwind';
+import { defineConfig } from "astro/config";
+import sitemap from "@astrojs/sitemap";
 
 export default defineConfig({
-  site: 'https://jrmgraphy.com',
-  output: 'static',
+  site: "https://jrmgraphy.com",
+  output: "static",
   build: {
-    assets: 'assets'
+    assets: "assets",
   },
   integrations: [
     sitemap({
       i18n: {
-        defaultLocale: 'es',
+        defaultLocale: "es",
         locales: {
-          en: 'en',
-          es: 'es',
+          en: "en",
+          es: "es",
         },
       },
     }),
-    tailwind()
-  ]
+  ],
 });

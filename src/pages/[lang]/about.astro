@@ -1,193 +1,76 @@
 ---
-import BaseLayout from '../../layouts/BaseLayout.astro';
-import Header from '../../components/Header.astro';
-import Footer from '../../components/Footer.astro';
-import ContactCTA from '../../components/ContactCTA.astro';
-import { Image } from 'astro:assets';
-import yoImage from '../../assets/images/yo.jpg';
-import { getLangFromUrl, useTranslations, useTranslatedPath } from '../../i18n/utils';
-
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import Header from "../../components/Header.astro";
+import Footer from "../../components/Footer.astro";
+import ContactCTA from "../../components/ContactCTA.astro";
+import { Image } from "astro:assets";
+import portrait from "../../assets/images/yo.jpg";
+import { words, type Lang } from "../../lib/editorial";
 export function getStaticPaths() {
-  return [
-    { params: { lang: 'en' } },
-    { params: { lang: 'es' } },
-  ];
+  return ["es", "en"].map((lang) => ({ params: { lang } }));
 }
-
-const lang = getLangFromUrl(Astro.url);
-const t = useTranslations(lang);
-const translatePath = useTranslatedPath(lang);
-
-const pillars = [
-  {
-    eyebrow: t('about.pillar1.eyebrow'),
-    title: t('about.pillar1.title'),
-    body: t('about.pillar1.body'),
-  },
-  {
-    eyebrow: t('about.pillar2.eyebrow'),
-    title: t('about.pillar2.title'),
-    body: t('about.pillar2.body'),
-  },
-  {
-    eyebrow: t('about.pillar3.eyebrow'),
-    title: t('about.pillar3.title'),
-    body: t('about.pillar3.body'),
-  },
-];
-
-const services = [
-  t('about.services.portrait'),
-  t('about.services.editorial'),
-  t('about.services.product'),
-  t('about.services.concert'),
-  t('about.services.visual'),
-  t('about.services.events'),
-];
+const lang = Astro.params.lang as Lang;
 ---
 
 <BaseLayout
-  title={t('about.title')}
-  description={t('about.desc')}
+  title={words(lang, "Javier Rangel · La mirada", "Javier Rangel · The eye")}
   pageType="about"
 >
   <Header />
-
-  <main class="site-main bg-background pb-40">
-    <section class="border-b border-white/5 bg-background py-20 md:py-28">
-      <div class="mx-auto w-full max-w-7xl px-6">
-        <p class="section-eyebrow reveal text-left uppercase tracking-[0.2em] text-[#D6B36A]">
-          {t('about.hero.eyebrow')}
+  <main id="main">
+    <section class="page-intro">
+      <h1>
+        {words(lang, "Primero mirar.", "Look first.")}
+        <br />
+        <em>{words(lang, "Después, fotografiar.", "Then photograph.")}</em>
+      </h1>
+    </section>
+    <section class="about-story">
+      <div data-reveal-image>
+        <Image
+          src={portrait}
+          alt="Javier Rangel"
+          widths={[480, 800, 1200]}
+          sizes="(max-width: 700px) 90vw, 45vw"
+          loading="eager"
+        />
+        <p class="image-note">Javier Rangel · JRMGraphy</p>
+      </div>
+      <div>
+        <h2>
+          {words(lang, "Una mirada propia,", "An eye of my own,")}
+          <br />
+          <em>
+            {words(lang, "una historia compartida.", "a story we share.")}
+          </em>
+        </h2>
+        <p>
+          {words(
+            lang,
+            "Soy Javier Rangel, fotógrafo en Ciudad de México. Mi trabajo se mueve entre el retrato, el producto y la energía de los eventos y la música.",
+            "I’m Javier Rangel, a photographer based in Mexico City. My work moves between portraiture, products and the energy of live events and music.",
+          )}
         </p>
-        <h1 class="reveal stagger-1 mt-4 max-w-5xl text-left font-heading text-4xl leading-[1.04] tracking-[-0.02em] text-text md:text-5xl lg:text-6xl">
-          {t('about.hero.title')}
-        </h1>
-        <p class="reveal stagger-2 mt-6 prose-measure-lg text-left text-base leading-7 text-text-muted lg:text-lg">
-          {t('about.entity.summary')}
+        <p>
+          {words(
+            lang,
+            "Me interesa encontrar lo que hace particular a cada persona, objeto o momento. Dirigir sin forzar. Cuidar la luz sin perder lo que está pasando. Hacer imágenes que se sientan auténticas y tengan un propósito.",
+            "I look for what makes each person, object or moment particular. Directing without forcing. Shaping the light without losing what’s happening. Making images that feel authentic and have a purpose.",
+          )}
         </p>
+        <p>
+          {words(
+            lang,
+            "Antes de una sesión, quiero entender tu proyecto: qué necesitas comunicar y qué esperas que alguien sienta al verlo. De ahí parte todo.",
+            "Before a session, I want to understand your project: what you need to communicate and what you hope someone feels when they see it. Everything starts there.",
+          )}
+        </p>
+        <a class="text-link" href={`/${lang}/gallery/`}>
+          {words(lang, "Explora mi trabajo", "Explore my work")} ↗
+        </a>
       </div>
     </section>
-
-    <section class="border-b border-white/10 bg-background py-20 md:py-24">
-      <div class="mx-auto w-full max-w-7xl px-6">
-        <div class="grid gap-12 lg:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)] lg:items-center">
-          <div class="reveal relative rounded-[32px] border border-white/10 bg-gradient-to-br from-white/5 to-white/0 p-1 shadow-[0_20px_60px_rgba(0,0,0,0.45)]">
-            <div class="overflow-hidden rounded-[30px] bg-black">
-              <Image
-                src={yoImage}
-                alt="Javier Rangel — fotógrafo en Ciudad de México"
-                width={1600}
-                height={2100}
-                class="h-full w-full object-cover"
-                sizes="(min-width: 1280px) 40vw, 80vw"
-                loading="eager"
-              />
-            </div>
-          </div>
-
-          <div class="reveal stagger-2 space-y-6">
-            <div class="space-y-2">
-              <p class="section-eyebrow text-xs uppercase tracking-[0.2em] text-[#D6B36A]">
-                {t('about.location')}
-              </p>
-              <h2 class="font-heading text-3xl leading-[1.05] tracking-[-0.02em] text-text md:text-4xl lg:text-5xl">
-                {t('about.name')}
-              </h2>
-            </div>
-
-            <ul class="space-y-3 text-base leading-7 text-text-muted">
-              <li><span class="text-[#D6B36A]">·</span> {t('about.meta.base')}</li>
-              <li><span class="text-[#D6B36A]">·</span> {t('about.meta.clients')}</li>
-              <li><span class="text-[#D6B36A]">·</span> {t('about.meta.focus')}</li>
-            </ul>
-
-            <div class="flex flex-wrap gap-3 pt-2">
-              <a href={translatePath('/contact')} class="btn btn-primary">
-                {t('contactCta.primary')}
-              </a>
-              <a href={translatePath('/gallery')} class="btn btn-ghost">
-                {t('featured.viewAll')}
-              </a>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <section class="border-b border-white/10 bg-background py-20 md:py-24">
-      <div class="mx-auto w-full max-w-7xl px-6">
-        <div class="reveal max-w-3xl">
-          <p class="section-eyebrow text-xs uppercase tracking-[0.2em] text-[#D6B36A]">
-            {lang === 'es' ? 'Filosofía de trabajo' : 'How I work'}
-          </p>
-          <h2 class="mt-4 font-heading text-3xl leading-[1.05] tracking-[-0.02em] text-text md:text-4xl lg:text-5xl">
-            {t('about.systems.title')}
-          </h2>
-          <p class="mt-4 prose-measure text-base leading-7 text-text-muted lg:text-lg">
-            {t('about.systems.body')}
-          </p>
-        </div>
-
-        <div class="mt-12 grid gap-6 md:grid-cols-3">
-          {pillars.map((pillar, index) => (
-            <article
-              class="reveal relative flex flex-col gap-4 rounded-[24px] border border-white/10 bg-white/[0.03] p-6 backdrop-blur-md transition duration-base hover:border-secondary"
-              style={`transition-delay: ${index * 0.08}s`}
-            >
-              <span class="inline-flex h-8 w-8 items-center justify-center rounded-full border border-[#D6B36A]/40 text-xs font-medium text-[#D6B36A]">
-                {`0${index + 1}`}
-              </span>
-              <p class="text-xs uppercase tracking-[0.22em] text-[#D6B36A]">
-                {pillar.eyebrow}
-              </p>
-              <h3 class="font-heading text-2xl leading-[1.2] text-text">
-                {pillar.title}
-              </h3>
-              <p class="text-sm leading-7 text-text-muted">
-                {pillar.body}
-              </p>
-            </article>
-          ))}
-        </div>
-      </div>
-    </section>
-
-    <section class="bg-background py-20 md:py-24">
-      <div class="mx-auto w-full max-w-7xl px-6">
-        <div class="reveal border-b border-white/10 pb-12">
-          <p class="section-eyebrow text-xs uppercase tracking-[0.2em] text-[#D6B36A]">
-            {t('about.services.title')}
-          </p>
-          <h2 class="mt-4 max-w-4xl font-heading text-3xl leading-[1.05] tracking-[-0.02em] text-text md:text-4xl lg:text-5xl">
-            {lang === 'es'
-              ? 'Líneas de trabajo, integradas como un sistema visual'
-              : 'Lines of work, integrated as a visual system'}
-          </h2>
-          <p class="mt-4 prose-measure-lg text-base leading-7 text-text-muted">
-            {t('about.desc')}
-          </p>
-        </div>
-
-        <div class="mt-10 grid gap-6 md:grid-cols-2 xl:grid-cols-3">
-          {services.map((label, index) => (
-            <article
-              class="reveal group flex flex-col gap-6 rounded-[28px] border border-white/10 bg-white/[0.03] p-6 transition duration-base hover:-translate-y-px hover:border-secondary"
-              style={`transition-delay: ${(index % 3) * 0.08}s`}
-            >
-              <div class="flex items-center justify-between text-xs uppercase tracking-[0.3em] text-[#D6B36A]">
-                <span>{t('about.services.title')}</span>
-                <span>{`0${index + 1}`}</span>
-              </div>
-              <h3 class="font-heading text-2xl leading-[1.2] text-text">
-                {label}
-              </h3>
-            </article>
-          ))}
-        </div>
-      </div>
-    </section>
+    <ContactCTA />
   </main>
-
-  <ContactCTA />
   <Footer />
 </BaseLayout>

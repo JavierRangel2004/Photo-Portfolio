@@ -1,0 +1,193 @@
+---
+import type { Lang } from "../lib/editorial";
+import { words } from "../lib/editorial";
+import Arrow from "./Arrow.astro";
+const { lang } = Astro.props as { lang: Lang };
+---
+
+<form
+  class="inquiry-form"
+  name="contact"
+  method="POST"
+  action={`/${lang}/thanks/`}
+  data-netlify="true"
+  netlify-honeypot="bot-field"
+  data-inquiry
+>
+  <input type="hidden" name="form-name" value="contact" />
+  <input type="hidden" name="language" value={lang} />
+  <p class="honeypot" aria-hidden="true">
+    <label>
+      Leave empty
+      <input name="bot-field" tabindex="-1" autocomplete="off" />
+    </label>
+  </p>
+  <fieldset>
+    <legend>
+      {words(lang, "¿Qué tienes en mente?", "What do you have in mind?")}
+    </legend>
+    <div class="inquiry-types">
+      {[
+        ["gastronomy", words(lang, "Producto / Gastro", "Product / Food")],
+        ["portraits", words(lang, "Retrato", "Portraits")],
+        ["events", words(lang, "Eventos / Música", "Events / Music")],
+      ].map(([value, label]) => (
+        <label>
+          <input type="radio" name="type" value={value} required />
+          <span>{label}</span>
+        </label>
+      ))}
+    </div>
+  </fieldset>
+  <div class="form-pair">
+    <label>
+      {words(lang, "Tu nombre", "Your name")}
+      <input
+        name="name"
+        autocomplete="name"
+        required
+        maxlength="120"
+        placeholder={words(lang, "¿Cómo te llamas?", "What’s your name?")}
+      />
+    </label>
+    <label>
+      {words(lang, "Tu correo", "Your email")}
+      <input
+        name="email"
+        type="email"
+        autocomplete="email"
+        required
+        maxlength="254"
+        placeholder={words(lang, "nombre@correo.com", "name@example.com")}
+      />
+    </label>
+  </div>
+  <div class="form-pair">
+    <label>
+      {words(
+        lang,
+        "Fecha aproximada (opcional)",
+        "Approximate date (optional)",
+      )}
+      <input
+        name="date"
+        type="text"
+        maxlength="120"
+        placeholder={words(
+          lang,
+          "Una fecha o un periodo",
+          "A date or time frame",
+        )}
+      />
+    </label>
+    <label>
+      {words(lang, "Ubicación (opcional)", "Location (optional)")}
+      <input
+        name="location"
+        type="text"
+        maxlength="200"
+        placeholder={words(lang, "Ciudad o lugar", "City or venue")}
+      />
+    </label>
+  </div>
+  <label>
+    {words(lang, "Cuéntame la idea", "Tell me about the idea")}
+    <textarea
+      name="message"
+      rows="4"
+      required
+      minlength="10"
+      maxlength="5000"
+      placeholder={words(
+        lang,
+        "¿Qué vamos a fotografiar y dónde usarás las imágenes?",
+        "What are we photographing and where will the images be used?",
+      )}
+    ></textarea>
+  </label>
+  <p class="form-note">
+    {words(
+      lang,
+      "Usaré estos datos para responder a tu solicitud por correo. Enviar el formulario no confirma una reserva.",
+      "I’ll use these details to reply to your inquiry by email. Submitting this form does not confirm a booking.",
+    )}
+  </p>
+  <button type="submit" class="solid-link">
+    {words(lang, "Enviar mi proyecto", "Send my project")}
+    <Arrow />
+  </button>
+  <p class="form-status" role="status" aria-live="polite" tabindex="-1"></p>
+</form>
+<script>
+  import { sendInquiry } from "../lib/inquiry";
+  document
+    .querySelectorAll<HTMLFormElement>("[data-inquiry]")
+    .forEach((form) => {
+      const es = document.documentElement.lang === "es";
+      const query = new URLSearchParams(location.search);
+      const raw = query.get("type");
+      const type =
+        raw === "branding"
+          ? "portraits"
+          : raw === "product"
+            ? "gastronomy"
+            : raw;
+      const radio = Array.from(
+        form.querySelectorAll<HTMLInputElement>('input[name="type"]'),
+      ).find((r) => r.value === type);
+      if (radio) radio.checked = true;
+      const message = form.querySelector<HTMLTextAreaElement>("textarea");
+      const packageName = query.get("package");
+      if (packageName && message)
+        message.value =
+          (es ? "Me interesa: " : "I’m interested in: ") +
+          packageName.slice(0, 200) +
+          "\n";
+      const status = form.querySelector<HTMLElement>(".form-status")!;
+      const button = form.querySelector<HTMLButtonElement>(
+        'button[type="submit"]',
+      )!;
+      let pending = false;
+      form.addEventListener("submit", async (event) => {
+        event.preventDefault();
+        if (pending || !form.reportValidity()) return;
+        const data = new FormData(form);
+        const name = String(data.get("name") || "").trim(),
+          body = String(data.get("message") || "").trim();
+        if (!name || body.length < 10) {
+          status.textContent = es
+            ? "Escribe tu nombre y al menos 10 caracteres sobre tu proyecto."
+            : "Enter your name and at least 10 characters about your project.";
+          status.focus();
+          return;
+        }
+        pending = true;
+        button.disabled = true;
+        form.setAttribute("aria-busy", "true");
+        status.textContent = es
+          ? "Enviando tu proyecto…"
+          : "Sending your project…";
+        try {
+          await sendInquiry(data);
+          status.textContent = es
+            ? "Gracias. Tu proyecto llegó. Continuamos la conversación por correo."
+            : "Thank you. Your project is in. We’ll continue the conversation by email.";
+          window.dispatchEvent(
+            new CustomEvent("jrmgraphy:lead-submitted", {
+              detail: { inquiryType: data.get("type") },
+            }),
+          );
+          form.reset();
+        } catch {
+          status.textContent = es
+            ? "No pudimos enviar tu mensaje. Tus datos siguen aquí: intenta de nuevo o escribe a inspecjrm@gmail.com."
+            : "Your message could not be sent. Your details are still here: try again or email inspecjrm@gmail.com.";
+        } finally {
+          pending = false;
+          button.disabled = false;
+          form.removeAttribute("aria-busy");
+          status.focus();
+        }
+      });
+    });
+</script>

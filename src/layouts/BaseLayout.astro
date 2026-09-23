@@ -1,517 +1,116 @@
 ---
-import '../styles/global.css';
-import { getLangFromUrl, getRouteWithoutLang } from '../i18n/utils';
-
+import "../styles/fonts.css";
+import "../styles/editorial.css";
+import Analytics from "../components/Analytics.astro";
+import { getLangFromUrl, getRouteWithoutLang } from "../i18n/utils";
 interface Props {
   title: string;
   description?: string;
   ogImage?: string;
-  pageType?: 'home' | 'about' | 'service' | 'portfolio' | 'contact' | 'landing';
+  pageType?: string;
   schema?: Record<string, unknown> | Array<Record<string, unknown>>;
   noindex?: boolean;
 }
-
 const {
   title,
-  description = "Photography portfolio by Javier Rangel — Mexico City.",
-  ogImage = '/assets/og-default.jpg',
-  pageType = 'portfolio',
+  description = getLangFromUrl(Astro.url) === "es"
+    ? "Javier Rangel — fotografía de producto, retrato y eventos en Ciudad de México."
+    : "Javier Rangel — product, portrait and event photography in Mexico City.",
+  ogImage = "/photos/product/product%20(35).webp",
   schema,
   noindex = false,
 } = Astro.props;
-
-const siteTitle = "JRMGraphy";
-const fullTitle = title === "Home" || title === "Inicio" ? siteTitle : `${title} — ${siteTitle}`;
-const lang = getLangFromUrl(Astro.url);
-const routeWithoutLang = getRouteWithoutLang(Astro.url);
-const siteUrl = Astro.site ? Astro.site.origin : 'https://jrmgraphy.com';
-
-const canonicalURL = new URL(`/${lang}${routeWithoutLang}`, siteUrl);
-const absoluteOgImage = ogImage.startsWith('http') ? ogImage : `${siteUrl}${ogImage}`;
-
-const sameAs = [
-  'https://www.instagram.com/JRM_Graphy',
-  'https://github.com/JavierRangel2004',
-  'https://www.linkedin.com/in/javierramu2004/',
-];
-
+const lang = getLangFromUrl(Astro.url),
+  route = getRouteWithoutLang(Astro.url);
+const site = "https://jrmgraphy.com",
+  canonical = new URL(`/${lang}${route}`, site);
+const production = process.env.CONTEXT === "production";
+const titleText = `${title} — JRMGraphy`;
 const organization = {
-  '@type': 'LocalBusiness',
-  '@id': `${siteUrl}/#organization`,
-  name: 'JRMGraphy — Javier Rangel',
-  alternateName: 'JRMGraphy',
-  url: siteUrl,
-  image: absoluteOgImage,
-  logo: `${siteUrl}/favicon.svg`,
-  telephone: undefined,
-  email: 'inspecjrm@gmail.com',
-  priceRange: '$$$',
-  description:
-    'Editorial portrait, brand, gastronomy, and event photography in Mexico City (CDMX) for founders, artists, chefs, and personal brands.',
+  "@type": "ProfessionalService",
+  "@id": `${site}/#organization`,
+  name: "JRMGraphy — Javier Rangel",
+  url: site,
+  email: "inspecjrm@gmail.com",
+  image: new URL(ogImage, site).href,
   address: {
-    '@type': 'PostalAddress',
-    addressLocality: 'Ciudad de México',
-    addressRegion: 'CDMX',
-    addressCountry: 'MX',
+    "@type": "PostalAddress",
+    addressLocality: "Ciudad de México",
+    addressCountry: "MX",
   },
-  areaServed: [
-    { '@type': 'City', name: 'Ciudad de México' },
-    { '@type': 'AdministrativeArea', name: 'México' },
+  sameAs: ["https://www.instagram.com/JRM_Graphy"],
+};
+const graph = {
+  "@context": "https://schema.org",
+  "@graph": [
+    organization,
+    ...(schema ? (Array.isArray(schema) ? schema : [schema]) : []),
   ],
-  founder: { '@id': `${siteUrl}/#person` },
-  sameAs,
 };
-
-const person = {
-  '@type': 'Person',
-  '@id': `${siteUrl}/#person`,
-  name: 'Javier Rangel',
-  alternateName: 'JRMGraphy',
-  jobTitle: 'Photographer',
-  url: `${siteUrl}/${lang}/about`,
-  image: absoluteOgImage,
-  email: 'inspecjrm@gmail.com',
-  worksFor: { '@id': `${siteUrl}/#organization` },
-  knowsLanguage: ['es', 'en'],
-  sameAs,
-};
-
-const website = {
-  '@type': 'WebSite',
-  '@id': `${siteUrl}/#website`,
-  url: siteUrl,
-  name: 'JRMGraphy',
-  inLanguage: lang,
-  publisher: { '@id': `${siteUrl}/#organization` },
-};
-
-const baseGraph: Array<Record<string, unknown>> = [organization, website];
-if (pageType === 'about') {
-  baseGraph.push(person, {
-    '@type': 'ProfilePage',
-    '@id': `${canonicalURL.toString()}#profilepage`,
-    url: canonicalURL.toString(),
-    name: fullTitle,
-    description,
-    inLanguage: lang,
-    mainEntity: { '@id': `${siteUrl}/#person` },
-  });
-}
-
-const extraSchemas = schema ? (Array.isArray(schema) ? schema : [schema]) : [];
-const jsonLdGraph = {
-  '@context': 'https://schema.org',
-  '@graph': [...baseGraph, ...extraSchemas],
-};
+const seoOnly = !["/", "/about", "/contact", "/services", "/gallery"].some(
+  (p) =>
+    route === p ||
+    route === p + "/" ||
+    (p === "/gallery" && route.startsWith("/gallery/")),
+);
 ---
 
-<!DOCTYPE html>
+<!doctype html>
 <html lang={lang}>
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>{fullTitle}</title>
-  <meta name="description" content={description} />
-  <meta name="theme-color" content="#0A0A0A" />
-  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-  {noindex && <meta name="robots" content="noindex,nofollow" />}
-
-  <link rel="canonical" href={canonicalURL} />
-  <link rel="alternate" hreflang="es" href={`${siteUrl}/es${routeWithoutLang}`} />
-  <link rel="alternate" hreflang="en" href={`${siteUrl}/en${routeWithoutLang}`} />
-  <link rel="alternate" hreflang="x-default" href={`${siteUrl}/es${routeWithoutLang}`} />
-
-  <!-- Open Graph -->
-  <meta property="og:title" content={fullTitle} />
-  <meta property="og:description" content={description} />
-  <meta property="og:type" content="website" />
-  <meta property="og:url" content={canonicalURL} />
-  <meta property="og:site_name" content={siteTitle} />
-  <meta property="og:image" content={absoluteOgImage} />
-  <meta property="og:locale" content={lang === 'es' ? 'es_MX' : 'en_US'} />
-  <meta name="twitter:card" content="summary_large_image" />
-  <meta name="twitter:title" content={fullTitle} />
-  <meta name="twitter:description" content={description} />
-  <meta name="twitter:image" content={absoluteOgImage} />
-
-  <!-- Structured data (JSON-LD) -->
-  <script type="application/ld+json" set:html={JSON.stringify(jsonLdGraph)} />
-
-  <!-- Google Fonts — Playfair Display (serif editorial) + Inter (sans UI) -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,400;0,600;0,700;0,900;1,400;1,700&display=swap" rel="stylesheet">
-
-  <!-- Font Awesome (icons only) -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer">
-
-  <!-- Design System & Global Styles -->
-  <link rel="stylesheet" href="/styles/styles.css" />
-</head>
-<body>
-  <slot />
-
-  <!-- Scroll-based nav behaviour -->
-  <script>
-    const nav = document.querySelector('.site-nav');
-    if (nav) {
-      const onScroll = () => {
-        nav.classList.toggle('scrolled', window.scrollY > 20);
-      };
-      window.addEventListener('scroll', onScroll, { passive: true });
-      onScroll();
-    }
-  </script>
-
-  <!-- Mobile nav drawer -->
-  <script>
-    const toggle = document.getElementById('nav-toggle');
-    const drawer = document.getElementById('nav-drawer');
-    const overlay = document.getElementById('nav-overlay');
-    const closeButton = document.getElementById('nav-close');
-
-    const openDrawer = () => {
-      toggle?.classList.add('open');
-      toggle?.setAttribute('aria-expanded', 'true');
-      drawer?.classList.add('open');
-      overlay?.classList.add('open');
-      document.body.style.overflow = 'hidden';
-      // Focus the first link in the drawer
-      const firstLink = drawer?.querySelector<HTMLElement>('.nav-drawer-link');
-      firstLink?.focus();
-    };
-
-    const closeDrawer = () => {
-      toggle?.classList.remove('open');
-      toggle?.setAttribute('aria-expanded', 'false');
-      drawer?.classList.remove('open');
-      overlay?.classList.remove('open');
-      document.body.style.overflow = '';
-      // Return focus to toggle
-      toggle?.focus();
-    };
-
-    toggle?.addEventListener('click', () => {
-      const isOpen = drawer?.classList.contains('open');
-      isOpen ? closeDrawer() : openDrawer();
-    });
-
-    overlay?.addEventListener('click', closeDrawer);
-    closeButton?.addEventListener('click', closeDrawer);
-
-    document.addEventListener('keydown', (event) => {
-      if (event.key === 'Escape' && drawer?.classList.contains('open')) {
-        closeDrawer();
-      }
-    });
-
-    document.querySelectorAll('.nav-drawer-link').forEach(link => {
-      link.addEventListener('click', closeDrawer);
-    });
-  </script>
-
-  <!-- Scroll-triggered reveal animations -->
-  <script>
-    const revealEls = document.querySelectorAll('.reveal');
-    if (revealEls.length > 0) {
-      const observer = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-          if (entry.isIntersecting) {
-            entry.target.classList.add('visible');
-            observer.unobserve(entry.target);
-          }
-        });
-      }, { rootMargin: '0px 0px -60px 0px', threshold: 0.08 });
-
-      revealEls.forEach(el => observer.observe(el));
-    }
-  </script>
-
-  <!-- Premium Lightbox -->
-  <script>
-    (() => {
-      let photos: { src: string; category: string; id: string }[] = [];
-      let currentIndex = 0;
-      let touchStartX = 0;
-      let triggerElement: HTMLElement | null = null;
-
-      const lightbox = document.getElementById('lightbox');
-      const lbImg    = document.getElementById('lb-img') as HTMLImageElement | null;
-      const lbCat    = document.getElementById('lb-cat');
-      const lbCount  = document.getElementById('lb-count');
-
-      if (!lightbox || !lbImg) return;
-
-      // Focus trap: keep Tab cycling within lightbox
-      function trapFocus(e: KeyboardEvent) {
-        if (e.key !== 'Tab' || !lightbox.classList.contains('open')) return;
-        const focusable = lightbox.querySelectorAll<HTMLElement>(
-          'button, [href], [tabindex]:not([tabindex="-1"])'
-        );
-        if (focusable.length === 0) return;
-        const first = focusable[0];
-        const last = focusable[focusable.length - 1];
-        if (e.shiftKey) {
-          if (document.activeElement === first) { e.preventDefault(); last.focus(); }
-        } else {
-          if (document.activeElement === last) { e.preventDefault(); first.focus(); }
-        }
-      }
-
-      function isVisibleCard(card: HTMLElement) {
-        const style = window.getComputedStyle(card);
-        return style.display !== 'none' && style.visibility !== 'hidden' && card.getClientRects().length > 0;
-      }
-
-      function getGroupCards(group: string) {
-        return Array.from(document.querySelectorAll<HTMLElement>('[data-lightbox-src]')).filter((card) => {
-          return (card.dataset.lightboxGroup || 'default') === group && isVisibleCard(card);
-        });
-      }
-
-      function open(index: number) {
-        currentIndex = index;
-        const p = photos[index];
-        if (!p || !lbImg) return;
-        lbImg.src = p.src;
-        lbImg.alt = p.category;
-        if (lbCat) lbCat.textContent = p.category.charAt(0).toUpperCase() + p.category.slice(1);
-        if (lbCount) lbCount.textContent = `${index + 1} of ${photos.length}`;
-        lightbox.classList.add('open');
-        lightbox.setAttribute('aria-hidden', 'false');
-        document.body.style.overflow = 'hidden';
-        // Focus close button inside lightbox
-        const closeBtn = document.getElementById('lb-close');
-        closeBtn?.focus();
-      }
-
-      function close() {
-        lightbox.classList.remove('open');
-        lightbox.setAttribute('aria-hidden', 'true');
-        document.body.style.overflow = '';
-        // Return focus to the card that triggered the lightbox
-        triggerElement?.focus();
-        triggerElement = null;
-      }
-
-      function prev() { open((currentIndex - 1 + photos.length) % photos.length); }
-      function next() { open((currentIndex + 1) % photos.length); }
-
-      function activateCard(card: HTMLElement) {
-        triggerElement = card;
-        const group = card.dataset.lightboxGroup || 'default';
-        const cards = getGroupCards(group);
-        photos = cards.map((item) => ({
-          src: item.dataset.lightboxSrc || '',
-          category: item.dataset.lightboxCat || '',
-          id: item.dataset.lightboxId || '',
-        }));
-
-        const index = cards.findIndex((item) => item === card);
-        if (index >= 0) {
-          open(index);
-        }
-      }
-
-      function init() {
-        const cards = document.querySelectorAll<HTMLElement>('[data-lightbox-src]');
-        cards.forEach((card) => {
-          card.addEventListener('click', () => activateCard(card));
-          card.addEventListener('keydown', (event) => {
-            if (event.key === 'Enter' || event.key === ' ') {
-              event.preventDefault();
-              activateCard(card);
-            }
-          });
-        });
-      }
-
-      // Controls
-      document.getElementById('lb-close')?.addEventListener('click', close);
-      document.getElementById('lb-prev')?.addEventListener('click', prev);
-      document.getElementById('lb-next')?.addEventListener('click', next);
-
-      lightbox.addEventListener('click', (e) => {
-        if (e.target === lightbox) close();
-      });
-
-      document.addEventListener('keydown', (e) => {
-        if (!lightbox.classList.contains('open')) return;
-        if (e.key === 'Escape') close();
-        if (e.key === 'ArrowLeft') prev();
-        if (e.key === 'ArrowRight') next();
-        trapFocus(e);
-      });
-
-      // Touch / swipe
-      lightbox.addEventListener('touchstart', (e) => {
-        touchStartX = e.touches[0].clientX;
-      }, { passive: true });
-
-      lightbox.addEventListener('touchend', (e) => {
-        const delta = touchStartX - e.changedTouches[0].clientX;
-        if (Math.abs(delta) > 50) delta > 0 ? next() : prev();
-      });
-
-      // Initialize after DOM ready
-      if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', init);
-      } else {
-        init();
-      }
-    })();
-  </script>
-
-  <!-- Active nav link highlight -->
-  <script>
-    const currentPath = window.location.pathname;
-    document.querySelectorAll('.nav-link, .nav-drawer-link').forEach(link => {
-      const href = (link as HTMLAnchorElement).getAttribute('href');
-      if (href && (href === currentPath || (href !== '/' && currentPath.startsWith(href)))) {
-        link.classList.add('active');
-      }
-    });
-  </script>
-
-  <!-- Google Analytics -->
-  <script is:inline async src="https://www.googletagmanager.com/gtag/js?id=G-5NLFSHDCBJ"></script>
-  <script>
-    const analyticsWindow = window as unknown as Window & {
-      dataLayer: unknown[][];
-      gtag?: (...args: unknown[]) => void;
-    };
-    analyticsWindow.dataLayer = analyticsWindow.dataLayer || [];
-    function gtag(...args: unknown[]) { analyticsWindow.dataLayer.push(args); }
-    analyticsWindow.gtag = gtag;
-    gtag('js', new Date());
-    gtag('config', 'G-5NLFSHDCBJ', {
-      page_path: window.location.pathname,
-      page_title: document.title,
-      page_location: window.location.href,
-    });
-
-    const sendAnalyticsEvent = (name: string, params: Record<string, unknown> = {}) => {
-      analyticsWindow.gtag?.('event', name, {
-        page_path: window.location.pathname,
-        page_location: window.location.href,
-        ...params,
-      });
-    };
-
-    const query = new URLSearchParams(window.location.search);
-    const utmSource = query.get('utm_source');
-    if (utmSource?.toLowerCase() === 'chatgpt.com') {
-      sessionStorage.setItem('jrmgraphy_gaeo_source', 'chatgpt.com');
-      sendAnalyticsEvent('gaeo_referral', {
-        event_category: 'GAEO',
-        traffic_source: 'chatgpt.com',
-        utm_medium: query.get('utm_medium') || undefined,
-        utm_campaign: query.get('utm_campaign') || undefined,
-        non_interaction: true,
-      });
-    }
-
-    document.addEventListener('click', (event) => {
-      const target = (event.target as HTMLElement | null)?.closest<HTMLElement>(
-        'a.btn, button.btn, .nav-link, .nav-drawer-link, [data-analytics-event]'
-      );
-      if (!target) return;
-
-      const link = target instanceof HTMLAnchorElement ? target : target.closest('a');
-      sendAnalyticsEvent(target.dataset.analyticsEvent || 'cta_click', {
-        event_category: target.dataset.analyticsCategory || 'Engagement',
-        event_label: target.dataset.analyticsLabel || target.textContent?.trim() || undefined,
-        link_url: link?.href,
-        link_text: target.textContent?.trim() || undefined,
-      });
-    });
-
-    window.addEventListener('jrmgraphy:lead-submitted', (event) => {
-      const detail = (event as CustomEvent).detail || {};
-      sendAnalyticsEvent('generate_lead', {
-        event_category: 'Lead',
-        method: detail.method || 'netlify_form',
-        inquiry_type: detail.inquiryType,
-        gaeo_source: sessionStorage.getItem('jrmgraphy_gaeo_source') || undefined,
-      });
-    });
-
-    (() => {
-      const reported = new Set<string>();
-      const sendWebVital = (name: string, value: number, id: string) => {
-        if (reported.has(id)) return;
-        reported.add(id);
-        sendAnalyticsEvent('web_vital', {
-          event_category: 'Web Vitals',
-          event_label: name,
-          metric_name: name,
-          metric_value: Math.round(name === 'CLS' ? value * 1000 : value),
-          metric_id: id,
-          non_interaction: true,
-        });
-      };
-
-      try {
-        let lcpEntry: PerformanceEntry | undefined;
-        let lcpObserver: PerformanceObserver | undefined;
-        let lcpSent = false;
-        const sendFinalLcp = () => {
-          if (lcpSent) return;
-          lcpSent = true;
-          lcpObserver?.disconnect();
-          if (lcpEntry) sendWebVital('LCP', lcpEntry.startTime, `LCP-${lcpEntry.startTime}`);
-        };
-        lcpObserver = new PerformanceObserver((entryList) => {
-          const entries = entryList.getEntries();
-          const lastEntry = entries[entries.length - 1] as PerformanceEntry | undefined;
-          if (lastEntry) lcpEntry = lastEntry;
-        });
-        lcpObserver.observe({ type: 'largest-contentful-paint', buffered: true });
-        window.addEventListener('visibilitychange', () => {
-          if (document.visibilityState === 'hidden') sendFinalLcp();
-        });
-        window.addEventListener('pagehide', sendFinalLcp, { once: true });
-      } catch {}
-
-      try {
-        let cls = 0;
-        new PerformanceObserver((entryList) => {
-          for (const entry of entryList.getEntries() as Array<PerformanceEntry & { hadRecentInput?: boolean; value?: number }>) {
-            if (!entry.hadRecentInput) cls += entry.value;
-          }
-        }).observe({ type: 'layout-shift', buffered: true });
-        window.addEventListener('visibilitychange', () => {
-          if (document.visibilityState === 'hidden') sendWebVital('CLS', cls, `CLS-${Date.now()}`);
-        });
-      } catch {}
-
-      try {
-        let maxInp = 0;
-        let maxInpStart = 0;
-        let inpSent = false;
-        const inpObserver = new PerformanceObserver((entryList) => {
-          for (const entry of entryList.getEntries() as Array<
-            PerformanceEntry & { duration: number; startTime: number }
-          >) {
-            if (entry.duration > maxInp) {
-              maxInp = entry.duration;
-              maxInpStart = entry.startTime;
-            }
-          }
-        });
-        inpObserver.observe({ type: 'event', buffered: true, durationThreshold: 40 });
-        const flushInp = () => {
-          if (inpSent) return;
-          inpSent = true;
-          inpObserver.disconnect();
-          if (maxInp > 0) sendWebVital('INP', maxInp, `INP-${maxInpStart}`);
-        };
-        window.addEventListener('visibilitychange', () => {
-          if (document.visibilityState === 'hidden') flushInp();
-        });
-        window.addEventListener('pagehide', flushInp, { once: true });
-      } catch {}
-    })();
-  </script>
-</body>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{titleText}</title>
+    <meta name="description" content={description} />
+    <meta name="theme-color" content="#f0eee8" />
+    <meta name="jrmgraphy-build" content={process.env.COMMIT_REF || "local"} />
+    <link rel="icon" href="/favicon.svg" />
+    <link rel="canonical" href={canonical} />
+    {(noindex || !production) && (
+      <meta name="robots" content="noindex,follow" />
+    )}
+    {!seoOnly && (
+      <>
+        <link rel="alternate" hreflang="es" href={`${site}/es${route}`} />
+        <link rel="alternate" hreflang="en" href={`${site}/en${route}`} />
+        <link
+          rel="alternate"
+          hreflang="x-default"
+          href={`${site}/es${route}`}
+        />
+      </>
+    )}
+    <meta property="og:title" content={titleText} />
+    <meta property="og:description" content={description} />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={new URL(ogImage, site)} />
+    <meta name="twitter:card" content="summary_large_image" />
+    <script
+      is:inline
+      type="application/ld+json"
+      set:html={JSON.stringify(graph)}
+    ></script>
+  </head>
+  <body id="top">
+    <a class="skip-link" href="#main">
+      {lang === "es" ? "Saltar al contenido" : "Skip to content"}
+    </a>
+    <slot />
+    <dialog
+      class="photo-dialog"
+      id="photo-dialog"
+      aria-label={lang === "es" ? "Fotografía ampliada" : "Enlarged photograph"}
+    >
+      <button class="photo-close" autofocus>
+        {lang === "es" ? "Cerrar" : "Close"} <span aria-hidden="true">×</span>
+      </button>
+      <img alt="" />
+      <div class="photo-dialog-caption"></div>
+    </dialog>
+    <script>
+      import "../scripts/editorial";
+    </script>
+    {production && <Analytics />}
+  </body>
 </html>

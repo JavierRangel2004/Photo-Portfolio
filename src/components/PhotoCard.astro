@@ -79,8 +79,8 @@ const altText =
   <Image
     src={photo.src}
     alt={altText}
-    width={photo.width}
-    height={photo.height}
+    width={photo.width ?? 1600}
+    height={photo.height ?? 1600}
     sizes={sizes}
     loading={loading}
   />

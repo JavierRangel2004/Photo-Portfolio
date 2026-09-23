@@ -1,20 +1,36 @@
 ---
-import { getLangFromUrl, useTranslations, useTranslatedPath } from '../i18n/utils';
-
+import { getLangFromUrl } from "../i18n/utils";
+import { words } from "../lib/editorial";
+import Arrow from "./Arrow.astro";
 const lang = getLangFromUrl(Astro.url);
-const t = useTranslations(lang);
-const translatePath = useTranslatedPath(lang);
 ---
 
-<section class="cta-section" aria-label="Call to action">
-  <div class="cta-inner">
-    <div class="cta-text reveal">
-      <h2 class="cta-title">{t('contactCta.title')}</h2>
-      <p class="cta-sub">{t('contactCta.subtitle')}</p>
-    </div>
-    <div class="cta-actions reveal stagger-2">
-      <a href={translatePath('/gallery')} class="btn btn-ghost" data-analytics-label="final_cta_portfolio">{t('featured.viewAll')}</a>
-      <a href={translatePath('/contact')} class="btn btn-primary" data-analytics-label="final_cta_contact">{t('contactCta.primary')}</a>
-    </div>
+<section class="contact-close">
+  <p>
+    {words(
+      lang,
+      "Tu próximo proyecto empieza con una conversación.",
+      "Your next project starts with a conversation.",
+    )}
+  </p>
+  <a
+    href={`/${lang}/contact/`}
+    class="contact-display"
+    data-analytics-label="closing_contact"
+  >
+    {words(lang, "Hagamos", "Let’s make")}
+    <br />
+    <em>{words(lang, "algo memorable.", "it memorable.")}</em>
+    <Arrow />
+  </a>
+  <div class="contact-close-bottom">
+    <span>
+      {words(
+        lang,
+        "Producto / Gastro · Retrato · Eventos / Música",
+        "Product / Food · Portraits · Events / Music",
+      )}
+    </span>
+    <a href="mailto:inspecjrm@gmail.com">inspecjrm@gmail.com</a>
   </div>
 </section>

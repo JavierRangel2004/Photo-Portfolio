@@ -1,0 +1,65 @@
+---
+import EditorialImage from "./EditorialImage.astro";
+import { verticals, words, type Lang } from "../lib/editorial";
+import { getAllPhotos } from "../lib/photos";
+const { lang, group } = Astro.props as { lang: Lang; group?: string };
+const items = verticals(lang);
+const active = items.find((v) => v.id === group);
+const archive = group === "archive";
+const chosen = active
+  ? active.picks
+  : archive
+    ? getAllPhotos().filter((p) => ["city", "nature"].includes(p.category))
+    : items.flatMap((v) => v.picks.slice(0, 4));
+const extra = active
+  ? getAllPhotos().filter(
+      (p) =>
+        p.category === (active.id === "events" ? "concert" : active.id) &&
+        !chosen.some((c) => c.id === p.id),
+    )
+  : [];
+const photos = [...chosen, ...extra];
+---
+
+<nav class="gallery-nav" aria-label={words(lang, "Colecciones", "Collections")}>
+  <a href={`/${lang}/gallery/`} aria-current={!group ? "page" : undefined}>
+    {words(lang, "Selección", "Selection")}
+  </a>
+  {items.map((v) => (
+    <a
+      href={`/${lang}/gallery/${v.id}/`}
+      aria-current={group === v.id ? "page" : undefined}
+    >
+      {v.name}
+    </a>
+  ))}
+  <a
+    href={`/${lang}/gallery/archive/`}
+    aria-current={archive ? "page" : undefined}
+  >
+    {words(lang, "Archivo personal", "Personal archive")}
+  </a>
+</nav>
+<div class="gallery-grid">
+  {photos.map((p, i) => (
+    <div
+      class:list={[
+        "gallery-cell",
+        {
+          "gallery-cell--wide": p.width && p.height && p.width > p.height * 1.4,
+        },
+      ]}
+    >
+      <EditorialImage
+        photo={p}
+        alt={words(
+          lang,
+          `${p.category === "product" ? "Producto y gastronomía" : p.category === "portraits" ? "Retrato" : p.category === "concert" ? "Música en vivo" : p.category === "nature" ? "Naturaleza" : "Ciudad"} — fotografía de Javier Rangel`,
+          `${p.category === "concert" ? "Live music" : p.category} — photography by Javier Rangel`,
+        )}
+        eager={i < 2}
+        sizes="(max-width: 760px) 45vw, 30vw"
+      />
+    </div>
+  ))}
+</div>

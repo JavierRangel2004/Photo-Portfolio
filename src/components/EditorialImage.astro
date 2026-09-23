@@ -1,0 +1,64 @@
+---
+import { getLangFromUrl } from "../i18n/utils";
+import { responsiveSrcset, describePhoto } from "../lib/editorial";
+import type { Photo } from "../lib/photos";
+interface Props {
+  photo: Photo;
+  alt: string;
+  eager?: boolean;
+  class?: string;
+  caption?: string;
+  zoom?: boolean;
+  sizes?: string;
+}
+const {
+  photo,
+  alt,
+  eager = false,
+  class: className = "",
+  caption,
+  zoom = true,
+  sizes = "(max-width: 760px) 90vw, 45vw",
+} = Astro.props;
+const src = encodeURI(photo.src);
+const description = describePhoto(photo, getLangFromUrl(Astro.url)) || alt;
+---
+
+<figure class:list={["editorial-image", className]}>
+  {zoom ? (
+    <a
+      class="photo-link"
+      href={src}
+      data-photo={src}
+      data-caption={caption || alt}
+      aria-label={description}
+    >
+      <img
+        src={src}
+        srcset={responsiveSrcset(photo)}
+        sizes={sizes}
+        alt={description}
+        width={photo.width}
+        height={photo.height}
+        loading={eager ? "eager" : "lazy"}
+        decoding="async"
+        fetchpriority={eager ? "high" : "auto"}
+      />
+      <span class="photo-expand" aria-hidden="true">
+        ↗
+      </span>
+    </a>
+  ) : (
+    <img
+      src={src}
+      srcset={responsiveSrcset(photo)}
+      sizes={sizes}
+      alt={description}
+      width={photo.width}
+      height={photo.height}
+      loading={eager ? "eager" : "lazy"}
+      decoding="async"
+    />
+  )}
+  {caption && <figcaption>{caption}</figcaption>}
+</figure>

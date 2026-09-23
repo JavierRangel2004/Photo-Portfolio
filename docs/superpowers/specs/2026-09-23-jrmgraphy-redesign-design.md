@@ -1,6 +1,6 @@
 # JRMGraphy — Mesa de edición
 
-Estado: propuesta para aprobación visual. La implementación y el despliegue a staging están solicitados; la dirección visual todavía no está confirmada.
+Estado: aprobado por Javier el 23 septiembre 2026, incluyendo animaciones como parte central de la dirección de arte. Implementación y despliegue exclusivo a staging autorizados.
 
 ## Objetivo
 

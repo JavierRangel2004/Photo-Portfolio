@@ -205,3 +205,6 @@ docs/images
 .claude-flow
 logs/
 generate_diff.py
+# Generated responsive photographs and local design review captures
+/public/responsive/
+/.impeccable/review/

@@ -263,7 +263,7 @@ export function groupPhotosBySession(photos: Photo[]): Map<string, Photo[]> {
   });
   
   // Ordenar cada sesión por fecha (más nuevo primero)
-  grouped.forEach((sessionPhotos, date) => {
+  grouped.forEach((sessionPhotos) => {
     sessionPhotos.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
   });
   

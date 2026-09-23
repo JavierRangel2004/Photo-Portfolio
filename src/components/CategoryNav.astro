@@ -10,11 +10,11 @@ const t = useTranslations(lang);
 const translatePath = useTranslatedPath(lang);
 
 const categoryMeta: Record<string, { label: string; description: string }> = {
-  portraits: { label: t('category.portraits'), description: t('categories.desc.portraits') },
-  city:       { label: t('category.city'),      description: t('categories.desc.city') },
-  concert:    { label: t('category.concert'),   description: t('categories.desc.concert') },
-  product:    { label: t('category.product'),   description: t('categories.desc.product') },
-  nature:     { label: t('category.nature'),    description: t('categories.desc.nature') },
+  portraits: { label: t('category.portraits'), description: t('category.portraits') },
+  city:       { label: t('category.city'),      description: t('category.city') },
+  concert:    { label: t('category.concert'),   description: t('category.concert') },
+  product:    { label: t('category.product'),   description: t('category.product') },
+  nature:     { label: t('category.nature'),    description: t('category.nature') },
 
 };
 
@@ -29,9 +29,9 @@ const categoryData = categories.map(cat => {
 <section class="categories-section" id="home-themes" aria-label="Photography categories">
   <div class="categories-header reveal">
     <div class="section-heading">
-      <p class="section-eyebrow">{t('categories.eyebrow')}</p>
-      <h2 class="section-title">{t('categories.title')}</h2>
-      <p class="section-subtitle">{t('categories.subtitle')}</p>
+      <p class="section-eyebrow">{t('nav.portfolio')}</p>
+      <h2 class="section-title">{t('gallery.title')}</h2>
+      <p class="section-subtitle">{t('gallery.desc')}</p>
     </div>
   </div>
 
@@ -48,8 +48,8 @@ const categoryData = categories.map(cat => {
           <Image
             src={cat.cover.src}
             alt={lang === 'es' ? `Fotografía de ${cat.label.toLowerCase()}` : `${cat.label} photography`}
-            width={cat.cover.width}
-            height={cat.cover.height}
+            width={cat.cover.width ?? 1600}
+            height={cat.cover.height ?? 1600}
             loading="lazy"
           />
         )}

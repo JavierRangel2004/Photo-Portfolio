@@ -1,0 +1,35 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import Header from "../../components/Header.astro";
+import Footer from "../../components/Footer.astro";
+import { words, type Lang } from "../../lib/editorial";
+export function getStaticPaths() {
+  return ["es", "en"].map((lang) => ({ params: { lang } }));
+}
+const lang = Astro.params.lang as Lang;
+---
+
+<BaseLayout
+  title={words(lang, "Gracias por escribir", "Thanks for writing")}
+  noindex
+>
+  <Header />
+  <main id="main" class="page-intro">
+    <h1>
+      {words(lang, "Gracias por", "Thank you for")}
+      <br />
+      <em>{words(lang, "compartir tu idea.", "sharing your idea.")}</em>
+    </h1>
+    <p>
+      {words(
+        lang,
+        "Continuamos la conversación por correo.",
+        "We’ll continue the conversation by email.",
+      )}
+    </p>
+    <a class="solid-link" href={`/${lang}/gallery/`}>
+      {words(lang, "Seguir explorando", "Keep exploring")}
+    </a>
+  </main>
+  <Footer />
+</BaseLayout>

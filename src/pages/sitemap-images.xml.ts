@@ -1,8 +1,6 @@
 import type { APIRoute } from 'astro';
 import {
   getAllPhotos,
-  getPhotoGroup,
-  getPortfolioGroupSlug,
   type Photo,
 } from '../lib/photos';
 
@@ -38,8 +36,7 @@ export const GET: APIRoute = ({ site }) => {
 
   const byGroupUrl = new Map<string, Photo[]>();
   for (const photo of photos) {
-    const group = getPhotoGroup(photo);
-    const slug = getPortfolioGroupSlug(group);
+    const slug = photo.category === 'product' ? 'product' : photo.category === 'portraits' ? 'portraits' : photo.category === 'concert' ? 'events' : 'archive';
     const pageUrl = `${origin}/es/gallery/${slug}/`;
     const bucket = byGroupUrl.get(pageUrl) ?? [];
     bucket.push(photo);

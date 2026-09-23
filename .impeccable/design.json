@@ -1,0 +1,244 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-09-23T07:22:33.313320+00:00",
+  "title": "Design System: JRMGraphy",
+  "extensions": {
+    "colorMeta": {
+      "paper": {
+        "role": "neutral",
+        "displayName": "Warm Paper",
+        "tonalRamp": [
+          "oklch(15% 0.0083 91.48)",
+          "oklch(26% 0.0083 91.48)",
+          "oklch(38% 0.0083 91.48)",
+          "oklch(49% 0.0083 91.48)",
+          "oklch(61% 0.0083 91.48)",
+          "oklch(72% 0.0083 91.48)",
+          "oklch(84% 0.0083 91.48)",
+          "oklch(95% 0.0083 91.48)"
+        ]
+      },
+      "ink": {
+        "role": "neutral",
+        "displayName": "Near-black Ink",
+        "tonalRamp": [
+          "oklch(15% 0.0129 120.24)",
+          "oklch(26% 0.0129 120.24)",
+          "oklch(38% 0.0129 120.24)",
+          "oklch(49% 0.0129 120.24)",
+          "oklch(61% 0.0129 120.24)",
+          "oklch(72% 0.0129 120.24)",
+          "oklch(84% 0.0129 120.24)",
+          "oklch(95% 0.0129 120.24)"
+        ]
+      },
+      "muted": {
+        "role": "neutral",
+        "displayName": "Muted Olive-gray",
+        "tonalRamp": [
+          "oklch(15% 0.0140 112.05)",
+          "oklch(26% 0.0140 112.05)",
+          "oklch(38% 0.0140 112.05)",
+          "oklch(49% 0.0140 112.05)",
+          "oklch(61% 0.0140 112.05)",
+          "oklch(72% 0.0140 112.05)",
+          "oklch(84% 0.0140 112.05)",
+          "oklch(95% 0.0140 112.05)"
+        ]
+      },
+      "line": {
+        "role": "neutral",
+        "displayName": "Fine Paper Rule",
+        "tonalRamp": [
+          "oklch(15% 0.0139 97.48)",
+          "oklch(26% 0.0139 97.48)",
+          "oklch(38% 0.0139 97.48)",
+          "oklch(49% 0.0139 97.48)",
+          "oklch(61% 0.0139 97.48)",
+          "oklch(72% 0.0139 97.48)",
+          "oklch(84% 0.0139 97.48)",
+          "oklch(95% 0.0139 97.48)"
+        ]
+      },
+      "accent": {
+        "role": "primary",
+        "displayName": "Vermilion",
+        "tonalRamp": [
+          "oklch(15% 0.1441 33.90)",
+          "oklch(26% 0.1441 33.90)",
+          "oklch(38% 0.1441 33.90)",
+          "oklch(49% 0.1441 33.90)",
+          "oklch(61% 0.1441 33.90)",
+          "oklch(72% 0.1441 33.90)",
+          "oklch(84% 0.1441 33.90)",
+          "oklch(95% 0.1441 33.90)"
+        ]
+      }
+    },
+    "typographyMeta": {
+      "display": {
+        "displayName": "Editorial Display",
+        "purpose": "Home hero statements with a separate italic line."
+      },
+      "headline": {
+        "displayName": "Section Headline",
+        "purpose": "Large serif section statements."
+      },
+      "title": {
+        "displayName": "Story Title",
+        "purpose": "Photographic story headings."
+      },
+      "body": {
+        "displayName": "Body",
+        "purpose": "Readable practical copy."
+      },
+      "label": {
+        "displayName": "Label",
+        "purpose": "Navigation, captions, metadata, and form labels."
+      }
+    },
+    "shadows": [],
+    "motion": [
+      {
+        "name": "ease",
+        "value": "cubic-bezier(0.2, 0.8, 0.2, 1)",
+        "purpose": "Shared CSS image and arrow easing."
+      },
+      {
+        "name": "specialty-selection",
+        "value": "0.85s power3.inOut",
+        "purpose": "GSAP Flip between selected photographic frames."
+      },
+      {
+        "name": "image-reveal",
+        "value": "1.25s power3.out",
+        "purpose": "Once-only clipped reveal when the image reaches 88% of the viewport."
+      },
+      {
+        "name": "dialog-image",
+        "value": "0.5s power3.out",
+        "purpose": "Image opacity and scale from 0.94 to 1 on viewer entry."
+      },
+      {
+        "name": "reduced-motion",
+        "value": "prefers-reduced-motion: reduce",
+        "purpose": "Immediate selection; no GSAP entrance or scroll motion; disable CSS transitions and image-hover transforms."
+      }
+    ],
+    "breakpoints": [
+      {
+        "name": "mobile",
+        "value": "760px"
+      },
+      {
+        "name": "compact-desktop",
+        "value": "1100px"
+      },
+      {
+        "name": "wide",
+        "value": "1600px"
+      },
+      {
+        "name": "detail-motion-min",
+        "value": "900px"
+      },
+      {
+        "name": "narrow-mobile",
+        "value": "390px"
+      }
+    ]
+  },
+  "components": [
+    {
+      "name": "Primary action",
+      "kind": "button",
+      "refersTo": "button-primary",
+      "description": "Square filled action for a project inquiry.",
+      "html": "<button class=\"ds-primary\">Enviar mi proyecto<svg width=\"18\" height=\"18\" viewBox=\"0 0 24 24\" fill=\"none\" aria-hidden=\"true\"><path d=\"M4 19 19 4M4 4h15v15\" stroke=\"currentColor\" stroke-width=\"1.5\"/></svg></button>",
+      "css": ".ds-primary{font-family:var(--sans,Manrope,sans-serif);font-weight:400;display:inline-flex;align-items:center;justify-content:space-between;gap:40px;border:0;border-radius:0;background:var(--ink,#252720);color:var(--paper,#f0eee8);padding:18px 24px;font-size:12px;min-height:56px;cursor:pointer;transition:background .3s}.ds-primary:hover{background:var(--accent,#9e351e)}.ds-primary:focus-visible{outline:2px solid var(--accent,#9e351e);outline-offset:6px}.ds-primary:disabled{opacity:.5;cursor:wait}@media(prefers-reduced-motion:reduce){.ds-primary{transition:none}}"
+    },
+    {
+      "name": "Editorial text link",
+      "kind": "button",
+      "refersTo": "text-link",
+      "description": "Underlined invitation with a moving arrow.",
+      "html": "<a class=\"ds-link\" href=\"#contact\">Cuéntame tu proyecto<svg width=\"18\" height=\"18\" viewBox=\"0 0 24 24\" fill=\"none\" aria-hidden=\"true\"><path d=\"M4 19 19 4M4 4h15v15\" stroke=\"currentColor\" stroke-width=\"1.5\"/></svg></a>",
+      "css": ".ds-link{font-family:var(--sans,Manrope,sans-serif);font-weight:400;display:inline-flex;align-items:center;justify-content:space-between;gap:28px;color:var(--ink,#252720);font-size:12px;padding:8px 0;border-bottom:1px solid currentColor;line-height:1.5;min-height:40px;text-decoration:none}.ds-link svg{transition:transform .4s var(--ease,cubic-bezier(.2,.8,.2,1))}.ds-link:hover svg{transform:translate(3px,-3px)}.ds-link:focus-visible{outline:2px solid var(--accent,#9e351e);outline-offset:6px}@media(prefers-reduced-motion:reduce){.ds-link svg{transition:none}}"
+    },
+    {
+      "name": "Quiet link",
+      "kind": "button",
+      "refersTo": "text-link",
+      "description": "Secondary editorial link.",
+      "html": "<a class=\"ds-quiet\" href=\"#work\">Explorar el trabajo</a>",
+      "css": ".ds-quiet{font-family:var(--sans,Manrope,sans-serif);font-weight:400;display:inline-block;color:var(--ink,#252720);font-size:11px;text-decoration:underline;text-underline-offset:4px;padding:10px 0;min-height:40px}.ds-quiet:focus-visible{outline:2px solid var(--accent,#9e351e);outline-offset:6px}"
+    },
+    {
+      "name": "Inquiry field",
+      "kind": "input",
+      "refersTo": "input",
+      "description": "Transparent field with a fine bottom rule.",
+      "html": "<label class=\"ds-label\">Tu nombre<input class=\"ds-input\" placeholder=\"¿Cómo te llamas?\" autocomplete=\"name\" /></label>",
+      "css": ".ds-label{font-family:var(--sans,Manrope,sans-serif);font-weight:400;display:grid;gap:12px;font-size:11px;color:var(--ink,#252720)}.ds-input{font-family:var(--sans,Manrope,sans-serif);font-weight:400;background:transparent;border:0;border-radius:0;border-bottom:1px solid var(--line,#cccac0);padding:8px 0 13px;font-size:13px;color:inherit;caret-color:var(--accent,#9e351e)}.ds-input::placeholder{color:var(--muted,#62635a);opacity:1}.ds-input:focus-visible{outline:2px solid var(--accent,#9e351e);outline-offset:4px}"
+    },
+    {
+      "name": "Inquiry choice",
+      "kind": "chip",
+      "refersTo": "inquiry-choice",
+      "description": "Radio choices invert when selected.",
+      "html": "<label class=\"ds-choice\"><input type=\"radio\" name=\"ds-type\" checked/><span>Producto / Gastro</span></label>",
+      "css": ".ds-choice{font-family:var(--sans,Manrope,sans-serif);font-weight:400;position:relative;display:inline-block;color:var(--ink,#252720)}.ds-choice input{position:absolute;opacity:0;width:100%;height:100%;margin:0;cursor:pointer}.ds-choice span{display:block;border:1px solid var(--line,#cccac0);padding:12px 14px;font-size:11px}.ds-choice input:checked+span{background:var(--ink,#252720);color:var(--paper,#f0eee8);border-color:var(--ink,#252720)}.ds-choice input:focus-visible+span{outline:2px solid var(--accent,#9e351e);outline-offset:4px}"
+    },
+    {
+      "name": "Desktop navigation",
+      "kind": "nav",
+      "refersTo": "text-link",
+      "description": "Small sans-serif links with drawn current and hover underlines.",
+      "html": "<nav class=\"ds-nav\"><a href=\"#work\" aria-current=\"page\">Trabajo</a><a href=\"#services\">Servicios</a><a href=\"#about\">Sobre mí</a></nav>",
+      "css": ".ds-nav{display:flex;gap:36px}.ds-nav a{font-family:var(--sans,Manrope,sans-serif);font-weight:400;position:relative;font-size:12px;color:var(--ink,#252720);padding:12px 0;text-decoration:none}.ds-nav a:after{content:\"\";position:absolute;bottom:6px;left:0;width:100%;height:1px;background:currentColor;transform:scaleX(0);transform-origin:left;transition:transform .3s}.ds-nav a:hover:after,.ds-nav a[aria-current]:after{transform:scaleX(1)}.ds-nav a:focus-visible{outline:2px solid var(--accent,#9e351e);outline-offset:6px}@media(prefers-reduced-motion:reduce){.ds-nav a:after{transition:none}}"
+    },
+    {
+      "name": "Photographic frame",
+      "kind": "card",
+      "refersTo": "text-link",
+      "description": "Borderless photograph and separate caption; the image slot is illustrative.",
+      "html": "<figure class=\"ds-frame\"><a class=\"ds-photo\" href=\"#photo\" aria-label=\"Ampliar fotografía\"><span class=\"ds-slot\">Fotografía de Javier</span><span class=\"ds-expand\"><svg width=\"18\" height=\"18\" viewBox=\"0 0 24 24\" fill=\"none\" aria-hidden=\"true\"><path d=\"M4 19 19 4M4 4h15v15\" stroke=\"currentColor\" stroke-width=\"1.5\"/></svg></span></a><figcaption>Producto / Gastro</figcaption></figure>",
+      "css": ".ds-frame{margin:0;max-width:280px}.ds-photo{display:block;position:relative;overflow:hidden;color:var(--ink,#252720);text-decoration:none}.ds-slot{font-family:var(--sans,Manrope,sans-serif);font-weight:400;display:grid;place-items:center;aspect-ratio:4/5;background:#dcd9d0;font-size:11px}.ds-expand{position:absolute;right:14px;bottom:12px;width:32px;height:32px;border-radius:50%;background:var(--paper,#f0eee8);display:grid;place-items:center;opacity:0;transition:opacity .3s}.ds-photo:hover .ds-expand,.ds-photo:focus-visible .ds-expand{opacity:1}.ds-photo:focus-visible{outline:2px solid var(--accent,#9e351e);outline-offset:6px}.ds-frame figcaption{font-family:var(--sans,Manrope,sans-serif);font-weight:400;font-size:10px;color:var(--muted,#62635a);margin-top:12px}@media(prefers-reduced-motion:reduce){.ds-expand{transition:none}}"
+    }
+  ],
+  "narrative": {
+    "northStar": "Mesa de edición",
+    "overview": "A photographic editing table translated into an editorial interface: warm paper, near-black ink, large serif statements, and real color photography with clean edges. Asymmetry comes from deliberate image sizes and offsets within a strict grid, while captions and restrained sans-serif copy make the work easy to browse.\n\nThe interface feels authored, quiet, and precise. Vermilion marks interaction; the photographs supply the visual richness. Motion reveals and refocuses an existing composition, with equivalent static states for reduced motion and useful links before JavaScript runs.",
+    "keyCharacteristics": [
+      "Real photography with separate, legible captions and copy.",
+      "Large serif statements paired with small sans-serif navigation and metadata.",
+      "Flat paper surfaces, fine rules, and staggered photographic compositions.",
+      "Purposeful reveal and selection motion with reduced-motion equivalents."
+    ],
+    "rules": [
+      {
+        "name": "The Photograph First Rule",
+        "body": "Keep the strongest color and texture in the photographs; use the accent to mark interaction rather than decorate whole surfaces.",
+        "section": "colors"
+      },
+      {
+        "name": "The Flat Paper Rule",
+        "body": "Separate content with space, fine rules, scale, and contrast; do not introduce card shadows.",
+        "section": "elevation"
+      }
+    ],
+    "dos": [
+      "Do use Javier’s real photographs as the evidence of the work.",
+      "Do keep copy on its own readable surface and preserve clear image edges.",
+      "Do use the shared paper, ink, muted, line, and accent roles consistently.",
+      "Do provide visible keyboard focus and equivalent touch interactions.",
+      "Do preserve content and state changes when motion is reduced."
+    ],
+    "donts": [
+      "Don’t replace the editing-table world with decorative collage or arbitrary image tilts.",
+      "Don’t turn photographs into generic rounded cards with drop shadows.",
+      "Don’t depend on hover, dragging, a custom cursor, or scroll hijacking for navigation.",
+      "Don’t use generated imagery as evidence of Javier’s portfolio."
+    ]
+  }
+}
