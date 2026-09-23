@@ -1,5 +1,6 @@
 ---
 import { getLangFromUrl, getRouteWithoutLang } from "../i18n/utils";
+import BrandSignature from "./BrandSignature.astro";
 import { words } from "../lib/editorial";
 import Arrow from "./Arrow.astro";
 const lang = getLangFromUrl(Astro.url);
@@ -20,11 +21,11 @@ const translatedRoute =
 
 <header class="masthead">
   <a
-    class="wordmark"
+    class="wordmark brand-signature"
     href={`/${lang}/`}
-    aria-label={words(lang, "JRMGraphy — Inicio", "JRMGraphy — Home")}
+    aria-label={words(lang, "Javier Rangel — Inicio", "Javier Rangel — Home")}
   >
-    jrm<span>graphy</span>
+    <BrandSignature />
   </a>
   <nav class="desktop-nav" aria-label={words(lang, "Principal", "Main")}>
     {links.map(([path, label]) => (

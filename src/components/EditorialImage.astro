@@ -10,10 +10,14 @@ interface Props {
   caption?: string;
   zoom?: boolean;
   sizes?: string;
+  position?: string;
+  ratio?: string;
 }
 const {
   photo,
   alt,
+  position = "50% 50%",
+  ratio,
   eager = false,
   class: className = "",
   caption,
@@ -34,6 +38,7 @@ const description = describePhoto(photo, getLangFromUrl(Astro.url)) || alt;
       aria-label={description}
     >
       <img
+        style={{ objectPosition: position, aspectRatio: ratio }}
         src={src}
         srcset={responsiveSrcset(photo)}
         sizes={sizes}
@@ -50,6 +55,7 @@ const description = describePhoto(photo, getLangFromUrl(Astro.url)) || alt;
     </a>
   ) : (
     <img
+      style={{ objectPosition: position, aspectRatio: ratio }}
       src={src}
       srcset={responsiveSrcset(photo)}
       sizes={sizes}

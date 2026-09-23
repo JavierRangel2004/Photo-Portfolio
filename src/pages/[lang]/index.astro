@@ -52,11 +52,12 @@ const items = verticals(lang);
           )}
         </p>
       </div>
-      {items.map((v, i) => (
+      {items.map((v) => (
         <article class:list={["work-story", `work-story--${v.id}`]}>
           <div class="work-story-image" data-reveal-image>
             <EditorialImage
-              photo={v.picks[i === 0 ? 1 : i === 1 ? 1 : 2]}
+              photo={v.story}
+              position={v.storyPosition}
               alt={`${v.name} — Javier Rangel`}
               caption={v.name}
             />
@@ -81,7 +82,8 @@ const items = verticals(lang);
           </div>
           <div class="story-detail">
             <EditorialImage
-              photo={v.picks[i === 0 ? 2 : i === 1 ? 2 : 1]}
+              photo={v.detail}
+              ratio={v.detailRatio}
               alt={`${v.name} — ${words(lang, "detalle de la selección", "selected detail")}`}
               zoom={false}
             />

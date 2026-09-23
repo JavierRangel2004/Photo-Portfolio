@@ -1,13 +1,14 @@
 ---
 import { getLangFromUrl } from "../i18n/utils";
+import BrandSignature from "./BrandSignature.astro";
 import { words } from "../lib/editorial";
 const lang = getLangFromUrl(Astro.url);
 ---
 
 <footer class="site-footer">
   <div class="footer-top">
-    <a href={`/${lang}/`} class="wordmark">
-      jrm<span>graphy</span>
+    <a href={`/${lang}/`} class="wordmark brand-signature">
+      <BrandSignature />
     </a>
     <p>
       Javier Rangel

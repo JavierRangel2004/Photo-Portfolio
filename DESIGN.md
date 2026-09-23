@@ -179,3 +179,13 @@ Entrance motion combines brief vertical text reveals and clipped photographic re
 - Don’t turn photographs into generic rounded cards with drop shadows.
 - Don’t depend on hover, dragging, a custom cursor, or scroll hijacking for navigation.
 - Don’t use generated imagery as evidence of Javier’s portfolio.
+
+## Local exploration: Bosque / Raíces (2026-09-23)
+
+Home now uses a dark forest stage (#182e27), cream type and ochre root trajectories. Three unequal organic photographic apertures grow from the existing JR leaf monogram. Authored SVG linework draws once; pointer and keyboard focus highlight the branch belonging to each photographic vertical. Direct gallery and inquiry links remain available throughout. Mobile uses a vertically staggered composition. Reduced motion skips entrance choreography and presents the complete composition.
+
+Shared contact invitations carry a quieter root signature. Interior gallery, services and inquiry behavior is preserved. Bosque surface tokens are restored: cream #f3ecd9, green #24473c, muted #536459, line #c5c9b5 and accessible ochre #80632c. This is a local exploration, not a deployment.
+
+### Raíces: cinematic extension
+
+Home now enhances the static vector root signature with a deterministic Canvas 2D field: 51 root strands and 204 lateral branches track the monogram and image geometry. Drawing is scheduled on geometry/interaction changes, with capped pixel density and offscreen gating. Desktop viewports at least 960×700 use a finite pinned scroll sequence that brings each photographic vertical forward with bilingual narrative. Touch layouts keep the vertical composition without pinning. Reduced-motion users retain the static vector composition; keyboard focus releases the pinned sequence and exposes all links. No new dependencies.

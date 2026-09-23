@@ -115,12 +115,28 @@ media.add("(prefers-reduced-motion: no-preference)", () => {
         scrollTrigger: { trigger: section, start: "top 92%", once: true },
       });
     });
-  gsap.from(".inquiry-form", {
-    opacity: 0,
-    duration: 0.5,
-    delay: 0.12,
-    clearProps: "opacity",
-  });
+  if (document.querySelector(".inquiry-form")) {
+    gsap.from(
+      ".inquiry-form > .inquiry-intro, .inquiry-form > fieldset, .inquiry-form > .form-pair, .inquiry-form > label",
+      {
+        opacity: 0,
+        y: 14,
+        duration: 0.65,
+        stagger: 0.07,
+        ease: "power3.out",
+        clearProps: "transform,opacity",
+      },
+    );
+    gsap.from(".contact-edition", {
+      rotate: -3,
+      y: 20,
+      opacity: 0,
+      duration: 0.9,
+      delay: 0.12,
+      ease: "power3.out",
+      clearProps: "transform,opacity",
+    });
+  }
   document
     .querySelectorAll<HTMLElement>("[data-reveal-image]")
     .forEach((el) => {
@@ -166,3 +182,27 @@ media.add("(prefers-reduced-motion: no-preference)", () => {
   return () => ScrollTrigger.getAll().forEach((trigger) => trigger.kill());
 });
 import "./photo-viewer";
+
+// Service chapter navigation reflects position without intercepting native scrolling.
+const serviceLinks = [
+  ...document.querySelectorAll<HTMLAnchorElement>(".service-index a"),
+];
+if (serviceLinks.length && "IntersectionObserver" in window) {
+  const observer = new IntersectionObserver(
+    (entries) => {
+      const visible = entries.find((entry) => entry.isIntersecting);
+      if (!visible) return;
+      serviceLinks.forEach((link) => {
+        if (link.hash === `#${visible.target.id}`)
+          link.setAttribute("aria-current", "location");
+        else link.removeAttribute("aria-current");
+      });
+    },
+    { rootMargin: "-15% 0px -55% 0px" },
+  );
+  document
+    .querySelectorAll(".service-chapter")
+    .forEach((chapter) => observer.observe(chapter));
+}
+
+import "./roots";

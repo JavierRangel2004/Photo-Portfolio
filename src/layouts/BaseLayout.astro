@@ -1,6 +1,8 @@
 ---
 import "../styles/fonts.css";
 import "../styles/editorial.css";
+import { getImage } from "astro:assets";
+import brandMark from "../assets/images/logo-bosque.png";
 import Analytics from "../components/Analytics.astro";
 import { getLangFromUrl, getRouteWithoutLang } from "../i18n/utils";
 interface Props {
@@ -25,6 +27,7 @@ const lang = getLangFromUrl(Astro.url),
 const site = "https://jrmgraphy.com",
   canonical = new URL(`/${lang}${route}`, site);
 const production = process.env.CONTEXT === "production";
+const brandIcon = await getImage({ src: brandMark, width: 64, height: 64, format: "png" });
 const titleText = `${title} — JRMGraphy`;
 const organization = {
   "@type": "ProfessionalService",
@@ -62,9 +65,9 @@ const seoOnly = !["/", "/about", "/contact", "/services", "/gallery"].some(
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>{titleText}</title>
     <meta name="description" content={description} />
-    <meta name="theme-color" content="#f0eee8" />
+    <meta name="theme-color" content="#f3ecd9" />
     <meta name="jrmgraphy-build" content={process.env.COMMIT_REF || "local"} />
-    <link rel="icon" href="/favicon.svg" />
+    <link rel="icon" href={brandIcon.src} />
     <link rel="canonical" href={canonical} />
     {(noindex || !production) && (
       <meta name="robots" content="noindex,follow" />

@@ -3,11 +3,14 @@ import BaseLayout from "../../layouts/BaseLayout.astro";
 import Header from "../../components/Header.astro";
 import Footer from "../../components/Footer.astro";
 import InquiryForm from "../../components/InquiryForm.astro";
+import EditorialImage from "../../components/EditorialImage.astro";
+import { verticals } from "../../lib/editorial";
 import { words, type Lang } from "../../lib/editorial";
 export function getStaticPaths() {
   return ["es", "en"].map((lang) => ({ params: { lang } }));
 }
 const lang = Astro.params.lang as Lang;
+const editions = verticals(lang);
 ---
 
 <BaseLayout
@@ -29,6 +32,45 @@ const lang = Astro.params.lang as Lang;
           "Tell me yours. You don’t need to have everything figured out — we can find the right way to photograph it together.",
         )}
       </p>
+      <figure
+        class="contact-edition"
+        aria-label={words(
+          lang,
+          "Tu proyecto en imágenes",
+          "Your project in images",
+        )}
+      >
+        <div class="contact-frames">
+          {editions.map((edition, i) => (
+            <div
+              class="contact-frame"
+              data-edition={
+                edition.id === "product" ? "gastronomy" : edition.id
+              }
+              aria-hidden={i !== 0}
+            >
+              <EditorialImage
+                photo={edition.contact}
+                position={edition.contactPosition}
+                alt={edition.name}
+                zoom={false}
+                eager={i === 0}
+                sizes="(max-width: 760px) 90vw, 38vw"
+              />
+            </div>
+          ))}
+        </div>
+        <figcaption>
+          <span data-edition-name>{editions[0].name}</span>
+          <span>
+            {words(
+              lang,
+              "Una idea. Tu propia mirada.",
+              "One idea. Your point of view.",
+            )}
+          </span>
+        </figcaption>
+      </figure>
       <div class="contact-direct">
         <span>
           {words(

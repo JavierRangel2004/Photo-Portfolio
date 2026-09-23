@@ -1,8 +1,9 @@
 ---
 import type { Lang } from "../lib/editorial";
-import { words } from "../lib/editorial";
+import { words, verticals, responsiveSrcset } from "../lib/editorial";
 import Arrow from "./Arrow.astro";
 const { lang } = Astro.props as { lang: Lang };
+const images = verticals(lang).map((v) => v.contact);
 ---
 
 <form
@@ -22,6 +23,20 @@ const { lang } = Astro.props as { lang: Lang };
       <input name="bot-field" tabindex="-1" autocomplete="off" />
     </label>
   </p>
+  <div class="inquiry-intro">
+    <p data-inquiry-summary>
+      {words(
+        lang,
+        "Una idea, unos datos y empezamos.",
+        "An idea, a few details, and we can begin.",
+      )}
+    </p>
+    <div
+      class="inquiry-progress"
+      data-inquiry-progress
+      aria-hidden="true"
+    ></div>
+  </div>
   <fieldset>
     <legend>
       {words(lang, "¿Qué tienes en mente?", "What do you have in mind?")}
@@ -31,10 +46,23 @@ const { lang } = Astro.props as { lang: Lang };
         ["gastronomy", words(lang, "Producto / Gastro", "Product / Food")],
         ["portraits", words(lang, "Retrato", "Portraits")],
         ["events", words(lang, "Eventos / Música", "Events / Music")],
-      ].map(([value, label]) => (
+      ].map(([value, label], index) => (
         <label>
           <input type="radio" name="type" value={value} required />
-          <span>{label}</span>
+          <span>
+            <img
+              class="inquiry-choice-image"
+              src={encodeURI(images[index].src)}
+              srcset={responsiveSrcset(images[index])}
+              sizes="48px"
+              width="48"
+              height="48"
+              alt=""
+              aria-hidden="true"
+              loading="lazy"
+            />
+            {label}
+          </span>
         </label>
       ))}
     </div>
@@ -119,6 +147,10 @@ const { lang } = Astro.props as { lang: Lang };
   <p class="form-status" role="status" aria-live="polite" tabindex="-1"></p>
 </form>
 <script>
+  import {
+    mountInquiryExperience,
+    inquiryFieldValid,
+  } from "../scripts/inquiry-experience";
   import { sendInquiry } from "../lib/inquiry";
   document
     .querySelectorAll<HTMLFormElement>("[data-inquiry]")
@@ -147,20 +179,26 @@ const { lang } = Astro.props as { lang: Lang };
       const button = form.querySelector<HTMLButtonElement>(
         'button[type="submit"]',
       )!;
+      mountInquiryExperience(form);
       let pending = false;
       form.addEventListener("submit", async (event) => {
         event.preventDefault();
         if (pending || !form.reportValidity()) return;
         const data = new FormData(form);
-        const name = String(data.get("name") || "").trim(),
-          body = String(data.get("message") || "").trim();
-        if (!name || body.length < 10) {
+        const nameField =
+          form.querySelector<HTMLInputElement>('input[name="name"]')!;
+        if (
+          !inquiryFieldValid(nameField) ||
+          !message ||
+          !inquiryFieldValid(message)
+        ) {
           status.textContent = es
             ? "Escribe tu nombre y al menos 10 caracteres sobre tu proyecto."
             : "Enter your name and at least 10 characters about your project.";
           status.focus();
           return;
         }
+        form.dataset.state = "pending";
         pending = true;
         button.disabled = true;
         form.setAttribute("aria-busy", "true");
@@ -177,8 +215,10 @@ const { lang } = Astro.props as { lang: Lang };
               detail: { inquiryType: data.get("type") },
             }),
           );
+          form.dataset.state = "success";
           form.reset();
         } catch {
+          form.dataset.state = "error";
           status.textContent = es
             ? "No pudimos enviar tu mensaje. Tus datos siguen aquí: intenta de nuevo o escribe a inspecjrm@gmail.com."
             : "Your message could not be sent. Your details are still here: try again or email inspecjrm@gmail.com.";

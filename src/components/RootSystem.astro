@@ -1,0 +1,59 @@
+---
+// Three connected trajectories, with lateral roots growing from points on each path.
+const branches = [
+  {
+    id: "product",
+    main: "M600 10 C600 100 560 120 478 165 S255 225 200 360",
+    twigs: [
+      "M538 133 C476 112 424 112 364 78",
+      "M478 165 C405 160 337 140 292 164",
+      "M390 203 C321 252 338 302 291 349",
+      "M304 249 C233 251 170 225 102 269",
+      "M242 295 C216 330 171 343 133 337",
+      "M423 190 C375 213 375 260 391 288",
+    ],
+  },
+  {
+    id: "portraits",
+    main: "M600 10 C600 100 635 175 608 258 S537 420 597 585",
+    twigs: [
+      "M610 132 C648 150 685 178 690 231",
+      "M616 219 C570 222 533 247 513 287",
+      "M593 298 C623 338 655 349 669 398",
+      "M568 378 C525 399 497 452 450 463",
+      "M569 466 C601 488 635 484 659 528",
+      "M582 547 C542 561 525 598 517 640",
+    ],
+  },
+  {
+    id: "events",
+    main: "M600 10 C600 100 664 108 739 156 S942 218 1004 375",
+    twigs: [
+      "M657 108 C716 99 747 79 776 48",
+      "M739 156 C815 151 845 112 911 133",
+      "M829 196 C853 254 826 298 865 335",
+      "M913 247 C989 253 1010 221 1094 251",
+      "M971 307 C991 338 1045 346 1082 331",
+      "M796 182 C832 179 865 175 887 191",
+    ],
+  },
+];
+---
+
+<svg
+  class="root-system"
+  viewBox="0 0 1200 700"
+  preserveAspectRatio="none"
+  fill="none"
+  aria-hidden="true"
+  focusable="false"
+>
+  {branches.map((branch) => (
+    <g data-root-branch={branch.id}>
+      <path class="root-main" d={branch.main} pathLength="1" />
+      {branch.twigs.map((d) => (
+        <path class="root-twig" d={d} pathLength="1" />
+      ))}
+    </g>
+  ))}
+</svg>

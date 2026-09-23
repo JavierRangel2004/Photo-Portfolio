@@ -1,11 +1,13 @@
 ---
 import { getLangFromUrl } from "../i18n/utils";
 import { words } from "../lib/editorial";
+import RootSystem from "./RootSystem.astro";
 import Arrow from "./Arrow.astro";
 const lang = getLangFromUrl(Astro.url);
 ---
 
 <section class="contact-close">
+  <RootSystem />
   <p>
     {words(
       lang,

@@ -1,160 +1,123 @@
 ---
+import { Image } from "astro:assets";
+import mark from "../assets/images/logo-bosque.png";
 import { getLangFromUrl } from "../i18n/utils";
 import {
   responsiveSrcset,
   describePhoto,
   verticals,
   words,
-  contactLink,
 } from "../lib/editorial";
 import Arrow from "./Arrow.astro";
+import RootSystem from "./RootSystem.astro";
 const lang = getLangFromUrl(Astro.url);
 const items = verticals(lang);
 ---
 
-<section class="edition-hero" aria-labelledby="hero-title">
-  <div class="hero-heading">
+<section class="roots-hero" aria-labelledby="hero-title">
+  <div class="roots-heading">
     <h1 id="hero-title">
       <span>{words(lang, "Hay imágenes", "Some images")}</span>
       <em>{words(lang, "que se quedan.", "stay with you.")}</em>
     </h1>
-    <div class="hero-intro">
-      <p data-active-copy>
+    <div class="roots-intro">
+      <p>
         {words(
           lang,
           "Fotografía para lo que creas, lo que eres y lo que sucede.",
           "Photography for what you create, who you are and what unfolds.",
         )}
       </p>
-      <span>Javier Rangel · CDMX</span>
-      <a
-        class="text-link"
-        href={contactLink(lang, items[0].inquiry)}
-        data-active-cta
-        data-analytics-label="hero_contact"
-      >
+      <a class="text-link" href={`/${lang}/contact/`}>
         {words(lang, "Cuéntame tu proyecto", "Tell me about your project")}
         <Arrow />
       </a>
     </div>
   </div>
-  <div class="editing-table" data-editing-table>
-    {items.map((v, i) => (
-      <article
-        class:list={["edition-frame", { "is-selected": i === 0 }]}
-        data-frame={v.id}
-      >
-        <a
-          class="edition-photo"
-          href={`/${lang}/gallery/${v.id}/`}
-          aria-label={words(
+  <div class="roots-garden">
+    <div class="roots-origin" aria-hidden="true">
+      <Image
+        src={mark}
+        alt=""
+        aria-hidden="true"
+        width={100}
+        height={100}
+        format="webp"
+      />
+    </div>
+    <RootSystem />
+    <canvas class="root-field" aria-hidden="true"></canvas>
+    <div class="root-narrative" aria-hidden="true">
+      <div data-root-story="product">
+        <span>{words(lang, "Lo que creas.", "What you create.")}</span>
+        <p>
+          {words(
             lang,
-            `Ver trabajo de ${v.name}`,
-            `Explore ${v.name}`,
+            "Del detalle nace el deseo.",
+            "Desire starts in the details.",
           )}
-        >
+        </p>
+      </div>
+      <div data-root-story="portraits">
+        <span>{words(lang, "Lo que eres.", "Who you are.")}</span>
+        <p>
+          {words(
+            lang,
+            "Una presencia irrepetible.",
+            "A presence like no other.",
+          )}
+        </p>
+      </div>
+      <div data-root-story="events">
+        <span>{words(lang, "Lo que sucede.", "What unfolds.")}</span>
+        <p>
+          {words(
+            lang,
+            "La energía también deja huella.",
+            "Energy leaves its mark.",
+          )}
+        </p>
+      </div>
+    </div>
+    <div class="roots-caption">
+      <span>Javier Rangel · CDMX</span>
+      <p>
+        {words(lang, "Tres universos.", "Three worlds.")}
+        <br />
+        <em>{words(lang, "Una misma raíz.", "One shared root.")}</em>
+      </p>
+    </div>
+    {items.map((v) => (
+      <a
+        class={`root-world root-world--${v.id}`}
+        data-world={v.id}
+        href={`/${lang}/gallery/${v.id}/`}
+      >
+        <div class="root-aperture">
           <img
+            style={{ objectPosition: v.heroPosition }}
             src={encodeURI(v.hero.src)}
             srcset={responsiveSrcset(v.hero)}
-            sizes={
-              i === 0
-                ? "(max-width: 760px) 36vw, 43vw"
-                : "(max-width: 760px) 28vw, 29vw"
-            }
+            sizes="(max-width: 600px) 60vw, 36vw"
             alt={describePhoto(v.hero, lang) || v.name}
             width={v.hero.width}
             height={v.hero.height}
             loading="eager"
-            fetchpriority={i === 0 ? "high" : "auto"}
+            fetchpriority={v.id === "product" ? "high" : "auto"}
           />
-          <span class="frame-open">
-            <Arrow />
-          </span>
-        </a>
-        <div class="frame-label">
-          <a href={`/${lang}/gallery/${v.id}/`}>{v.name}</a>
-          <span>{words(lang, "Explorar", "Explore")} ↗</span>
         </div>
-      </article>
+        <div class="root-world-label">
+          <span>{v.name}</span>
+          <Arrow />
+        </div>
+      </a>
     ))}
-  </div>
-  <div class="edition-bottom">
-    <p>
-      {words(
-        lang,
-        "Tres universos. Una misma mirada.",
-        "Three worlds. One point of view.",
-      )}
-    </p>
-    <div
-      class="edition-switch"
-      hidden
-      aria-label={words(lang, "Enfocar especialidad", "Focus on a specialty")}
-    >
-      {items.map((v, i) => (
-        <button
-          type="button"
-          data-select={v.id}
-          data-copy={v.title}
-          data-contact={contactLink(lang, v.inquiry)}
-          aria-pressed={i === 0}
-        >
-          {v.name}
-        </button>
-      ))}
-    </div>
-    <a href="#selected-work" class="scroll-cue">
-      {words(lang, "Sigue mirando", "Keep looking")}
+    <a class="roots-scroll" href="#selected-work">
+      {words(lang, "Sigue la raíz", "Follow the root")}
       <span aria-hidden="true">↓</span>
     </a>
   </div>
 </section>
 <script>
-  import { gsap } from "gsap";
-  import { Flip } from "gsap/Flip";
-  gsap.registerPlugin(Flip);
-  const table = document.querySelector<HTMLElement>("[data-editing-table]");
-  const controls = document.querySelector<HTMLElement>(".edition-switch");
-  const reduced = window.matchMedia("(prefers-reduced-motion: reduce)");
-  if (table && controls) {
-    controls.hidden = false;
-    let busy = false;
-    controls.querySelectorAll<HTMLButtonElement>("button").forEach((button) =>
-      button.addEventListener("click", () => {
-        if (busy || button.getAttribute("aria-pressed") === "true") return;
-        const frames = table.querySelectorAll<HTMLElement>(".edition-frame");
-        const state = Flip.getState(frames);
-        frames.forEach((frame) =>
-          frame.classList.toggle(
-            "is-selected",
-            frame.dataset.frame === button.dataset.select,
-          ),
-        );
-        controls
-          .querySelectorAll("button")
-          .forEach((b) => b.setAttribute("aria-pressed", String(b === button)));
-        const copy = document.querySelector<HTMLElement>("[data-active-copy]");
-        const cta =
-          document.querySelector<HTMLAnchorElement>("[data-active-cta]");
-        if (copy) copy.textContent = button.dataset.copy || "";
-        if (cta) {
-          cta.href = button.dataset.contact || cta.href;
-          cta.dataset.analyticsLabel =
-            "hero_" + button.dataset.select + "_contact";
-        }
-        if (!reduced.matches) {
-          busy = true;
-          Flip.from(state, {
-            duration: 0.85,
-            ease: "power3.inOut",
-            absolute: false,
-            scale: true,
-            onComplete: () => {
-              busy = false;
-            },
-          });
-        }
-      }),
-    );
-  }
+  import "../scripts/roots";
 </script>

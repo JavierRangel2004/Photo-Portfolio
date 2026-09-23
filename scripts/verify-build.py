@@ -22,7 +22,7 @@ for file in pages:
         if not target or not target.startswith('/') or target.startswith('//'): continue
         path=root/unquote(urlsplit(target).path).lstrip('/')
         if not path.is_file() and not (path/'index.html').is_file(): errors.append(f'{file}: missing {target}')
-        if tag=='img' and not a.get('alt'): errors.append(f'{file}: missing image description {target}')
+        if tag=='img' and not a.get('alt') and not ('alt' in a and not a['alt'] and a.get('aria-hidden') == 'true'): errors.append(f'{file}: missing image description {target}')
 for lang in ('es','en'):
     page=Page((root/lang/'contact/index.html').read_text())
     form=next(a for tag,a in page.tags if tag=='form')

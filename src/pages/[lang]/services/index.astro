@@ -59,7 +59,12 @@ const items = verticals(lang);
               : "events"
         }
       >
-        <EditorialImage photo={v.hero} alt={v.name} caption={v.name} />
+        <EditorialImage
+          photo={v.service}
+          position={v.servicePosition}
+          alt={v.name}
+          caption={v.name}
+        />
         <div>
           <h2>{v.title}</h2>
           <p>{v.description}</p>
