@@ -19,4 +19,16 @@
 - [x] Add page entrances, image reveals, bounded scroll movement and image expansion. Disable movement for reduced motion while retaining all controls.
 - [x] Validate build, active route graph, photo taxonomy, form behavior, desktop/mobile and keyboard. Investigate pre-existing typecheck configuration and dependency issues before changing them.
 - [x] Run design detector once on completed changes; get independent finish review under Impeccable, resolve material findings and document built system.
-- [ ] Commit, preserve remote staging ancestry, push staging and verify the published site, routes and Netlify form recognition. Record exact deployed commit and any verification limitations.
+- [x] Commit, preserve remote staging ancestry, push staging and verify the published site, routes and Netlify form recognition. Record exact deployed commit and any verification limitations.
+
+## Published result
+
+- Verified deployment: `b62d6df05157ada8266aec492c4cfc6adf800094`.
+- Staging: https://staging--jrmgraphy.netlify.app/es/
+- Netlify deploy: https://app.netlify.com/projects/jrmgraphy/deploys/6ab37e57c4184b000840f49c
+- Public HTML reports the exact commit, noindex and no production analytics.
+- Netlify processed the contact form and retained the contact form identity. Actual inquiry receipt/email notification was not tested.
+- Product, portrait, event galleries, English services and a responsive image return HTTP 200.
+- Production HTML matches the pre-deployment snapshot after normalizing Cloudflare's per-response email obfuscation. Main was not pushed.
+- Local validation: 31-page build, 52-file Astro check with zero errors/warnings/hints, 3 passing inquiry tests, route/image/form/taxonomy verifier passing, npm audit zero vulnerabilities.
+- Independent finish review approved staging with minor residual polish, documented in `docs/redesign-finish-review-2026-09-23.md`. No field performance benchmark was run.
