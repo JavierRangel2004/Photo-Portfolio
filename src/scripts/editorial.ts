@@ -101,7 +101,7 @@ media.add("(prefers-reduced-motion: no-preference)", () => {
   }
   document
     .querySelectorAll<HTMLElement>(
-      ".service-chapter, .about-story, .seo-overview",
+      ".seo-overview",
     )
     .forEach((section) => {
       const children = [...section.children];
@@ -179,7 +179,7 @@ media.add("(prefers-reduced-motion: no-preference)", () => {
       clearProps: "all",
     }),
   );
-  return () => ScrollTrigger.getAll().forEach((trigger) => trigger.kill());
+  // gsap.matchMedia reverts only this context; other page signatures own their triggers.
 });
 import "./photo-viewer";
 
@@ -206,3 +206,4 @@ if (serviceLinks.length && "IntersectionObserver" in window) {
 }
 
 import "./roots";
+import "./page-signatures";

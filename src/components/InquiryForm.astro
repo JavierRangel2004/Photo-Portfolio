@@ -1,6 +1,7 @@
 ---
 import type { Lang } from "../lib/editorial";
 import { words, verticals, responsiveSrcset } from "../lib/editorial";
+import InquirySprout from "./InquirySprout.astro";
 import Arrow from "./Arrow.astro";
 const { lang } = Astro.props as { lang: Lang };
 const images = verticals(lang).map((v) => v.contact);
@@ -24,6 +25,7 @@ const images = verticals(lang).map((v) => v.contact);
     </label>
   </p>
   <div class="inquiry-intro">
+    <InquirySprout />
     <p data-inquiry-summary>
       {words(
         lang,
@@ -69,9 +71,12 @@ const images = verticals(lang).map((v) => v.contact);
   </fieldset>
   <div class="form-pair">
     <label>
-      {words(lang, "Tu nombre", "Your name")}
+      <span id="inquiry-name-label">
+        {words(lang, "Tu nombre", "Your name")}
+      </span>
       <input
         name="name"
+        aria-labelledby="inquiry-name-label"
         autocomplete="name"
         required
         maxlength="120"
@@ -79,9 +84,12 @@ const images = verticals(lang).map((v) => v.contact);
       />
     </label>
     <label>
-      {words(lang, "Tu correo", "Your email")}
+      <span id="inquiry-email-label">
+        {words(lang, "Tu correo", "Your email")}
+      </span>
       <input
         name="email"
+        aria-labelledby="inquiry-email-label"
         type="email"
         autocomplete="email"
         required
@@ -119,9 +127,12 @@ const images = verticals(lang).map((v) => v.contact);
     </label>
   </div>
   <label>
-    {words(lang, "Cuéntame la idea", "Tell me about the idea")}
+    <span id="inquiry-message-label">
+      {words(lang, "Cuéntame la idea", "Tell me about the idea")}
+    </span>
     <textarea
       name="message"
+      aria-labelledby="inquiry-message-label"
       rows="4"
       required
       minlength="10"

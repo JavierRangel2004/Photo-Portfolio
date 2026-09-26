@@ -51,6 +51,7 @@ const items = verticals(lang);
     {items.map((v) => (
       <section
         class="service-chapter"
+        data-service-motion={v.id}
         id={
           v.id === "product"
             ? "gastronomy"
@@ -59,12 +60,25 @@ const items = verticals(lang);
               : "events"
         }
       >
-        <EditorialImage
-          photo={v.service}
-          position={v.servicePosition}
-          alt={v.name}
-          caption={v.name}
-        />
+        <div class="service-print">
+          <svg
+            class="service-stem"
+            viewBox="0 0 100 500"
+            preserveAspectRatio="none"
+            aria-hidden="true"
+          >
+            <path
+              d="M50 0 C15 90 85 160 50 240 S15 400 50 500 M50 240 C18 225 12 190 12 178 M50 240 C83 257 88 287 88 300"
+              pathLength="1"
+            />
+          </svg>
+          <EditorialImage
+            photo={v.service}
+            position={v.servicePosition}
+            alt={v.name}
+            caption={v.name}
+          />
+        </div>
         <div>
           <h2>{v.title}</h2>
           <p>{v.description}</p>

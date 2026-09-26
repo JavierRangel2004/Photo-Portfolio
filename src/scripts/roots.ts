@@ -168,27 +168,44 @@ if (hero) {
           clearProps: "strokeDasharray,strokeDashoffset",
         },
         0.8,
-      )
-      .from(
-        ".root-aperture",
-        {
-          clipPath: "ellipse(0% 0% at 50% 15%)",
-          duration: 1.25,
-          stagger: 0.13,
-          ease: "power3.inOut",
-          clearProps: "clipPath",
-        },
-        0.45,
-      )
-      .from(
-        ".root-world-label",
-        { opacity: 0, y: 10, duration: 0.65, stagger: 0.1, clearProps: "all" },
-        1,
       );
+    const focusCleanups: (() => void)[] = [];
+    worlds.forEach((world) => {
+      const reveal = gsap.timeline({
+        defaults: { ease: "power3.out" },
+        scrollTrigger: { trigger: world, start: "top 92%", once: true },
+      });
+      reveal
+        .fromTo(
+          world.querySelector(".root-aperture"),
+          { clipPath: "ellipse(10% 18% at 50% 15%)" },
+          {
+            clipPath: "ellipse(85% 85% at 50% 50%)",
+            duration: 1.05,
+            ease: "power3.inOut",
+            clearProps: "clipPath",
+          },
+          0,
+        )
+        .from(
+          world.querySelector(".root-world-label"),
+          { opacity: 0, y: 8, duration: 0.5, clearProps: "transform,opacity" },
+          0.5,
+        );
+      const finish = () => {
+        reveal.scrollTrigger?.kill();
+        reveal.progress(1);
+      };
+      world.addEventListener("focus", finish);
+      focusCleanups.push(() => world.removeEventListener("focus", finish));
+    });
     // A keyboard visitor never waits for the entrance to expose their focused link.
     const reveal = () => timeline.progress(1);
     hero.addEventListener("focusin", reveal);
-    return () => hero.removeEventListener("focusin", reveal);
+    return () => {
+      hero.removeEventListener("focusin", reveal);
+      focusCleanups.forEach((cleanup) => cleanup());
+    };
   });
 }
 const closingMedia = gsap.matchMedia();

@@ -165,3 +165,22 @@ if (dialog && links.length > 1) {
     dialog.append(button);
   }
 }
+
+// Horizontal swipes change the photograph; vertical gestures and pinch zoom stay native.
+let swipe: { x: number; y: number; id: number } | null = null;
+img?.addEventListener("pointerdown", (event) => {
+  if (event.pointerType !== "touch" || !event.isPrimary || !dialog?.open)
+    return;
+  swipe = { x: event.clientX, y: event.clientY, id: event.pointerId };
+});
+img?.addEventListener("pointerup", (event) => {
+  if (!swipe || swipe.id !== event.pointerId) return;
+  const dx = event.clientX - swipe.x,
+    dy = event.clientY - swipe.y;
+  swipe = null;
+  if (Math.abs(dx) > 55 && Math.abs(dx) > Math.abs(dy) * 1.5 && !closing)
+    void showPhoto(current + (dx < 0 ? 1 : -1));
+});
+img?.addEventListener("pointercancel", () => {
+  swipe = null;
+});

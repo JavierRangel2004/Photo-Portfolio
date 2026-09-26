@@ -54,6 +54,7 @@ const translatedRoute =
       class="menu-toggle"
       aria-label={words(lang, "Abrir menú", "Open menu")}
       aria-haspopup="dialog"
+      aria-expanded="false"
       aria-controls="mobile-menu"
     >
       <span></span>
@@ -94,18 +95,75 @@ const translatedRoute =
   <p>Javier Rangel · Ciudad de México</p>
 </dialog>
 <script>
+  import { gsap } from "gsap";
   const menu = document.querySelector<HTMLDialogElement>("#mobile-menu");
   const opener = document.querySelector<HTMLButtonElement>(".menu-toggle");
+  const reduced = matchMedia("(prefers-reduced-motion: reduce)");
+  let animation: gsap.core.Timeline | undefined;
+  let closing = false;
+  function closeMenu() {
+    if (!menu?.open || closing) return;
+    closing = true;
+    animation?.kill();
+    if (reduced.matches) menu.close();
+    else
+      animation = gsap
+        .timeline({ onComplete: () => menu.close() })
+        .to(menu, { xPercent: 100, duration: 0.25, ease: "power2.in" });
+  }
   opener?.addEventListener("click", () => {
-    menu?.showModal();
+    if (!menu || menu.open) return;
+    animation?.kill();
+    closing = false;
+    gsap.set(menu, { clearProps: "transform" });
+    menu.showModal();
+    opener.setAttribute("aria-expanded", "true");
     document.body.classList.add("dialog-open");
+    if (!reduced.matches)
+      animation = gsap
+        .timeline()
+        .fromTo(
+          menu,
+          { xPercent: 100 },
+          {
+            xPercent: 0,
+            duration: 0.5,
+            ease: "power3.out",
+            clearProps: "transform",
+          },
+        )
+        .fromTo(
+          menu.querySelectorAll("nav a"),
+          { x: 18, opacity: 0 },
+          {
+            x: 0,
+            opacity: 1,
+            duration: 0.4,
+            stagger: 0.05,
+            clearProps: "transform,opacity",
+          },
+          0.1,
+        );
   });
-  menu?.querySelector("button")?.addEventListener("click", () => menu.close());
-  menu?.addEventListener("click", (e) => {
-    if (e.target === menu) menu.close();
+  menu?.querySelector("button")?.addEventListener("click", closeMenu);
+  menu?.addEventListener("click", (event) => {
+    if (event.target === menu) closeMenu();
+  });
+  menu?.addEventListener("cancel", (event) => {
+    event.preventDefault();
+    closeMenu();
   });
   menu?.addEventListener("close", () => {
+    closing = false;
+    animation?.kill();
+    gsap.set([menu, ...menu.querySelectorAll("nav a")], {
+      clearProps: "transform,opacity",
+    });
+    opener?.setAttribute("aria-expanded", "false");
     document.body.classList.remove("dialog-open");
     opener?.focus();
+  });
+  reduced.addEventListener("change", () => {
+    animation?.progress(1);
   });
 </script>

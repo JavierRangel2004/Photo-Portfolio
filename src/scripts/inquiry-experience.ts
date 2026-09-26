@@ -24,9 +24,38 @@ export function mountInquiryExperience(form: HTMLFormElement) {
   const frames = [...document.querySelectorAll<HTMLElement>("[data-edition]")];
   const caption = document.querySelector<HTMLElement>("[data-edition-name]");
   let active = "";
+  const leaves = [
+    ...form.querySelectorAll<SVGPathElement>("[data-sprout-leaf]"),
+  ];
+  const reduced = matchMedia("(prefers-reduced-motion: reduce)");
+  let previousValid = -1;
+  const applyLeaves = (valid: number, animate: boolean) => {
+    gsap.killTweensOf(leaves);
+    leaves.forEach((leaf, index) => {
+      const values = {
+        opacity: index < valid ? 1 : 0.15,
+        scale: index < valid ? 1 : 0.58,
+      };
+      if (animate)
+        gsap.to(leaf, {
+          ...values,
+          duration: 0.45,
+          ease: "power3.out",
+          overwrite: true,
+        });
+      else gsap.set(leaf, values);
+    });
+  };
+  reduced.addEventListener("change", () =>
+    applyLeaves(Math.max(previousValid, 0), false),
+  );
   function update() {
     const selected = radios.find((r) => r.checked);
     const valid = fields.filter(inquiryFieldValid).length + Number(!!selected);
+    if (valid !== previousValid) {
+      applyLeaves(valid, previousValid >= 0 && !reduced.matches);
+      previousValid = valid;
+    }
     progress?.style.setProperty("--completion", String(valid / 4));
     if (summary)
       summary.textContent =
@@ -44,6 +73,7 @@ export function mountInquiryExperience(form: HTMLFormElement) {
         f.setAttribute("aria-hidden", String(f !== incoming)),
       );
       gsap.killTweensOf(frames);
+      gsap.set(frames, { clearProps: "clipPath,transform" });
       if (
         incoming &&
         active &&
@@ -55,8 +85,15 @@ export function mountInquiryExperience(form: HTMLFormElement) {
         );
         gsap.fromTo(
           incoming,
-          { opacity: 0 },
-          { opacity: 1, duration: 0.55, ease: "power2.out", overwrite: true },
+          { opacity: 0, clipPath: "inset(0 100% 0 0)" },
+          {
+            opacity: 1,
+            clipPath: "inset(0 0% 0 0)",
+            duration: 0.65,
+            ease: "power3.inOut",
+            overwrite: true,
+            clearProps: "clipPath",
+          },
         );
       } else
         frames.forEach((f) => {
@@ -79,7 +116,11 @@ export function mountInquiryExperience(form: HTMLFormElement) {
       const invalid = !inquiryFieldValid(field);
       field.setAttribute("aria-invalid", String(invalid));
       error.textContent = invalid
-        ? (field.validity.typeMismatch ? (es ? "Escribe un correo válido." : "Enter a valid email address.") : "") ||
+        ? (field.validity.typeMismatch
+            ? es
+              ? "Escribe un correo válido."
+              : "Enter a valid email address."
+            : "") ||
           (field.name === "message"
             ? es
               ? "Cuéntame tu idea en al menos 10 caracteres, sin contar espacios al inicio o al final."

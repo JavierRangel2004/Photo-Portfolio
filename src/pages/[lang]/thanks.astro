@@ -1,6 +1,7 @@
 ---
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import Header from "../../components/Header.astro";
+import InquirySprout from "../../components/InquirySprout.astro";
 import Footer from "../../components/Footer.astro";
 import { words, type Lang } from "../../lib/editorial";
 export function getStaticPaths() {
@@ -14,7 +15,8 @@ const lang = Astro.params.lang as Lang;
   noindex
 >
   <Header />
-  <main id="main" class="page-intro">
+  <main id="main" class="page-intro thanks-intro">
+    <InquirySprout complete />
     <h1>
       {words(lang, "Gracias por", "Thank you for")}
       <br />

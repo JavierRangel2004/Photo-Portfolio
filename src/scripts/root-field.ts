@@ -46,13 +46,14 @@ export function createRootField(host: HTMLElement) {
       const side = branch === 0 ? -1 : 1;
       const strength = state.active < 0 || state.active === branch ? 1 : 0.23;
       // Each root has its own travel time and curvature; lateral roots inherit its tangent.
-      for (let strand = 0; strand < 17; strand++) {
+      const strandCount = width < 700 ? 9 : 17;
+      for (let strand = 0; strand < strandCount; strand++) {
         const random = seed(branch * 100 + strand);
         const progress = reduced.matches
           ? 1
           : Math.min(1, Math.max(0, (state.growth - strand * 0.009) / 0.82));
         if (!progress) continue;
-        const spread = (strand - 8) * 2.3;
+        const spread = (strand - (strandCount - 1) / 2) * 2.3;
         const points: { x: number; y: number }[] = [];
         const steps = 45;
         for (let step = 0; step <= steps; step++) {
@@ -123,7 +124,7 @@ export function createRootField(host: HTMLElement) {
   const resize = () => {
     width = canvas.clientWidth;
     height = canvas.clientHeight;
-    const ratio = Math.min(devicePixelRatio || 1, 2);
+    const ratio = Math.min(devicePixelRatio || 1, width < 700 ? 1.5 : 2);
     canvas.width = Math.round(width * ratio);
     canvas.height = Math.round(height * ratio);
     ctx.setTransform(ratio, 0, 0, ratio, 0, 0);

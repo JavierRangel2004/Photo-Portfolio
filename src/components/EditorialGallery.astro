@@ -1,4 +1,5 @@
 ---
+import GalleryOpening from "./GalleryOpening.astro";
 import EditorialImage from "./EditorialImage.astro";
 import { verticals, words, type Lang } from "../lib/editorial";
 import { getAllPhotos } from "../lib/photos";
@@ -18,10 +19,29 @@ const extra = active
         !chosen.some((c) => c.id === p.id),
     )
   : [];
-const photos = [...chosen, ...extra];
+const opening = active
+  ? [active.hero, active.detail]
+  : archive
+    ? chosen.slice(0, 2)
+    : items.map((v) => v.hero);
+const openingIds = new Set(opening.map((p) => p.id));
+const photos = [...chosen, ...extra].filter((p) => !openingIds.has(p.id));
+const positions = active
+  ? [active.heroPosition, "50% 50%"]
+  : items.map((v) => v.heroPosition);
 ---
 
-<nav class="gallery-nav" aria-label={words(lang, "Colecciones", "Collections")}>
+<GalleryOpening
+  lang={lang}
+  kind={group || "selection"}
+  photos={opening}
+  positions={positions}
+/>
+<nav
+  id="collection"
+  class="gallery-nav"
+  aria-label={words(lang, "Colecciones", "Collections")}
+>
   <a href={`/${lang}/gallery/`} aria-current={!group ? "page" : undefined}>
     {words(lang, "Selección", "Selection")}
   </a>

@@ -189,3 +189,10 @@ Shared contact invitations carry a quieter root signature. Interior gallery, ser
 ### Raíces: cinematic extension
 
 Home now enhances the static vector root signature with a deterministic Canvas 2D field: 51 root strands and 204 lateral branches track the monogram and image geometry. Drawing is scheduled on geometry/interaction changes, with capped pixel density and offscreen gating. Desktop viewports at least 960×700 use a finite pinned scroll sequence that brings each photographic vertical forward with bilingual narrative. Touch layouts keep the vertical composition without pinning. Reduced-motion users retain the static vector composition; keyboard focus releases the pinned sequence and exposes all links. No new dependencies.
+
+
+## Mobile page signatures (2026-09-26)
+
+Each gallery now has a finite photographic opening: contact-sheet assembly for selected work, opposing shutter strips for product, an iris and optical brackets for portraits, stage wings for music, and an unfolding organic aperture for the personal archive. Opening photos retain the same lightbox behavior and appear only once per gallery. All signatures have static fallbacks and run on viewport entry, without hover dependency.
+
+Services connects its chapter photographs with a drawn stem; the author portrait opens through a focusing frame; four contact leaves reflect validated required-field completion; the thank-you page displays the complete sprout. On mobile, home photos reveal when entering view and the root renderer uses fewer strands/lower pixel density. Mobile menu motion is interruptible; the viewer reserves separate space for captions and controls and supports horizontal touch swipes. These patterns use existing GSAP and scoped matchMedia cleanup, with no new dependencies.

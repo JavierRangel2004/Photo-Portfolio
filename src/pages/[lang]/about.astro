@@ -26,14 +26,27 @@ const lang = Astro.params.lang as Lang;
       </h1>
     </section>
     <section class="about-story">
-      <div data-reveal-image>
-        <Image
-          src={portrait}
-          alt="Javier Rangel"
-          widths={[480, 800, 1200]}
-          sizes="(max-width: 700px) 90vw, 45vw"
-          loading="eager"
-        />
+      <div class="about-focus" data-about-focus>
+        <div class="about-focus-window">
+          <Image
+            src={portrait}
+            alt="Javier Rangel"
+            widths={[480, 800, 1200]}
+            sizes="(max-width: 700px) 90vw, 45vw"
+            loading="eager"
+          />
+          <svg
+            class="about-focus-lines"
+            viewBox="0 0 100 100"
+            preserveAspectRatio="none"
+            aria-hidden="true"
+          >
+            <path
+              d="M2 24V2H24 M76 2H98V24 M98 76V98H76 M24 98H2V76"
+              pathLength="1"
+            />
+          </svg>
+        </div>
         <p class="image-note">Javier Rangel · JRMGraphy</p>
       </div>
       <div>
