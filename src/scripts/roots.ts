@@ -1,3 +1,4 @@
+import { entranceEnabled, entranceQuery } from "./motion-startup";
 import { gsap } from "gsap";
 import { createRootField } from "./root-field";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
@@ -31,7 +32,9 @@ if (hero) {
   });
   const cinema = gsap.matchMedia();
   cinema.add(
-    "(min-width: 960px) and (min-height: 700px) and (prefers-reduced-motion: no-preference)",
+    entranceEnabled
+      ? "(prefers-reduced-motion: no-preference) and (min-width: 960px) and (min-height: 700px)"
+      : "not all",
     () => {
       hero.classList.add("roots-cinema");
       const garden = hero.querySelector<HTMLElement>(".roots-garden")!;
@@ -133,7 +136,7 @@ if (hero) {
     },
   );
   const media = gsap.matchMedia();
-  media.add("(prefers-reduced-motion: no-preference)", () => {
+  media.add(entranceQuery, () => {
     const timeline = gsap.timeline({ defaults: { ease: "power3.out" } });
     timeline
       .from(
@@ -209,7 +212,7 @@ if (hero) {
   });
 }
 const closingMedia = gsap.matchMedia();
-closingMedia.add("(prefers-reduced-motion: no-preference)", () => {
+closingMedia.add(entranceQuery, () => {
   document
     .querySelectorAll<HTMLElement>(".contact-close")
     .forEach((section) => {

@@ -1,0 +1,19 @@
+/* A short, bounded preparation phase, scoped to entrance elements only.
+   Navigation, CTAs and the page background remain available throughout.
+   No JS / reduced motion / delayed bundles all keep the complete static page. */
+@media (prefers-reduced-motion: no-preference) {
+  html[data-motion="pending"] :is(
+    .roots-heading h1 > *, .roots-origin, .root-aperture, .root-world-label,
+    .roots-garden > .root-system, .root-field,
+    .hero-heading h1 > *, .hero-intro, .edition-photo,
+    .page-intro h1, .page-intro > p, .page-intro > div,
+    .contact-intro h1, .contact-intro > p, .contact-intro > div,
+    .gallery-nav, .service-index, .gallery-cell, [data-gallery-opening],
+    .service-print, .service-stem, .about-focus-window, .about-focus-lines,
+    .thanks-intro .inquiry-sprout, .contact-edition,
+    .inquiry-form > .inquiry-intro, .inquiry-form > fieldset,
+    .inquiry-form > .form-pair, .inquiry-form > label,
+    .seo-overview > *, [data-reveal-image], .process-list li,
+    .contact-close .root-system
+  ) { visibility: hidden; }
+}

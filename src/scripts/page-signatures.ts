@@ -1,9 +1,10 @@
+import { entranceQuery } from "./motion-startup";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 gsap.registerPlugin(ScrollTrigger);
 
 const motion = gsap.matchMedia();
-motion.add("(prefers-reduced-motion: no-preference)", () => {
+motion.add(entranceQuery, () => {
   const cleanups: (() => void)[] = [];
   function revealOnFocus(element: Element, timeline: gsap.core.Timeline) {
     const reveal = () => {
@@ -58,12 +59,14 @@ motion.add("(prefers-reduced-motion: no-preference)", () => {
           0,
         )
         .set(curtains, { visibility: "hidden" });
-      if (first)
+      if (first) {
+        gsap.set(first.querySelector("img"), { transition: "none" });
         sequence.from(
           first.querySelector("img"),
-          { scale: 1.055, duration: 1.1, clearProps: "transform" },
+          { scale: 1.055, duration: 1.1, clearProps: "transform,transition" },
           0,
         );
+      }
     } else if (kind === "portraits" && first) {
       sequence
         .fromTo(

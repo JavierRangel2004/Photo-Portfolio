@@ -1,3 +1,4 @@
+import { entranceEnabled } from "./motion-startup";
 import { gsap } from "gsap";
 
 /** A deterministic root field, drawn only while its geometry or interaction changes. */
@@ -179,7 +180,7 @@ export function createRootField(host: HTMLElement) {
   });
   const enter = () => {
     gsap.killTweensOf(state, "growth");
-    if (reduced.matches) {
+    if (reduced.matches || !entranceEnabled) {
       state.growth = 1;
       render();
     } else

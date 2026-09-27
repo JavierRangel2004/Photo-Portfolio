@@ -2,6 +2,8 @@
 import "../styles/fonts.css";
 import "../styles/editorial.css";
 import "../styles/page-signatures.css";
+import "../styles/motion-startup.css";
+import motionPrepaint from "../scripts/motion-prepaint.js?raw";
 import { getImage } from "astro:assets";
 import brandMark from "../assets/images/logo-bosque.png";
 import Analytics from "../components/Analytics.astro";
@@ -64,6 +66,10 @@ const seoOnly = !["/", "/about", "/contact", "/services", "/gallery"].some(
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <script is:inline set:html={motionPrepaint}></script>
+    <link rel="preload" href="/fonts/cormorant-garamond-normal-400.woff2" as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href="/fonts/cormorant-garamond-italic-400.woff2" as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href="/fonts/manrope-normal-400.woff2" as="font" type="font/woff2" crossorigin />
     <title>{titleText}</title>
     <meta name="description" content={description} />
     <meta name="theme-color" content="#f3ecd9" />
@@ -113,7 +119,7 @@ const seoOnly = !["/", "/about", "/contact", "/services", "/gallery"].some(
       <div class="photo-dialog-caption"></div>
     </dialog>
     <script>
-      import "../scripts/editorial";
+      import "../scripts/motion-entry";
     </script>
     {production && <Analytics />}
   </body>

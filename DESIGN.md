@@ -196,3 +196,13 @@ Home now enhances the static vector root signature with a deterministic Canvas 2
 Each gallery now has a finite photographic opening: contact-sheet assembly for selected work, opposing shutter strips for product, an iris and optical brackets for portraits, stage wings for music, and an unfolding organic aperture for the personal archive. Opening photos retain the same lightbox behavior and appear only once per gallery. All signatures have static fallbacks and run on viewport entry, without hover dependency.
 
 Services connects its chapter photographs with a drawn stem; the author portrait opens through a focusing frame; four contact leaves reflect validated required-field completion; the thank-you page displays the complete sprout. On mobile, home photos reveal when entering view and the root renderer uses fewer strands/lower pixel density. Mobile menu motion is interruptible; the viewer reserves separate space for captions and controls and supports horizontal touch swipes. These patterns use existing GSAP and scoped matchMedia cleanup, with no new dependencies.
+
+### Motion startup (2026-09-26)
+Entrances use a single BaseLayout entry point. An inline head script prepares only
+animated content before paint; navigation and CTAs remain usable. Preparation is
+bounded to 700 ms. If the bundle arrives late, interaction begins, or the visitor
+prefers reduced motion, the page stays static instead of rewinding visible content.
+The canvas uses its completed state in that fallback. Document-level view
+transitions are disabled to avoid layering a second arrival over GSAP. Critical
+fonts are preloaded; GSAP photograph settling temporarily disables CSS transform
+transitions. Startup regression tests cover timeout, interaction and reduced motion.

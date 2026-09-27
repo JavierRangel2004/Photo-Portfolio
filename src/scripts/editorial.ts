@@ -1,8 +1,9 @@
+import { entranceQuery } from "./motion-startup";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 gsap.registerPlugin(ScrollTrigger);
 const media = gsap.matchMedia();
-media.add("(prefers-reduced-motion: no-preference)", () => {
+media.add(entranceQuery, () => {
   const heading = document.querySelector(".hero-heading");
   if (heading) {
     gsap.from(".hero-heading h1 > *", {
