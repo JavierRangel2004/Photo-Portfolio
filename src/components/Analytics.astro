@@ -1,0 +1,24 @@
+<script
+  is:inline
+  async
+  src="https://www.googletagmanager.com/gtag/js?id=G-5NLFSHDCBJ"
+></script>
+<script is:inline>
+  window.dataLayer = window.dataLayer || [];
+  function gtag() {
+    dataLayer.push(arguments);
+  }
+  gtag("js", new Date());
+  gtag("config", "G-5NLFSHDCBJ");
+  window.addEventListener("jrmgraphy:lead-submitted", (e) =>
+    gtag("event", "generate_lead", {
+      method: "netlify_form",
+      inquiry_type: e.detail.inquiryType,
+    }),
+  );
+  document.addEventListener("click", (e) => {
+    const a = e.target.closest("[data-analytics-label]");
+    if (a)
+      gtag("event", "cta_click", { event_label: a.dataset.analyticsLabel });
+  });
+</script>

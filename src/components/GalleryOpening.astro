@@ -1,0 +1,85 @@
+---
+import EditorialImage from "./EditorialImage.astro";
+import type { Photo } from "../lib/photos";
+import { words, type Lang } from "../lib/editorial";
+const {
+  lang,
+  kind,
+  photos,
+  positions = [],
+} = Astro.props as {
+  lang: Lang;
+  kind: string;
+  photos: Photo[];
+  positions?: string[];
+};
+const captions: Record<string, [string, string]> = {
+  selection: ["Tres universos. Una mirada.", "Three worlds. One perspective."],
+  product: ["La luz revela el detalle.", "Light reveals the details."],
+  portraits: ["El instante de reconocerse.", "A moment of recognition."],
+  events: ["La energía deja una imagen.", "Energy leaves an image."],
+  archive: ["Mirar sin prisa.", "Take time to look."],
+};
+---
+
+<section
+  class={`gallery-opening gallery-opening--${kind}`}
+  data-gallery-opening={kind}
+  aria-label={words(lang, ...captions[kind])}
+>
+  <div class="opening-prints">
+    {photos.map((photo, i) => (
+      <div class={`opening-print opening-print--${i + 1}`}>
+        <EditorialImage
+          photo={photo}
+          alt={words(
+            lang,
+            "Fotografía de Javier Rangel",
+            "Photograph by Javier Rangel",
+          )}
+          eager={i === 0}
+          position={positions[i]}
+          sizes="(max-width: 600px) 70vw, 45vw"
+        />
+        {i === 0 && (
+          <>
+            <div class="opening-shutters" aria-hidden="true">
+              {[0, 1, 2, 3].map(() => (
+                <span />
+              ))}
+            </div>
+            <svg
+              class="opening-focus"
+              viewBox="0 0 100 100"
+              preserveAspectRatio="none"
+              aria-hidden="true"
+            >
+              <path
+                d="M4 24V4H24 M76 4H96V24 M96 76V96H76 M24 96H4V76"
+                pathLength="1"
+              />
+            </svg>
+          </>
+        )}
+      </div>
+    ))}
+    <svg
+      class="opening-thread"
+      viewBox="0 0 1000 400"
+      preserveAspectRatio="none"
+      aria-hidden="true"
+    >
+      <path
+        d="M0 340 C160 340 190 55 420 80 S680 360 1000 110"
+        pathLength="1"
+      />
+    </svg>
+  </div>
+  <div class="opening-caption">
+    <p>{words(lang, ...captions[kind])}</p>
+    <a href="#collection">
+      {words(lang, "Explorar colección", "Explore collection")}
+      <span aria-hidden="true">↓</span>
+    </a>
+  </div>
+</section>

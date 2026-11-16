@@ -14,8 +14,8 @@ const { photo, orientation } = Astro.props;
   <Image
     src={photo.src}
     alt={`${photo.category} - ${photo.originalName}`}
-    width={photo.width}
-    height={photo.height}
+    width={photo.width ?? 1600}
+    height={photo.height ?? 1600}
     loading="lazy"
     class={`home-carousel-image home-carousel-image--${orientation}`}
     data-modal-src={photo.src}

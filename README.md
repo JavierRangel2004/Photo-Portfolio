@@ -55,7 +55,7 @@ npm run dev
 
 The site runs at `http://localhost:4321`.
 
-`npm run dev` only starts the dev server. It does not process photos automatically.
+`npm run dev` and `npm run build` generate cached 480/960px responsive variants from the existing photo library. They do not import raw photos automatically.
 The site data is built from `public/photos`, not directly from `assets/images`.
 
 ## Production
@@ -101,3 +101,19 @@ If the processed library changes, run `npm run prepare:photos` before deploying 
 - Sharp
 - Exifr
 - TypeScript support via Astro
+
+## Editorial design and verification
+
+The approved Mesa de edición system is documented in `DESIGN.md`. Curated commercial verticals live in `src/lib/editorial.ts`; original city/nature work remains in the archive.
+
+Use Node 22.12 or newer supported by Astro 7, then run:
+
+```bash
+npm ci
+npm run check
+npm test
+npm run build
+npm run verify
+```
+
+Netlify builds `staging` at https://staging--jrmgraphy.netlify.app/ and production from `main`. Only `CONTEXT=production` enables analytics and indexing. Forms use Netlify Forms; notification delivery is configured in the Netlify dashboard.

@@ -1,0 +1,33 @@
+---
+const { complete = false } = Astro.props as { complete?: boolean };
+---
+
+<svg
+  class:list={["inquiry-sprout", { "is-complete": complete }]}
+  viewBox="0 0 180 100"
+  aria-hidden="true"
+  data-inquiry-sprout
+>
+  <path
+    class="sprout-stem"
+    d="M8 90 C55 92 52 77 85 63 S123 48 167 13"
+    fill="none"
+    pathLength="1"
+  />
+  <path
+    data-sprout-leaf="0"
+    d="M53 80 C30 77 27 54 27 54 C52 53 65 65 53 80Z"
+  />
+  <path
+    data-sprout-leaf="1"
+    d="M84 65 C80 39 103 24 103 24 C117 45 106 61 84 65Z"
+  />
+  <path
+    data-sprout-leaf="2"
+    d="M117 48 C116 71 139 80 139 80 C150 56 137 43 117 48Z"
+  />
+  <path
+    data-sprout-leaf="3"
+    d="M148 29 C130 15 136 2 136 2 C156 1 164 15 148 29Z"
+  />
+</svg>

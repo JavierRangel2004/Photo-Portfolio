@@ -1,0 +1,20 @@
+---
+import { Image } from "astro:assets";
+import mark from "../assets/images/logo-bosque.png";
+---
+
+<Image
+  src={mark}
+  alt=""
+  aria-hidden="true"
+  width={144}
+  height={144}
+  format="webp"
+  quality={90}
+  class="brand-symbol"
+  loading="eager"
+/>
+<span class="brand-lettering">
+  <span class="brand-name">Javier Rangel</span>
+  <span class="brand-discipline">Fotografía</span>
+</span>

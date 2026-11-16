@@ -1,11 +1,14 @@
 {
   "compilerOptions": {
     "target": "ES2022",
-    "module": "NodeNext",
-    "moduleResolution": "NodeNext",
+    "module": "ESNext",
+    "moduleResolution": "Bundler",
     "strict": true,
     "noEmit": true,
-    "types": ["node"]
+    "types": ["node"],
+    "allowSyntheticDefaultImports": true
   },
-  "include": ["scripts/**/*.ts"]
+  "include": [".astro/types.d.ts", "src/**/*", "scripts/**/*.ts"],
+  "extends": "astro/tsconfigs/strict",
+  "exclude": ["dist", "node_modules"]
 }

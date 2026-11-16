@@ -1,145 +1,169 @@
 ---
-import { getLangFromUrl, useTranslations, useTranslatedPath } from '../i18n/utils';
-import LanguagePicker from './LanguagePicker.astro';
-
+import { getLangFromUrl, getRouteWithoutLang } from "../i18n/utils";
+import BrandSignature from "./BrandSignature.astro";
+import { words } from "../lib/editorial";
+import Arrow from "./Arrow.astro";
 const lang = getLangFromUrl(Astro.url);
-const t = useTranslations(lang);
-const translatePath = useTranslatedPath(lang);
-
-const siteTitle = "JRMGraphy";
-const navLinks = [
-  { href: "/services", label: t('nav.services') },
-  { href: "/gallery", label: t('nav.portfolio') },
-  { href: "/about", label: t('nav.about') },
-  { href: "/contact", label: t('nav.contact') },
+const other = lang === "es" ? "en" : "es";
+const route = getRouteWithoutLang(Astro.url);
+const links = [
+  ["gallery", words(lang, "Trabajo", "Work")],
+  ["services", words(lang, "Servicios", "Services")],
+  ["about", words(lang, "La mirada", "The eye")],
 ];
+const translatedRoute =
+  route.startsWith("/fotograf") ||
+  route.startsWith("/retrato-") ||
+  route.startsWith("/fotos-")
+    ? "/"
+    : route;
 ---
 
-<nav class="site-nav site-nav--transparent" aria-label="Main navigation">
-  <div class="container nav-inner">
-    <a href={translatePath('/')} class="nav-brand">{siteTitle}</a>
-
-    <!-- Desktop links -->
-    <ul class="nav-links">
-      {navLinks.map(link => (
-        <li>
-          <a href={translatePath(link.href)} class="nav-link" aria-label={link.label}>{link.label}</a>
-        </li>
-      ))}
-      <li>
-        <LanguagePicker />
-      </li>
-    </ul>
-
-    <!-- Mobile hamburger -->
+<header class="masthead">
+  <a
+    class="wordmark brand-signature"
+    href={`/${lang}/`}
+    aria-label={words(lang, "Javier Rangel — Inicio", "Javier Rangel — Home")}
+  >
+    <BrandSignature />
+  </a>
+  <nav class="desktop-nav" aria-label={words(lang, "Principal", "Main")}>
+    {links.map(([path, label]) => (
+      <a
+        href={`/${lang}/${path}/`}
+        aria-current={Astro.url.pathname.includes(path) ? "page" : undefined}
+      >
+        {label}
+      </a>
+    ))}
+  </nav>
+  <div class="nav-end">
+    <a
+      class="language"
+      href={`/${other}${translatedRoute}`}
+      lang={other}
+      aria-label={words(lang, "Switch to English", "Cambiar a español")}
+    >
+      {other.toUpperCase()}
+    </a>
+    <a class="nav-inquiry" href={`/${lang}/contact/`}>
+      {words(lang, "Hablemos", "Let’s talk")}
+      <Arrow />
+    </a>
     <button
-      class="nav-toggle"
-      id="nav-toggle"
-      aria-label={t('header.toggle')}
+      class="menu-toggle"
+      aria-label={words(lang, "Abrir menú", "Open menu")}
+      aria-haspopup="dialog"
       aria-expanded="false"
-      aria-controls="nav-drawer"
+      aria-controls="mobile-menu"
     >
       <span></span>
       <span></span>
-      <span></span>
     </button>
   </div>
-</nav>
-
-<!-- Mobile drawer overlay -->
-<div class="nav-drawer-overlay" id="nav-overlay" aria-hidden="true"></div>
-
-<!-- Mobile drawer -->
-<nav class="nav-drawer" id="nav-drawer" aria-label="Mobile navigation">
-  <div class="nav-drawer-header">
-    <a href={translatePath('/')} class="nav-drawer-brand">{siteTitle}</a>
-    <button class="nav-drawer-close" id="nav-close" aria-label={t('header.close')}>
-      <span></span>
-      <span></span>
-    </button>
-  </div>
-
-  <div class="nav-drawer-body">
-    <ul class="nav-drawer-links">
-      {navLinks.map(link => (
-        <li>
-          <a href={translatePath(link.href)} class="nav-drawer-link" aria-label={link.label}>{link.label}</a>
-        </li>
-      ))}
-    </ul>
-    <div class="nav-drawer-social">
-      <LanguagePicker />
-      <br/><br/>
-      <a href="https://www.instagram.com/JRM_Graphy" target="_blank" rel="noopener noreferrer" aria-label="Instagram">
-        <i class="fab fa-instagram" aria-hidden="true"></i>
-        <span>@JRM_Graphy</span>
+</header>
+<noscript>
+  <nav
+    class="fallback-nav"
+    aria-label={words(lang, "Navegación", "Navigation")}
+  >
+    {links.map(([path, label]) => (
+      <a href={`/${lang}/${path}/`}>{label}</a>
+    ))}
+  </nav>
+</noscript>
+<dialog
+  id="mobile-menu"
+  class="mobile-menu"
+  aria-label={words(lang, "Navegación", "Navigation")}
+>
+  <button class="menu-close" autofocus>
+    {words(lang, "Cerrar", "Close")} <span aria-hidden="true">×</span>
+  </button>
+  <nav>
+    {links.map(([path, label]) => (
+      <a href={`/${lang}/${path}/`}>
+        {label}
+        <Arrow />
       </a>
-    </div>
-  </div>
-</nav>
-
-<style>
-  .nav-drawer-social {
-    padding-top: 1.5rem;
-    border-top: 1px solid var(--color-border);
+    ))}
+    <a href={`/${lang}/contact/`}>
+      {words(lang, "Hablemos", "Let’s talk")}
+      <Arrow />
+    </a>
+  </nav>
+  <p>Javier Rangel · Ciudad de México</p>
+</dialog>
+<script>
+  import { gsap } from "gsap";
+  const menu = document.querySelector<HTMLDialogElement>("#mobile-menu");
+  const opener = document.querySelector<HTMLButtonElement>(".menu-toggle");
+  const reduced = matchMedia("(prefers-reduced-motion: reduce)");
+  let animation: gsap.core.Timeline | undefined;
+  let closing = false;
+  function closeMenu() {
+    if (!menu?.open || closing) return;
+    closing = true;
+    animation?.kill();
+    if (reduced.matches) menu.close();
+    else
+      animation = gsap
+        .timeline({ onComplete: () => menu.close() })
+        .to(menu, { xPercent: 100, duration: 0.25, ease: "power2.in" });
   }
-
-  .nav-drawer-social a {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.5rem;
-    font-size: var(--text-sm);
-    color: var(--color-text-dim);
-    transition: color var(--dur-base);
-  }
-
-  .nav-drawer-social a:hover {
-    color: var(--color-accent);
-  }
-
-  .nav-drawer-header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 1rem;
-  }
-
-  .nav-drawer-brand {
-    font-family: var(--font-serif);
-    font-size: var(--text-lg);
-    letter-spacing: 0.04em;
-  }
-
-  .nav-drawer-body {
-    display: flex;
-    flex: 1;
-    flex-direction: column;
-    justify-content: space-between;
-    gap: 2rem;
-  }
-
-  .nav-drawer-close {
-    position: relative;
-    width: 2.75rem;
-    height: 2.75rem;
-    border: 1px solid var(--color-border);
-    border-radius: 9999px;
-  }
-
-  .nav-drawer-close span {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    width: 1rem;
-    height: 1.5px;
-    background: var(--color-text);
-  }
-
-  .nav-drawer-close span:first-child {
-    transform: translate(-50%, -50%) rotate(45deg);
-  }
-
-  .nav-drawer-close span:last-child {
-    transform: translate(-50%, -50%) rotate(-45deg);
-  }
-</style>
+  opener?.addEventListener("click", () => {
+    if (!menu || menu.open) return;
+    animation?.kill();
+    closing = false;
+    gsap.set(menu, { clearProps: "transform" });
+    menu.showModal();
+    opener.setAttribute("aria-expanded", "true");
+    document.body.classList.add("dialog-open");
+    if (!reduced.matches)
+      animation = gsap
+        .timeline()
+        .fromTo(
+          menu,
+          { xPercent: 100 },
+          {
+            xPercent: 0,
+            duration: 0.5,
+            ease: "power3.out",
+            clearProps: "transform",
+          },
+        )
+        .fromTo(
+          menu.querySelectorAll("nav a"),
+          { x: 18, opacity: 0 },
+          {
+            x: 0,
+            opacity: 1,
+            duration: 0.4,
+            stagger: 0.05,
+            clearProps: "transform,opacity",
+          },
+          0.1,
+        );
+  });
+  menu?.querySelector("button")?.addEventListener("click", closeMenu);
+  menu?.addEventListener("click", (event) => {
+    if (event.target === menu) closeMenu();
+  });
+  menu?.addEventListener("cancel", (event) => {
+    event.preventDefault();
+    closeMenu();
+  });
+  menu?.addEventListener("close", () => {
+    closing = false;
+    animation?.kill();
+    gsap.set([menu, ...menu.querySelectorAll("nav a")], {
+      clearProps: "transform,opacity",
+    });
+    opener?.setAttribute("aria-expanded", "false");
+    document.body.classList.remove("dialog-open");
+    opener?.focus();
+  });
+  reduced.addEventListener("change", () => {
+    animation?.progress(1);
+  });
+</script>
